@@ -1,0 +1,72 @@
+{
+  "$schema": "../../schema/eme-project.v1.schema.json",
+  "suite": "Phase 10 Standardized Editing Benchmarks",
+  "version": "1.0.0",
+  "benchmarks": [
+    {
+      "id": "benchmark_a_kinetic_typography",
+      "name": "Benchmark A — Reference-Driven Kinetic Typography (15s @ 60fps)",
+      "aspectRatio": "9:16",
+      "resolution": { "width": 1080, "height": 1920 },
+      "fps": 60,
+      "durationTicks": 1800000,
+      "targetDurationSec": 15.0,
+      "features": [
+        "Multiple typographic elements & visual layers",
+        "Contrasting text styles (Instrument Serif + Syne)",
+        "Staggered entrance keyframe animations",
+        "Synchronized BGM bed + SFX whoosh & camera clicks",
+        "Safe margins & visual hierarchy"
+      ],
+      "projectFile": "benchmarks/manifests/benchmark-a-kinetic.json"
+    },
+    {
+      "id": "benchmark_b_editorial_pacing",
+      "name": "Benchmark B — Footage Assembly & Editorial Pacing (20s @ 60fps)",
+      "aspectRatio": "16:9",
+      "resolution": { "width": 1920, "height": 1080 },
+      "fps": 60,
+      "durationTicks": 2400000,
+      "targetDurationSec": 20.0,
+      "features": [
+        "Multi-clip sequencing & in/out trim points",
+        "Controlled rhythmic cuts across scene boundaries",
+        "Picture-in-picture window overlay",
+        "Audio continuity & volume envelope transitions"
+      ],
+      "projectFile": "benchmarks/manifests/benchmark-b-editorial.json"
+    },
+    {
+      "id": "benchmark_c_layered_compositing",
+      "name": "Benchmark C — Layered Compositing & Effect Order (10s @ 60fps)",
+      "aspectRatio": "9:16",
+      "resolution": { "width": 1080, "height": 1920 },
+      "fps": 60,
+      "durationTicks": 1200000,
+      "targetDurationSec": 10.0,
+      "features": [
+        "Multi-track visual compositing",
+        "Mathematical difference blending mode (mix-blend-mode: difference)",
+        "Invert and contrast post-processing effect filters",
+        "Audio synchronization"
+      ],
+      "projectFile": "benchmarks/manifests/benchmark-c-compositing.json"
+    },
+    {
+      "id": "benchmark_d_aspect_adaptation",
+      "name": "Benchmark D — Cross-Aspect Ratio Adaptation (16:9 -> 9:16 Retargeting)",
+      "aspectRatio": "9:16",
+      "resolution": { "width": 1080, "height": 1920 },
+      "fps": 60,
+      "durationTicks": 480000,
+      "targetDurationSec": 4.0,
+      "features": [
+        "Automated layout adaptation from landscape to vertical format",
+        "Safe-margin repositioning for text lower thirds",
+        "Scale adjustment for centered graphic overlays",
+        "Zero loss of audio envelopes or timeline synchronization"
+      ],
+      "projectFile": "benchmarks/manifests/benchmark-d-adaptation.json"
+    }
+  ]
+}

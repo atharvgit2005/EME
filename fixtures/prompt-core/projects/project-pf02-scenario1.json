@@ -1,0 +1,83 @@
+{
+  "id": "proj_pf02_scenario1",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "PF02 Scenario 1 - 10s Three-Clip Social Edit",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1800000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "asset_clip_1",
+      "type": "video",
+      "src": "assets/clips/scene_01.mp4"
+    },
+    {
+      "id": "asset_clip_2",
+      "type": "video",
+      "src": "assets/clips/scene_02.mp4"
+    },
+    {
+      "id": "asset_clip_3",
+      "type": "video",
+      "src": "assets/clips/scene_03.mp4"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v_main",
+      "kind": "visual",
+      "zIndex": 1,
+      "name": "Main Video Track",
+      "enabled": true,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_1",
+      "trackId": "track_v_main",
+      "assetId": "asset_clip_1",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 600000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 600000,
+      "name": "scene_01"
+    },
+    {
+      "id": "clip_2",
+      "trackId": "track_v_main",
+      "assetId": "asset_clip_2",
+      "type": "video",
+      "startTick": 600000,
+      "durationTicks": 600000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 600000,
+      "name": "scene_02"
+    },
+    {
+      "id": "clip_3",
+      "trackId": "track_v_main",
+      "assetId": "asset_clip_3",
+      "type": "video",
+      "startTick": 1200000,
+      "durationTicks": 600000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 600000,
+      "name": "scene_03"
+    }
+  ]
+}

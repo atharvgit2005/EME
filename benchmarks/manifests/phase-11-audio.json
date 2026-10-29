@@ -1,0 +1,136 @@
+{
+  "id": "proj_p11_audio_benchmark",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 11 Benchmark D: Audio Mixing & Dynamic Envelopes (16s @ 60fps)",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#090d16"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1920000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "bgm_snowfall",
+      "type": "audio",
+      "src": "assets/bgm/snowfall.mp3"
+    },
+    {
+      "id": "sfx_woosh",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/12_woosh_original.wav"
+    },
+    {
+      "id": "sfx_shutter",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/20_shutter_original.wav"
+    },
+    {
+      "id": "sfx_click",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/22_click_sfx_original.wav"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_hud",
+      "name": "Audio Telemetry HUD",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_bgm",
+      "name": "Primary Background Music Bed",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_sfx_primary",
+      "name": "Synchronous Mechanical Impacts",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_sfx_secondary",
+      "name": "Ambient Acoustic Accents",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_hud_title",
+      "trackId": "track_hud",
+      "type": "text",
+      "startTick": 0,
+      "durationTicks": 1920000,
+      "transform": { "x": 960, "y": 540, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "PHASE 11 AUDIO MIXING & ENVELOPE BENCHMARK (16.0s)", "fontAssetId": "font_syne", "fontSize": 44, "color": "#38bdf8", "textAlign": "center" }
+    },
+    {
+      "id": "clip_bgm_bed",
+      "trackId": "track_audio_bgm",
+      "type": "audio",
+      "source": { "assetId": "bgm_snowfall", "inTick": 0, "outTick": 1920000 },
+      "startTick": 0,
+      "durationTicks": 1920000,
+      "volume": 0.8,
+      "audioEnvelope": [
+        { "offsetTick": 0, "gain": 0.1 },
+        { "offsetTick": 120000, "gain": 0.8 },
+        { "offsetTick": 480000, "gain": 0.8 },
+        { "offsetTick": 540000, "gain": 0.25 },
+        { "offsetTick": 780000, "gain": 0.25 },
+        { "offsetTick": 840000, "gain": 0.8 },
+        { "offsetTick": 1800000, "gain": 0.8 },
+        { "offsetTick": 1920000, "gain": 0.0 }
+      ]
+    },
+    {
+      "id": "clip_sfx_woosh_intro",
+      "trackId": "track_audio_sfx_primary",
+      "type": "audio",
+      "source": { "assetId": "sfx_woosh", "inTick": 0, "outTick": 120000 },
+      "startTick": 60000,
+      "durationTicks": 120000,
+      "volume": 1.0
+    },
+    {
+      "id": "clip_sfx_shutter_accent",
+      "trackId": "track_audio_sfx_primary",
+      "type": "audio",
+      "source": { "assetId": "sfx_shutter", "inTick": 0, "outTick": 120000 },
+      "startTick": 600000,
+      "durationTicks": 120000,
+      "volume": 1.0
+    },
+    {
+      "id": "clip_sfx_click_cue",
+      "trackId": "track_audio_sfx_secondary",
+      "type": "audio",
+      "source": { "assetId": "sfx_click", "inTick": 0, "outTick": 120000 },
+      "startTick": 1200000,
+      "durationTicks": 120000,
+      "volume": 0.9
+    }
+  ]
+}

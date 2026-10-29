@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-operation-plan.v1.schema.json",
+  "title": "EditingMechanicsEngineOperationPlan",
+  "description": "Deterministic declarative operation plan compiled from validated EditBrief and project snapshot for atomic execution by OperationExecutor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "source_brief_id",
+    "source_request_id",
+    "project_snapshot",
+    "target_duration_ticks",
+    "operations",
+    "diagnostics",
+    "dry_run",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^plan-[a-zA-Z0-9_-]+$",
+      "description": "Unique stable identifier for the compiled operation plan"
+    },
+    "source_brief_id": {
+      "type": "string",
+      "pattern": "^brief-[a-zA-Z0-9_-]+$",
+      "description": "Reference to the source EditBrief brief_id"
+    },
+    "source_request_id": {
+      "type": "string",
+      "description": "Reference to the original IntentEnvelope request_id"
+    },
+    "project_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "base_revision",
+        "snapshot_sha256",
+        "timebase_ticks_per_second"
+      ],
+      "properties": {
+        "project_id": { "type": "string" },
+        "base_revision": { "type": "integer", "minimum": 0 },
+        "snapshot_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "timebase_ticks_per_second": {
+          "type": "integer",
+          "const": 120000
+        }
+      }
+    },
+    "target_duration_ticks": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Expected target project duration in exact integer EME ticks (120,000 ticks/sec)"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "op_id",
+          "step_index",
+          "type",
+          "target_id",
+          "params",
+          "dependencies"
+        ],
+        "properties": {
+          "op_id": { "type": "string", "pattern": "^op-[a-zA-Z0-9_-]+$" },
+          "step_index": { "type": "integer", "minimum": 0 },
+          "type": { "type": "string" },
+          "target_id": { "type": "string" },
+          "params": { "type": "object" },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "preconditions": {
+            "type": "object",
+            "properties": {
+              "expectedBaseRevision": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "expected_effects": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "affected_field": { "type": "string" },
+              "resulting_ticks": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unsupported_requests",
+        "missing_references",
+        "conflicts",
+        "rejected_operations"
+      ],
+      "properties": {
+        "unsupported_requests": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "missing_references": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rejected_operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["reason", "operation"],
+            "properties": {
+              "reason": { "type": "string" },
+              "operation": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "dry_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "success",
+        "simulated_steps",
+        "final_revision",
+        "affected_tracks",
+        "affected_clips",
+        "timing_implications",
+        "invariant_checks"
+      ],
+      "properties": {
+        "success": { "type": "boolean" },
+        "simulated_steps": { "type": "integer", "minimum": 0 },
+        "final_revision": { "type": "integer", "minimum": 0 },
+        "affected_tracks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "affected_clips": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "timing_implications": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start_tick",
+            "end_tick",
+            "duration_ticks",
+            "duration_seconds"
+          ],
+          "properties": {
+            "start_tick": { "type": "integer", "minimum": 0 },
+            "end_tick": { "type": "integer", "minimum": 0 },
+            "duration_ticks": { "type": "integer", "minimum": 0 },
+            "duration_seconds": { "type": "number", "minimum": 0 }
+          }
+        },
+        "invariant_checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "preserved_properties_verified",
+            "track_locks_respected",
+            "zero_leak_integrity"
+          ],
+          "properties": {
+            "preserved_properties_verified": { "type": "boolean" },
+            "track_locks_respected": { "type": "boolean" },
+            "zero_leak_integrity": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "blocking_issue_ids"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready", "needs_clarification", "blocked"]
+        },
+        "blocking_issue_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

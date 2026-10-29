@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/morluto/rea/schemas/eme-editing-plan.v1.schema.json",
+  "title": "EME Structured Editing Plan",
+  "description": "Deterministic intermediate creative plan compiled from creative brief and source media analysis into explicit EME operations.",
+  "type": "object",
+  "required": [
+    "id",
+    "schemaVersion",
+    "brief",
+    "outputProfile",
+    "sequenceStructure",
+    "operations"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^plan_[a-zA-Z0-9_-]+$"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "sourceAnalysisId": {
+      "type": "string",
+      "pattern": "^sa_[a-zA-Z0-9_-]+$"
+    },
+    "brief": {
+      "type": "object",
+      "required": ["prompt", "creativeGoal", "targetAudience"],
+      "properties": {
+        "prompt": { "type": "string" },
+        "creativeGoal": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "referenceStyle": { "type": "string" }
+      }
+    },
+    "outputProfile": {
+      "type": "object",
+      "required": ["width", "height", "aspectRatio", "fps", "targetDurationTicks"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "aspectRatio": { "type": "string" },
+        "fps": { "type": "integer", "minimum": 1 },
+        "targetDurationTicks": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "sourceReferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assetId", "path", "type"],
+        "properties": {
+          "assetId": { "type": "string" },
+          "path": { "type": "string" },
+          "type": { "type": "string", "enum": ["video", "audio", "image", "font"] },
+          "analysisSummary": { "type": "string" },
+          "sha256": { "type": "string" },
+          "sourceTimestampSec": { "type": "number", "minimum": 0 },
+          "evidenceRationale": { "type": "string" }
+        }
+      }
+    },
+    "sequenceStructure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["actId", "name", "startTick", "durationTicks"],
+        "properties": {
+          "actId": { "type": "string" },
+          "name": { "type": "string" },
+          "startTick": { "type": "integer", "minimum": 0 },
+          "durationTicks": { "type": "integer", "minimum": 1 },
+          "narrativeIntent": { "type": "string" }
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "params"],
+        "properties": {
+          "type": { "type": "string" },
+          "params": { "type": "object" },
+          "intent": { "type": "string" },
+          "evidenceRef": { "type": "string" }
+        }
+      }
+    }
+  }
+}

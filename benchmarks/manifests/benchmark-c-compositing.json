@@ -1,0 +1,152 @@
+{
+  "id": "proj_p10_bench_c_compositing",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 10 Benchmark C — Layered Compositing & Effect Order (10s @ 60fps)",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#050508"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1200000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "video_primary_footage",
+      "type": "video",
+      "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4"
+    },
+    {
+      "id": "font_archivo",
+      "type": "font",
+      "src": "assets/fonts/files/ArchivoBlack-Regular.ttf"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    },
+    {
+      "id": "sfx_shutter",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/20_shutter_original.wav"
+    },
+    {
+      "id": "sfx_click",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/22_click_sfx_original.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_base_footage",
+      "name": "Base Photographic Plate",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_xray_layer",
+      "name": "Mathematical Difference Composite",
+      "kind": "visual",
+      "zIndex": 20,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_composited_titles",
+      "name": "Geometric Title Overlay",
+      "kind": "visual",
+      "zIndex": 30,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_sfx",
+      "name": "Synchronous Impact Audio",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_plate_base",
+      "trackId": "track_base_footage",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 1200000 },
+      "startTick": 0,
+      "durationTicks": 1200000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_plate_xray_invert",
+      "trackId": "track_xray_layer",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 1200000 },
+      "startTick": 120000,
+      "durationTicks": 960000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.05, "scaleY": 1.05, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "effects": [
+        { "type": "blendMode", "parameters": { "mode": "difference" } },
+        { "type": "invert", "parameters": {} },
+        { "type": "contrast", "parameters": { "factor": 2.2 } }
+      ]
+    },
+    {
+      "id": "clip_title_comp_1",
+      "trackId": "track_composited_titles",
+      "type": "text",
+      "startTick": 120000,
+      "durationTicks": 480000,
+      "transform": { "x": 540, "y": 960, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "X-RAY DIFFERENCE", "fontAssetId": "font_archivo", "fontSize": 80, "color": "#ffffff", "textAlign": "center" },
+      "effects": [
+        { "type": "blendMode", "parameters": { "mode": "difference" } }
+      ]
+    },
+    {
+      "id": "clip_title_comp_2",
+      "trackId": "track_composited_titles",
+      "type": "text",
+      "startTick": 600000,
+      "durationTicks": 480000,
+      "transform": { "x": 540, "y": 960, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "COMPOSITING STACK", "fontAssetId": "font_syne", "fontSize": 72, "color": "#00ffcc", "textAlign": "center" }
+    },
+    {
+      "id": "clip_sfx_hit_1",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "source": { "assetId": "sfx_shutter", "inTick": 0, "outTick": 120000 },
+      "startTick": 120000,
+      "durationTicks": 120000
+    },
+    {
+      "id": "clip_sfx_hit_2",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "source": { "assetId": "sfx_click", "inTick": 0, "outTick": 120000 },
+      "startTick": 600000,
+      "durationTicks": 120000
+    }
+  ],
+  "animations": [
+    {
+      "clipId": "clip_plate_xray_invert",
+      "property": "transform.scale",
+      "keyframes": [
+        { "offsetTick": 0, "value": 1.0, "easing": "linear" },
+        { "offsetTick": 480000, "value": 1.15, "easing": "easeInOut" },
+        { "offsetTick": 960000, "value": 1.0, "easing": "easeInOut" }
+      ]
+    }
+  ]
+}

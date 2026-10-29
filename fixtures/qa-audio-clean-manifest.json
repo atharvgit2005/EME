@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "fix-qa-audio-clean-5s",
+  "created_at": "2026-10-22T18:30:00.000Z",
+  "baseline_type": "CLEAN_CONTROL_BASELINE",
+  "file": {
+    "path": "assets/creator_reel_soundtrack_20s.wav",
+    "size_bytes": 3840078,
+    "sha256": "1b8183af7135d64b1ee7d1d15d007fd1516a42bf41a7a64d3e66c5237d59b628",
+    "duration_seconds": 20.0,
+    "duration_ticks": 2400000,
+    "video": {
+      "width": 1080,
+      "height": 1920,
+      "fps": 60,
+      "aspect_ratio": "9:16"
+    },
+    "audio": {
+      "sample_rate": 48000,
+      "channels": 2,
+      "codec": "pcm_s24le",
+      "measured_true_peak_dbtp": -2.5,
+      "av_sync_offset_ticks": 0
+    }
+  },
+  "ground_truth_defects": [],
+  "expected_finding_count": 0,
+  "expected_status": "passed",
+  "run_id": "RUN-CLEAN-04"
+}

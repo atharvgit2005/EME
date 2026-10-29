@@ -1,0 +1,133 @@
+{
+  "id": "proj-pf03-insufficient-handles",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "PF-03 Insufficient Handles",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": { "numerator": 30, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1440000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "asset_v_primary1",
+      "type": "video",
+      "src": "media/primary_take1.mp4",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "durationTicks": 480000
+    },
+    {
+      "id": "asset_v_primary2",
+      "type": "video",
+      "src": "media/primary_take2.mp4",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "durationTicks": 720000
+    },
+    {
+      "id": "asset_v_primary3",
+      "type": "video",
+      "src": "media/primary_take3.mp4",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "durationTicks": 720000
+    },
+    {
+      "id": "asset_v_broll",
+      "type": "video",
+      "src": "media/broll_cutaway.mp4",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "durationTicks": 360000
+    },
+    {
+      "id": "asset_a_music",
+      "type": "audio",
+      "src": "audio/soundtrack_120bpm.wav",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "durationTicks": 1800000
+    },
+    {
+      "id": "asset_f_headline",
+      "type": "font",
+      "src": "fonts/Inter-Bold.ttf",
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v_main",
+      "name": "Main Primary Visual",
+      "kind": "visual",
+      "zIndex": 1,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_v_broll",
+      "name": "B-Roll Cutaway Track",
+      "kind": "visual",
+      "zIndex": 2,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_graphics",
+      "name": "Graphics & Text Overlays",
+      "kind": "visual",
+      "zIndex": 3,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_a_music",
+      "name": "Music Soundtrack",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_1",
+      "trackId": "track_v_main",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 480000,
+      "source": {
+        "assetId": "asset_v_primary1",
+        "trimInTick": 0,
+        "trimOutTick": 480000
+      }
+    },
+    {
+      "id": "clip_2",
+      "trackId": "track_v_main",
+      "type": "video",
+      "startTick": 480000,
+      "durationTicks": 480000,
+      "source": {
+        "assetId": "asset_v_primary2",
+        "trimInTick": 0,
+        "trimOutTick": 480000
+      }
+    },
+    {
+      "id": "clip_3",
+      "trackId": "track_v_main",
+      "type": "video",
+      "startTick": 960000,
+      "durationTicks": 480000,
+      "source": {
+        "assetId": "asset_v_primary3",
+        "trimInTick": 0,
+        "trimOutTick": 480000
+      }
+    }
+  ]
+}

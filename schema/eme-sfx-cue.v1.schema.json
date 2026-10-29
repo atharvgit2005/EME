@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-sfx-cue.v1.schema.json",
+  "title": "EditingMechanicsEngineSfxCue",
+  "description": "Deterministic SFX cue contract representing procedural synthesis or catalog asset placement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "cueId",
+    "type",
+    "sourceType",
+    "startTick",
+    "durationTicks",
+    "gain",
+    "pan"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "eme-sfx-cue.v1"
+    },
+    "cueId": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["whoosh", "impact", "riser", "glitch", "click", "shutter", "foley"]
+    },
+    "sourceType": {
+      "type": "string",
+      "enum": ["procedural", "catalog"]
+    },
+    "startTick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "durationTicks": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "gain": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 2.0
+    },
+    "pan": {
+      "type": "number",
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    "proceduralParams": {
+      "type": "object"
+    },
+    "catalogAssetPath": {
+      "type": "string"
+    }
+  }
+}

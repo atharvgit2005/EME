@@ -1,0 +1,243 @@
+{
+  "id": "proj_benchmark_a_motion_graphics",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Benchmark A - Reference-Driven Kinetic Typography & Transitions",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#121214"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 60,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1440000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "font_instrument_serif",
+      "type": "font",
+      "src": "assets/fonts/files/InstrumentSerif-Regular.ttf"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    },
+    {
+      "id": "font_archivo",
+      "type": "font",
+      "src": "assets/fonts/files/ArchivoBlack-Regular.ttf"
+    },
+    {
+      "id": "bgm_snowfall",
+      "type": "audio",
+      "src": "assets/bgm/snowfall.mp3"
+    },
+    {
+      "id": "sfx_riser",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/07_riser_original.wav"
+    },
+    {
+      "id": "sfx_camera_click",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/10_camera_click_original.wav"
+    },
+    {
+      "id": "transition_whiteout",
+      "type": "overlay",
+      "src": "assets/transitions/vertical_alpha_webm/vertical_01_whiteout_sunburst_alpha.webm"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_bg",
+      "name": "Background Studio Canvas",
+      "kind": "visual",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_typography",
+      "name": "Kinetic Typography Layer",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_overlay",
+      "name": "Alpha Transition Overlays",
+      "kind": "visual",
+      "zIndex": 20,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_bgm",
+      "name": "Background Music Stem",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_sfx",
+      "name": "Synchronized Sound FX",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_headline_intro",
+      "trackId": "track_typography",
+      "type": "text",
+      "startTick": 60000,
+      "durationTicks": 480000,
+      "transform": {
+        "x": 540,
+        "y": 960,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "opacity": 1.0,
+        "anchorX": 0.5,
+        "anchorY": 0.5
+      },
+      "typography": {
+        "text": "PURE CRAFT",
+        "fontAssetId": "font_instrument_serif",
+        "fontSize": 128,
+        "color": "#f8f8f6",
+        "textAlign": "center",
+        "letterSpacing": 2,
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "clip_headline_act2",
+      "trackId": "track_typography",
+      "type": "text",
+      "startTick": 600000,
+      "durationTicks": 720000,
+      "transform": {
+        "x": 540,
+        "y": 960,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "opacity": 1.0,
+        "anchorX": 0.5,
+        "anchorY": 0.5
+      },
+      "typography": {
+        "text": "EDITING MECHANICS",
+        "fontAssetId": "font_archivo",
+        "fontSize": 96,
+        "color": "#e2e8f0",
+        "textAlign": "center",
+        "letterSpacing": -1,
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "clip_trans_01",
+      "trackId": "track_overlay",
+      "type": "video",
+      "startTick": 540000,
+      "durationTicks": 120000,
+      "source": {
+        "assetId": "transition_whiteout",
+        "trimInTick": 0,
+        "trimOutTick": 120000
+      },
+      "transform": {
+        "x": 540,
+        "y": 960,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "opacity": 0.95
+      }
+    },
+    {
+      "id": "clip_audio_bgm",
+      "trackId": "track_bgm",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 1440000,
+      "source": {
+        "assetId": "bgm_snowfall",
+        "trimInTick": 0,
+        "trimOutTick": 1440000
+      },
+      "audio": {
+        "volume": 0.75,
+        "volumeEnvelope": [
+          { "offsetTick": 0, "volume": 0.0 },
+          { "offsetTick": 60000, "volume": 0.75 },
+          { "offsetTick": 520000, "volume": 0.35 },
+          { "offsetTick": 680000, "volume": 0.75 },
+          { "offsetTick": 1380000, "volume": 0.0 }
+        ]
+      }
+    },
+    {
+      "id": "clip_audio_riser",
+      "trackId": "track_sfx",
+      "type": "audio",
+      "startTick": 420000,
+      "durationTicks": 140000,
+      "source": {
+        "assetId": "sfx_riser",
+        "trimInTick": 0,
+        "trimOutTick": 140000
+      },
+      "audio": {
+        "volume": 0.85
+      }
+    },
+    {
+      "id": "clip_audio_click",
+      "trackId": "track_sfx",
+      "type": "audio",
+      "startTick": 600000,
+      "durationTicks": 60000,
+      "source": {
+        "assetId": "sfx_camera_click",
+        "trimInTick": 0,
+        "trimOutTick": 60000
+      },
+      "audio": {
+        "volume": 1.0
+      }
+    }
+  ],
+  "animations": [
+    {
+      "clipId": "clip_headline_intro",
+      "property": "transform.y",
+      "keyframes": [
+        { "offsetTick": 0, "value": 1020, "easing": "power3.out" },
+        { "offsetTick": 60000, "value": 960, "easing": "linear" }
+      ]
+    },
+    {
+      "clipId": "clip_headline_intro",
+      "property": "transform.opacity",
+      "keyframes": [
+        { "offsetTick": 0, "value": 0.0, "easing": "linear" },
+        { "offsetTick": 30000, "value": 1.0, "easing": "linear" },
+        { "offsetTick": 420000, "value": 1.0, "easing": "linear" },
+        { "offsetTick": 480000, "value": 0.0, "easing": "power2.out" }
+      ]
+    }
+  ]
+}

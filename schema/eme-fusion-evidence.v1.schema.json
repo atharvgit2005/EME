@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-fusion-evidence.v1.schema.json",
+  "title": "EditingMechanicsEngineFusionEvidence",
+  "description": "Deterministic Audio-Visual Fusion auxiliary observation sidecar contract for EME Phase 33 (AVCS-33)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "fusionId",
+    "provenance",
+    "timebase",
+    "policy",
+    "audioObservations",
+    "visualObservations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "eme-fusion-evidence.v1",
+      "description": "Exact version identifier for the audio-visual fusion contract"
+    },
+    "fusionId": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Content-addressed SHA-256 fingerprint of the normalized fusion payload"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectRevision",
+        "audioSource",
+        "visualSource"
+      ],
+      "properties": {
+        "projectRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Canonical project revision number for which this fusion is valid"
+        },
+        "audioSource": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assetId",
+            "sha256",
+            "sampleRate",
+            "analysisId",
+            "schemaVersion"
+          ],
+          "properties": {
+            "assetId": { "type": "string" },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "SHA-256 checksum of the audio media file"
+            },
+            "sampleRate": {
+              "type": "integer",
+              "minimum": 8000,
+              "maximum": 192000
+            },
+            "analysisId": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$",
+              "description": "Content-addressed fingerprint of the Earshot beat-analysis sidecar"
+            },
+            "schemaVersion": {
+              "type": "string",
+              "const": "eme-beat-analysis.v1"
+            }
+          }
+        },
+        "visualSource": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assetId",
+            "sha256",
+            "width",
+            "height",
+            "fps",
+            "sidecarId",
+            "schemaVersion"
+          ],
+          "properties": {
+            "assetId": { "type": "string" },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "SHA-256 checksum of the visual video media file"
+            },
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "fps": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["numerator", "denominator"],
+              "properties": {
+                "numerator": { "type": "integer", "minimum": 1 },
+                "denominator": { "type": "integer", "minimum": 1 }
+              }
+            },
+            "sidecarId": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$",
+              "description": "Content-addressed fingerprint of the visual-intelligence sidecar"
+            },
+            "schemaVersion": {
+              "type": "string",
+              "const": "eme-visual-intelligence.v1"
+            }
+          }
+        }
+      }
+    },
+    "timebase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ticksPerSecond",
+        "durationTicks",
+        "intervalConvention"
+      ],
+      "properties": {
+        "ticksPerSecond": {
+          "type": "integer",
+          "const": 120000,
+          "description": "Canonical EME timebase standard: exactly 120,000 integer ticks per second"
+        },
+        "durationTicks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "intervalConvention": {
+          "type": "string",
+          "const": "half-open"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyVersion",
+        "confidenceNormalization"
+      ],
+      "properties": {
+        "policyVersion": {
+          "type": "string",
+          "description": "Declared fusion policy version, e.g. avcs-policy-v1.0.0"
+        },
+        "confidenceNormalization": {
+          "type": "string",
+          "const": "roundHalfToEven(1000 * c)"
+        }
+      }
+    },
+    "audioObservations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tempo",
+        "beats",
+        "downbeats",
+        "onsets"
+      ],
+      "properties": {
+        "tempo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bpm",
+            "confidence",
+            "isAmbiguous",
+            "phaseOffsetTicks"
+          ],
+          "properties": {
+            "bpm": { "type": "number", "minimum": 0, "maximum": 500 },
+            "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 },
+            "alternativesBpm": { "type": "array", "items": { "type": "number" } },
+            "isAmbiguous": { "type": "boolean" },
+            "phaseOffsetTicks": { "type": "integer" }
+          }
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "tick", "sampleIndex", "confidence"],
+            "properties": {
+              "id": { "type": "string" },
+              "tick": { "type": "integer", "minimum": 0 },
+              "sampleIndex": { "type": "integer", "minimum": 0 },
+              "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 },
+              "strength": { "type": "number" }
+            }
+          }
+        },
+        "downbeats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "tick", "barIndex", "confidence"],
+            "properties": {
+              "id": { "type": "string" },
+              "tick": { "type": "integer", "minimum": 0 },
+              "barIndex": { "type": "integer" },
+              "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 }
+            }
+          }
+        },
+        "onsets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tick"],
+            "properties": {
+              "tick": { "type": "integer", "minimum": 0 },
+              "strength": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "visualObservations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coordinateSpace",
+        "frames"
+      ],
+      "properties": {
+        "coordinateSpace": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "units",
+            "origin",
+            "precisionDecimals"
+          ],
+          "properties": {
+            "units": { "type": "string", "const": "source_pixel" },
+            "origin": { "type": "string", "const": "top_left" },
+            "precisionDecimals": { "type": "integer", "const": 3 }
+          }
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tick", "frameIndex"],
+            "properties": {
+              "tick": { "type": "integer", "minimum": 0 },
+              "frameIndex": { "type": "integer", "minimum": 0 },
+              "faces": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["faceId", "confidence", "box"],
+                  "properties": {
+                    "faceId": { "type": "string" },
+                    "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 },
+                    "box": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["x", "y", "width", "height"],
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" },
+                        "width": { "type": "number", "minimum": 0 },
+                        "height": { "type": "number", "minimum": 0 }
+                      }
+                    },
+                    "landmarks": { "type": "object" },
+                    "headPose": { "type": "object" }
+                  }
+                }
+              },
+              "persons": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["personId", "confidence", "box"],
+                  "properties": {
+                    "personId": { "type": "string" },
+                    "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 },
+                    "box": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["x", "y", "width", "height"],
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" },
+                        "width": { "type": "number", "minimum": 0 },
+                        "height": { "type": "number", "minimum": 0 }
+                      }
+                    }
+                  }
+                }
+              },
+              "salientRegions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["regionId", "confidence", "box"],
+                  "properties": {
+                    "regionId": { "type": "string" },
+                    "confidence": { "type": "integer", "minimum": 0, "maximum": 1000 },
+                    "box": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["x", "y", "width", "height"],
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" },
+                        "width": { "type": "number", "minimum": 0 },
+                        "height": { "type": "number", "minimum": 0 }
+                      }
+                    },
+                    "saliencyType": { "type": "string" }
+                  }
+                }
+              },
+              "backgroundRegions": { "type": "array", "items": { "type": "object" } },
+              "lighting": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "alignmentMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temporalToleranceTicks": { "type": "integer", "minimum": 0 },
+        "discrepancies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "description", "timestampTicks"],
+            "properties": {
+              "type": { "type": "string" },
+              "description": { "type": "string" },
+              "timestampTicks": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

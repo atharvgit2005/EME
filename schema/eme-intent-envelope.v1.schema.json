@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-intent-envelope.v1.schema.json",
+  "title": "EditingMechanicsEngineIntentEnvelope",
+  "description": "Untrusted initial interpretation contract of a user editing prompt and snapshot context in EME v1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "raw_prompt",
+    "context",
+    "interpretation",
+    "ambiguities",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "description": "Unique stable identifier for the request"
+    },
+    "raw_prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact untouched natural language instruction text"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "base_revision",
+        "snapshot_sha256",
+        "timebase_ticks_per_second",
+        "selected_entity_ids",
+        "available_asset_ids"
+      ],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "description": "Target EME project ID"
+        },
+        "base_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Authoritative base project revision used for interpretation"
+        },
+        "snapshot_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$",
+          "description": "Cryptographic SHA-256 fingerprint of the canonical project snapshot"
+        },
+        "timebase_ticks_per_second": {
+          "type": "integer",
+          "const": 120000,
+          "description": "Must strictly equal EME standard integer timebase (120,000)"
+        },
+        "selected_entity_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Active selection when prompt was submitted"
+        },
+        "available_asset_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Assets available in project pool"
+        }
+      }
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal",
+        "requested_changes",
+        "constraints",
+        "deliverables"
+      ],
+      "properties": {
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Extracted high-level creative goal"
+        },
+        "requested_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["change_id", "domain", "description"],
+            "properties": {
+              "change_id": { "type": "string" },
+              "domain": {
+                "type": "string",
+                "enum": ["timeline", "color", "audio", "typography", "render_export", "effect"]
+              },
+              "description": { "type": "string" },
+              "target_ids": {
+                "type": "array",
+                "items": { "type": "string" },
+                "default": []
+              }
+            }
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_text", "polarity"],
+            "properties": {
+              "source_text": { "type": "string" },
+              "polarity": { "type": "string", "enum": ["negative_prohibition", "positive_invariant"] },
+              "suggested_type": { "type": "string" }
+            }
+          }
+        },
+        "deliverables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["kind", "container"],
+            "properties": {
+              "kind": { "type": "string", "enum": ["video", "audio", "frames", "manifest"] },
+              "container": { "type": "string", "enum": ["mp4", "mov", "wav", "png", "json"] }
+            }
+          }
+        }
+      }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "description", "is_blocking"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["MISSING_INPUT", "CONFLICTING_REQUIREMENTS", "AMBIGUOUS_TARGET", "UNSUPPORTED_REQUEST"]
+          },
+          "description": { "type": "string" },
+          "is_blocking": { "type": "boolean" },
+          "conflicting_clauses": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["extractor_version", "timestamp"],
+      "properties": {
+        "model": { "type": "string" },
+        "extractor_version": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    }
+  }
+}

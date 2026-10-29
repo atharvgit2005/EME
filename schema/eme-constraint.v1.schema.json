@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-constraint.v1.schema.json",
+  "title": "EditingMechanicsEngineConstraint",
+  "description": "Zero-tolerance typed hard constraint specification for EME PF-01",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "constraint_id",
+    "type",
+    "strength",
+    "target",
+    "on_violation",
+    "on_unknown",
+    "verify_at",
+    "origin"
+  ],
+  "properties": {
+    "constraint_id": {
+      "type": "string",
+      "pattern": "^C-[A-Z0-9_-]+$",
+      "description": "Unique identifier for the compiled constraint"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "preserve_property",
+        "forbid_effect",
+        "preserve_fields",
+        "scope_limit"
+      ]
+    },
+    "strength": {
+      "type": "string",
+      "enum": ["hard", "soft"],
+      "default": "hard"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "entity_type", "ids"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["project", "entity_ids", "project_snapshot", "role"]
+        },
+        "entity_type": {
+          "type": "string",
+          "enum": ["clip", "track", "asset", "any"]
+        },
+        "ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "role": {
+          "type": "string",
+          "enum": ["dialogue", "music", "sfx", "broll", "graphics", "any"]
+        }
+      }
+    },
+    "property_key": {
+      "type": "string",
+      "description": "Semantic property key (e.g. 'color_grade', 'audio_volume')"
+    },
+    "fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Explicit fields to preserve (e.g. ['timeline_interval', 'source_interval', 'time_remap', 'sync_offset'])"
+    },
+    "forbidden_effects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Semantic effects prohibited by this constraint"
+    },
+    "baseline_revision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Project revision to compare against"
+    },
+    "comparison": {
+      "type": "string",
+      "enum": ["canonical_equal", "exact", "subset", "within_tolerance"],
+      "default": "exact"
+    },
+    "on_violation": {
+      "type": "string",
+      "enum": ["block", "warn", "ask_user"],
+      "default": "block"
+    },
+    "on_unknown": {
+      "type": "string",
+      "enum": ["block", "warn"],
+      "default": "block"
+    },
+    "verify_at": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["plan_preflight", "post_execution", "pre_render", "post_render"]
+      },
+      "minItems": 1
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_text"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["explicit_user", "system_safety", "policy_rule"]
+        },
+        "source_text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

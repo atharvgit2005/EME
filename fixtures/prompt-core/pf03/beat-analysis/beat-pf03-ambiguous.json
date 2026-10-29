@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "eme-beat-analysis.v1",
+  "analysisId": "sha256:ambig00000000000000000000000000000000000000000000000000000000000",
+  "source": {
+    "sha256": "ambig00000000000000000000000000000000000000000000000000000000000",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSamples": 661500,
+    "durationTicks": 1800000
+  },
+  "config": {
+    "algorithmVersion": "1.0.0",
+    "sampleRate": 44100,
+    "fftSize": 2048,
+    "hopLength": 512,
+    "window": "hann",
+    "frameCenterConvention": "centered"
+  },
+  "tempo": {
+    "bpm": 60.0,
+    "confidence": 0.51,
+    "alternativesBpm": [120.0],
+    "isAmbiguous": true,
+    "phaseOffsetSamples": 0,
+    "phaseOffsetTicks": 0
+  },
+  "events": {
+    "beats": [
+      { "id": "beat_0", "sampleIndex": 0, "ticks": 0, "confidence": 0.51, "strength": 0.5 }
+    ],
+    "downbeats": [],
+    "onsets": []
+  },
+  "meter": {
+    "numerator": 4,
+    "denominator": 4,
+    "confidence": 0.51
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EMEPreferenceProfile",
+  "description": "Canonical schema for versioned, explainable user editing preferences and soft evaluation weights (PF-08).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "preference_id",
+    "timestamp",
+    "request",
+    "dimensions",
+    "scoring_weights",
+    "fallback_active"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "preference_id": {
+      "type": "string",
+      "pattern": "^pref-[a-f0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "request": {
+      "type": "object",
+      "required": ["prompt"],
+      "properties": {
+        "prompt": { "type": "string" },
+        "brief_id": { "type": "string" }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "required": ["pacing", "transition_style", "typography_style", "musical_alignment"],
+      "properties": {
+        "pacing": {
+          "type": "object",
+          "required": ["preference", "strength", "provenance"],
+          "properties": {
+            "preference": { "type": "string", "enum": ["rapid", "fluid", "restrained", "neutral"] },
+            "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+            "provenance": { "type": "string", "enum": ["explicit_user", "confirmed_prior", "inferred", "default"] }
+          }
+        },
+        "transition_style": {
+          "type": "object",
+          "required": ["preference", "strength", "provenance"],
+          "properties": {
+            "preference": { "type": "string", "enum": ["quick_dissolve", "cross_dissolve", "subtle_dissolve", "neutral"] },
+            "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+            "provenance": { "type": "string", "enum": ["explicit_user", "confirmed_prior", "inferred", "default"] }
+          }
+        },
+        "typography_style": {
+          "type": "object",
+          "required": ["preference", "strength", "provenance"],
+          "properties": {
+            "preference": { "type": "string", "enum": ["bold_punchy", "classic_cinematic", "editorial_hierarchy", "neutral"] },
+            "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+            "provenance": { "type": "string", "enum": ["explicit_user", "confirmed_prior", "inferred", "default"] }
+          }
+        },
+        "musical_alignment": {
+          "type": "object",
+          "required": ["preference", "strength", "provenance"],
+          "properties": {
+            "preference": { "type": "string", "enum": ["downbeat_priority", "phrase_priority", "section_priority", "balanced", "neutral"] },
+            "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+            "provenance": { "type": "string", "enum": ["explicit_user", "confirmed_prior", "inferred", "default"] }
+          }
+        }
+      }
+    },
+    "hard_constraints_ref": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "scoring_weights": {
+      "type": "object",
+      "required": ["preference_satisfaction", "musical_alignment", "physical_qa"],
+      "properties": {
+        "preference_satisfaction": { "type": "number", "minimum": 0, "maximum": 1 },
+        "musical_alignment": { "type": "number", "minimum": 0, "maximum": 1 },
+        "physical_qa": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "fallback_active": {
+      "type": "boolean"
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

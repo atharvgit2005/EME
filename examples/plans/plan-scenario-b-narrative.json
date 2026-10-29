@@ -1,0 +1,112 @@
+{
+  "id": "plan_scenario_b_narrative_edit",
+  "schemaVersion": "1.0.0",
+  "brief": {
+    "prompt": "Create a 12s dynamic narrative montage from raw video footage with title overlays",
+    "creativeGoal": "Paced sequence trimming with lower third context badges and BGM continuity",
+    "targetAudience": "Video editors & post-production teams",
+    "referenceStyle": "Editorial documentary storytelling"
+  },
+  "outputProfile": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "fps": 60,
+    "targetDurationTicks": 1440000
+  },
+  "sourceReferences": [
+    { "assetId": "video_primary_footage", "path": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4", "type": "video" },
+    { "assetId": "font_inter", "path": "assets/fonts/files/Inter-Variable.ttf", "type": "font" },
+    { "assetId": "bgm_snowfall", "path": "assets/bgm/snowfall.mp3", "type": "audio" }
+  ],
+  "sequenceStructure": [
+    { "actId": "act_intro", "name": "Footage Establishing Shot", "startTick": 0, "durationTicks": 720000, "narrativeIntent": "Introduce character & atmosphere" },
+    { "actId": "act_conclusion", "name": "Montage Progression & Title", "startTick": 720000, "durationTicks": 720000, "narrativeIntent": "Deliver core editorial narrative statement" }
+  ],
+  "operations": [
+    {
+      "type": "create_project",
+      "params": {
+        "title": "Phase 12 Scenario B: Footage Narrative Assembly",
+        "canvas": { "width": 1920, "height": 1080, "aspectRatio": "16:9", "backgroundColor": "#0b0f19" },
+        "timebase": { "fps": { "numerator": 60, "denominator": 1 }, "ticksPerSecond": 120000, "durationTicks": 1440000 }
+      },
+      "intent": "Initialize 16:9 landscape canvas"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "video_primary_footage", "type": "video", "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4" },
+      "intent": "Load raw primary footage"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "font_inter", "type": "font", "src": "assets/fonts/files/Inter-Variable.ttf" },
+      "intent": "Load typeface for lower third"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "bgm_snowfall", "type": "audio", "src": "assets/bgm/snowfall.mp3" },
+      "intent": "Load soundtrack bed"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_video_main", "name": "Primary Assembly A-Roll", "kind": "visual", "zIndex": 10 },
+      "intent": "Add visual video track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_lower_third", "name": "Context Titles", "kind": "visual", "zIndex": 20 },
+      "intent": "Add title overlay track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_audio_bed", "name": "Audio Bed", "kind": "audio", "zIndex": 0 },
+      "intent": "Add audio track"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_footage_act1",
+          "trackId": "track_video_main",
+          "type": "video",
+          "source": { "assetId": "video_primary_footage", "trimInTick": 0, "trimOutTick": 1440000 },
+          "startTick": 0,
+          "durationTicks": 1440000,
+          "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+        }
+      },
+      "intent": "Insert assembly video clip"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_title_act1",
+          "trackId": "track_lower_third",
+          "type": "text",
+          "startTick": 60000,
+          "durationTicks": 600000,
+          "transform": { "x": 960, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+          "typography": { "text": "AUTONOMOUS EDITORIAL ASSEMBLY", "fontAssetId": "font_inter", "fontSize": 44, "color": "#f8fafc", "textAlign": "center" }
+        }
+      },
+      "intent": "Insert context lower third"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_bgm_track",
+          "trackId": "track_audio_bed",
+          "type": "audio",
+          "source": { "assetId": "bgm_snowfall", "trimInTick": 0, "trimOutTick": 1440000 },
+          "startTick": 0,
+          "durationTicks": 1440000,
+          "volume": 0.75
+        }
+      },
+      "intent": "Insert soundtrack"
+    }
+  ]
+}

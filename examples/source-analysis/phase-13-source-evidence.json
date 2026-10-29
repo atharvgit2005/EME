@@ -1,0 +1,640 @@
+{
+  "analysisId": "sa_phase_13_e2e",
+  "schemaVersion": "1.0.0",
+  "analyzedAt": "2026-10-15T21:28:27.442Z",
+  "analyzerVersion": "13.0.0",
+  "assets": [
+    {
+      "assetId": "video_raatein",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4",
+      "exists": true,
+      "assetType": "video",
+      "fileSizeBytes": 14192021,
+      "sha256": "dfd9540a620b49b67247099a50a1b1a7328b580184720040ec9b9fb3975899c5",
+      "videoStream": {
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "rationalFps": "24/1",
+        "fps": 24,
+        "durationSec": 182.973243,
+        "totalFrames": 4390,
+        "displayAspectRatio": "640:360"
+      },
+      "audioStream": {
+        "codec": "aac",
+        "channels": 2,
+        "durationSec": 182.973243,
+        "peakDbfs": null,
+        "rmsDbfs": null,
+        "isSilent": false
+      },
+      "candidateKeyframes": [
+        {
+          "timestampSec": 0,
+          "frameIndex": 0,
+          "rationale": "Scene start / in-point"
+        },
+        {
+          "timestampSec": 4,
+          "frameIndex": 96,
+          "rationale": "Periodic interval candidate keyframe @ 4.0s"
+        },
+        {
+          "timestampSec": 8,
+          "frameIndex": 192,
+          "rationale": "Periodic interval candidate keyframe @ 8.0s"
+        },
+        {
+          "timestampSec": 12,
+          "frameIndex": 288,
+          "rationale": "Periodic interval candidate keyframe @ 12.0s"
+        },
+        {
+          "timestampSec": 16,
+          "frameIndex": 384,
+          "rationale": "Periodic interval candidate keyframe @ 16.0s"
+        },
+        {
+          "timestampSec": 20,
+          "frameIndex": 480,
+          "rationale": "Periodic interval candidate keyframe @ 20.0s"
+        },
+        {
+          "timestampSec": 24,
+          "frameIndex": 576,
+          "rationale": "Periodic interval candidate keyframe @ 24.0s"
+        },
+        {
+          "timestampSec": 28,
+          "frameIndex": 672,
+          "rationale": "Periodic interval candidate keyframe @ 28.0s"
+        },
+        {
+          "timestampSec": 32,
+          "frameIndex": 768,
+          "rationale": "Periodic interval candidate keyframe @ 32.0s"
+        },
+        {
+          "timestampSec": 36,
+          "frameIndex": 864,
+          "rationale": "Periodic interval candidate keyframe @ 36.0s"
+        },
+        {
+          "timestampSec": 40,
+          "frameIndex": 960,
+          "rationale": "Periodic interval candidate keyframe @ 40.0s"
+        },
+        {
+          "timestampSec": 44,
+          "frameIndex": 1056,
+          "rationale": "Periodic interval candidate keyframe @ 44.0s"
+        },
+        {
+          "timestampSec": 48,
+          "frameIndex": 1152,
+          "rationale": "Periodic interval candidate keyframe @ 48.0s"
+        },
+        {
+          "timestampSec": 52,
+          "frameIndex": 1248,
+          "rationale": "Periodic interval candidate keyframe @ 52.0s"
+        },
+        {
+          "timestampSec": 56,
+          "frameIndex": 1344,
+          "rationale": "Periodic interval candidate keyframe @ 56.0s"
+        },
+        {
+          "timestampSec": 60,
+          "frameIndex": 1440,
+          "rationale": "Periodic interval candidate keyframe @ 60.0s"
+        },
+        {
+          "timestampSec": 64,
+          "frameIndex": 1536,
+          "rationale": "Periodic interval candidate keyframe @ 64.0s"
+        },
+        {
+          "timestampSec": 68,
+          "frameIndex": 1632,
+          "rationale": "Periodic interval candidate keyframe @ 68.0s"
+        },
+        {
+          "timestampSec": 72,
+          "frameIndex": 1728,
+          "rationale": "Periodic interval candidate keyframe @ 72.0s"
+        },
+        {
+          "timestampSec": 76,
+          "frameIndex": 1824,
+          "rationale": "Periodic interval candidate keyframe @ 76.0s"
+        },
+        {
+          "timestampSec": 80,
+          "frameIndex": 1920,
+          "rationale": "Periodic interval candidate keyframe @ 80.0s"
+        },
+        {
+          "timestampSec": 84,
+          "frameIndex": 2016,
+          "rationale": "Periodic interval candidate keyframe @ 84.0s"
+        },
+        {
+          "timestampSec": 88,
+          "frameIndex": 2112,
+          "rationale": "Periodic interval candidate keyframe @ 88.0s"
+        },
+        {
+          "timestampSec": 92,
+          "frameIndex": 2208,
+          "rationale": "Periodic interval candidate keyframe @ 92.0s"
+        },
+        {
+          "timestampSec": 96,
+          "frameIndex": 2304,
+          "rationale": "Periodic interval candidate keyframe @ 96.0s"
+        },
+        {
+          "timestampSec": 100,
+          "frameIndex": 2400,
+          "rationale": "Periodic interval candidate keyframe @ 100.0s"
+        },
+        {
+          "timestampSec": 104,
+          "frameIndex": 2496,
+          "rationale": "Periodic interval candidate keyframe @ 104.0s"
+        },
+        {
+          "timestampSec": 108,
+          "frameIndex": 2592,
+          "rationale": "Periodic interval candidate keyframe @ 108.0s"
+        },
+        {
+          "timestampSec": 112,
+          "frameIndex": 2688,
+          "rationale": "Periodic interval candidate keyframe @ 112.0s"
+        },
+        {
+          "timestampSec": 116,
+          "frameIndex": 2784,
+          "rationale": "Periodic interval candidate keyframe @ 116.0s"
+        },
+        {
+          "timestampSec": 120,
+          "frameIndex": 2880,
+          "rationale": "Periodic interval candidate keyframe @ 120.0s"
+        },
+        {
+          "timestampSec": 124,
+          "frameIndex": 2976,
+          "rationale": "Periodic interval candidate keyframe @ 124.0s"
+        },
+        {
+          "timestampSec": 128,
+          "frameIndex": 3072,
+          "rationale": "Periodic interval candidate keyframe @ 128.0s"
+        },
+        {
+          "timestampSec": 132,
+          "frameIndex": 3168,
+          "rationale": "Periodic interval candidate keyframe @ 132.0s"
+        },
+        {
+          "timestampSec": 136,
+          "frameIndex": 3264,
+          "rationale": "Periodic interval candidate keyframe @ 136.0s"
+        },
+        {
+          "timestampSec": 140,
+          "frameIndex": 3360,
+          "rationale": "Periodic interval candidate keyframe @ 140.0s"
+        },
+        {
+          "timestampSec": 144,
+          "frameIndex": 3456,
+          "rationale": "Periodic interval candidate keyframe @ 144.0s"
+        },
+        {
+          "timestampSec": 148,
+          "frameIndex": 3552,
+          "rationale": "Periodic interval candidate keyframe @ 148.0s"
+        },
+        {
+          "timestampSec": 152,
+          "frameIndex": 3648,
+          "rationale": "Periodic interval candidate keyframe @ 152.0s"
+        },
+        {
+          "timestampSec": 156,
+          "frameIndex": 3744,
+          "rationale": "Periodic interval candidate keyframe @ 156.0s"
+        },
+        {
+          "timestampSec": 160,
+          "frameIndex": 3840,
+          "rationale": "Periodic interval candidate keyframe @ 160.0s"
+        },
+        {
+          "timestampSec": 164,
+          "frameIndex": 3936,
+          "rationale": "Periodic interval candidate keyframe @ 164.0s"
+        },
+        {
+          "timestampSec": 168,
+          "frameIndex": 4032,
+          "rationale": "Periodic interval candidate keyframe @ 168.0s"
+        },
+        {
+          "timestampSec": 172,
+          "frameIndex": 4128,
+          "rationale": "Periodic interval candidate keyframe @ 172.0s"
+        },
+        {
+          "timestampSec": 176,
+          "frameIndex": 4224,
+          "rationale": "Periodic interval candidate keyframe @ 176.0s"
+        },
+        {
+          "timestampSec": 180,
+          "frameIndex": 4320,
+          "rationale": "Periodic interval candidate keyframe @ 180.0s"
+        },
+        {
+          "timestampSec": 182.92,
+          "frameIndex": 4390,
+          "rationale": "Scene end / out-point"
+        }
+      ]
+    },
+    {
+      "assetId": "font_instrument",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/InstrumentSerif-Regular.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 70012,
+      "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "InstrumentSerif-Regular"
+      }
+    },
+    {
+      "assetId": "font_syne",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/Syne-Variable.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 146980,
+      "sha256": "ce5ac77142a65cab2248a1a2ebb740b1d4d9c20b52488877d3ff664d1356104a",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "Syne-Variable"
+      }
+    },
+    {
+      "assetId": "font_inter",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/Inter-Variable.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 876576,
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "Inter-Variable"
+      }
+    },
+    {
+      "assetId": "bgm_snowfall",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/bgm/snowfall.mp3",
+      "exists": true,
+      "assetType": "audio",
+      "fileSizeBytes": 1521308,
+      "sha256": "c022d554e8d308791fcd3766aa20315e8d49ea8332ed00c79a05f68066cce992",
+      "audioStream": {
+        "codec": "mp3",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "peakDbfs": -90.24333,
+        "rmsDbfs": -99.13588,
+        "isSilent": true
+      }
+    }
+  ],
+  "assetsAnalyzed": [
+    {
+      "assetId": "video_raatein",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4",
+      "exists": true,
+      "assetType": "video",
+      "fileSizeBytes": 14192021,
+      "sha256": "dfd9540a620b49b67247099a50a1b1a7328b580184720040ec9b9fb3975899c5",
+      "videoStream": {
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "rationalFps": "24/1",
+        "fps": 24,
+        "durationSec": 182.973243,
+        "totalFrames": 4390,
+        "displayAspectRatio": "640:360"
+      },
+      "audioStream": {
+        "codec": "aac",
+        "channels": 2,
+        "durationSec": 182.973243,
+        "peakDbfs": null,
+        "rmsDbfs": null,
+        "isSilent": false
+      },
+      "candidateKeyframes": [
+        {
+          "timestampSec": 0,
+          "frameIndex": 0,
+          "rationale": "Scene start / in-point"
+        },
+        {
+          "timestampSec": 4,
+          "frameIndex": 96,
+          "rationale": "Periodic interval candidate keyframe @ 4.0s"
+        },
+        {
+          "timestampSec": 8,
+          "frameIndex": 192,
+          "rationale": "Periodic interval candidate keyframe @ 8.0s"
+        },
+        {
+          "timestampSec": 12,
+          "frameIndex": 288,
+          "rationale": "Periodic interval candidate keyframe @ 12.0s"
+        },
+        {
+          "timestampSec": 16,
+          "frameIndex": 384,
+          "rationale": "Periodic interval candidate keyframe @ 16.0s"
+        },
+        {
+          "timestampSec": 20,
+          "frameIndex": 480,
+          "rationale": "Periodic interval candidate keyframe @ 20.0s"
+        },
+        {
+          "timestampSec": 24,
+          "frameIndex": 576,
+          "rationale": "Periodic interval candidate keyframe @ 24.0s"
+        },
+        {
+          "timestampSec": 28,
+          "frameIndex": 672,
+          "rationale": "Periodic interval candidate keyframe @ 28.0s"
+        },
+        {
+          "timestampSec": 32,
+          "frameIndex": 768,
+          "rationale": "Periodic interval candidate keyframe @ 32.0s"
+        },
+        {
+          "timestampSec": 36,
+          "frameIndex": 864,
+          "rationale": "Periodic interval candidate keyframe @ 36.0s"
+        },
+        {
+          "timestampSec": 40,
+          "frameIndex": 960,
+          "rationale": "Periodic interval candidate keyframe @ 40.0s"
+        },
+        {
+          "timestampSec": 44,
+          "frameIndex": 1056,
+          "rationale": "Periodic interval candidate keyframe @ 44.0s"
+        },
+        {
+          "timestampSec": 48,
+          "frameIndex": 1152,
+          "rationale": "Periodic interval candidate keyframe @ 48.0s"
+        },
+        {
+          "timestampSec": 52,
+          "frameIndex": 1248,
+          "rationale": "Periodic interval candidate keyframe @ 52.0s"
+        },
+        {
+          "timestampSec": 56,
+          "frameIndex": 1344,
+          "rationale": "Periodic interval candidate keyframe @ 56.0s"
+        },
+        {
+          "timestampSec": 60,
+          "frameIndex": 1440,
+          "rationale": "Periodic interval candidate keyframe @ 60.0s"
+        },
+        {
+          "timestampSec": 64,
+          "frameIndex": 1536,
+          "rationale": "Periodic interval candidate keyframe @ 64.0s"
+        },
+        {
+          "timestampSec": 68,
+          "frameIndex": 1632,
+          "rationale": "Periodic interval candidate keyframe @ 68.0s"
+        },
+        {
+          "timestampSec": 72,
+          "frameIndex": 1728,
+          "rationale": "Periodic interval candidate keyframe @ 72.0s"
+        },
+        {
+          "timestampSec": 76,
+          "frameIndex": 1824,
+          "rationale": "Periodic interval candidate keyframe @ 76.0s"
+        },
+        {
+          "timestampSec": 80,
+          "frameIndex": 1920,
+          "rationale": "Periodic interval candidate keyframe @ 80.0s"
+        },
+        {
+          "timestampSec": 84,
+          "frameIndex": 2016,
+          "rationale": "Periodic interval candidate keyframe @ 84.0s"
+        },
+        {
+          "timestampSec": 88,
+          "frameIndex": 2112,
+          "rationale": "Periodic interval candidate keyframe @ 88.0s"
+        },
+        {
+          "timestampSec": 92,
+          "frameIndex": 2208,
+          "rationale": "Periodic interval candidate keyframe @ 92.0s"
+        },
+        {
+          "timestampSec": 96,
+          "frameIndex": 2304,
+          "rationale": "Periodic interval candidate keyframe @ 96.0s"
+        },
+        {
+          "timestampSec": 100,
+          "frameIndex": 2400,
+          "rationale": "Periodic interval candidate keyframe @ 100.0s"
+        },
+        {
+          "timestampSec": 104,
+          "frameIndex": 2496,
+          "rationale": "Periodic interval candidate keyframe @ 104.0s"
+        },
+        {
+          "timestampSec": 108,
+          "frameIndex": 2592,
+          "rationale": "Periodic interval candidate keyframe @ 108.0s"
+        },
+        {
+          "timestampSec": 112,
+          "frameIndex": 2688,
+          "rationale": "Periodic interval candidate keyframe @ 112.0s"
+        },
+        {
+          "timestampSec": 116,
+          "frameIndex": 2784,
+          "rationale": "Periodic interval candidate keyframe @ 116.0s"
+        },
+        {
+          "timestampSec": 120,
+          "frameIndex": 2880,
+          "rationale": "Periodic interval candidate keyframe @ 120.0s"
+        },
+        {
+          "timestampSec": 124,
+          "frameIndex": 2976,
+          "rationale": "Periodic interval candidate keyframe @ 124.0s"
+        },
+        {
+          "timestampSec": 128,
+          "frameIndex": 3072,
+          "rationale": "Periodic interval candidate keyframe @ 128.0s"
+        },
+        {
+          "timestampSec": 132,
+          "frameIndex": 3168,
+          "rationale": "Periodic interval candidate keyframe @ 132.0s"
+        },
+        {
+          "timestampSec": 136,
+          "frameIndex": 3264,
+          "rationale": "Periodic interval candidate keyframe @ 136.0s"
+        },
+        {
+          "timestampSec": 140,
+          "frameIndex": 3360,
+          "rationale": "Periodic interval candidate keyframe @ 140.0s"
+        },
+        {
+          "timestampSec": 144,
+          "frameIndex": 3456,
+          "rationale": "Periodic interval candidate keyframe @ 144.0s"
+        },
+        {
+          "timestampSec": 148,
+          "frameIndex": 3552,
+          "rationale": "Periodic interval candidate keyframe @ 148.0s"
+        },
+        {
+          "timestampSec": 152,
+          "frameIndex": 3648,
+          "rationale": "Periodic interval candidate keyframe @ 152.0s"
+        },
+        {
+          "timestampSec": 156,
+          "frameIndex": 3744,
+          "rationale": "Periodic interval candidate keyframe @ 156.0s"
+        },
+        {
+          "timestampSec": 160,
+          "frameIndex": 3840,
+          "rationale": "Periodic interval candidate keyframe @ 160.0s"
+        },
+        {
+          "timestampSec": 164,
+          "frameIndex": 3936,
+          "rationale": "Periodic interval candidate keyframe @ 164.0s"
+        },
+        {
+          "timestampSec": 168,
+          "frameIndex": 4032,
+          "rationale": "Periodic interval candidate keyframe @ 168.0s"
+        },
+        {
+          "timestampSec": 172,
+          "frameIndex": 4128,
+          "rationale": "Periodic interval candidate keyframe @ 172.0s"
+        },
+        {
+          "timestampSec": 176,
+          "frameIndex": 4224,
+          "rationale": "Periodic interval candidate keyframe @ 176.0s"
+        },
+        {
+          "timestampSec": 180,
+          "frameIndex": 4320,
+          "rationale": "Periodic interval candidate keyframe @ 180.0s"
+        },
+        {
+          "timestampSec": 182.92,
+          "frameIndex": 4390,
+          "rationale": "Scene end / out-point"
+        }
+      ]
+    },
+    {
+      "assetId": "font_instrument",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/InstrumentSerif-Regular.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 70012,
+      "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "InstrumentSerif-Regular"
+      }
+    },
+    {
+      "assetId": "font_syne",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/Syne-Variable.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 146980,
+      "sha256": "ce5ac77142a65cab2248a1a2ebb740b1d4d9c20b52488877d3ff664d1356104a",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "Syne-Variable"
+      }
+    },
+    {
+      "assetId": "font_inter",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/Inter-Variable.ttf",
+      "exists": true,
+      "assetType": "font",
+      "fileSizeBytes": 876576,
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "fontMetadata": {
+        "format": "ttf",
+        "familyName": "Inter-Variable"
+      }
+    },
+    {
+      "assetId": "bgm_snowfall",
+      "resolvedPath": "/Users/atharvpaharia100/editing-mechanics-engine/assets/bgm/snowfall.mp3",
+      "exists": true,
+      "assetType": "audio",
+      "fileSizeBytes": 1521308,
+      "sha256": "c022d554e8d308791fcd3766aa20315e8d49ea8332ed00c79a05f68066cce992",
+      "audioStream": {
+        "codec": "mp3",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "peakDbfs": -90.24333,
+        "rmsDbfs": -99.13588,
+        "isSilent": true
+      }
+    }
+  ]
+}

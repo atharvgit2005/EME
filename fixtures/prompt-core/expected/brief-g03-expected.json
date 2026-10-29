@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf01-g03-contradiction",
+  "source_request_id": "req-pf01-g03",
+  "project_snapshot": {
+    "project_id": "proj_g03_contradiction",
+    "base_revision": 0,
+    "snapshot_sha256": "fd06ec4006e18d870c4351facd87f35efb81aa8756bf99e253746f17cf35208d",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Execute prompt requirements",
+    "success_criteria": [
+      "Requirements executed without violating constraints"
+    ]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-COLOR-001",
+      "domain": "color",
+      "description": "Make warmer by changing color grade",
+      "target_ids": [
+        "clip_v1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-GRADE-001",
+      "type": "preserve_property",
+      "strength": "hard",
+      "target": {
+        "kind": "entity_ids",
+        "entity_type": "clip",
+        "ids": [
+          "clip_v1"
+        ]
+      },
+      "property_key": "color_grade",
+      "baseline_revision": 0,
+      "comparison": "canonical_equal",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": [
+        "plan_preflight",
+        "post_execution",
+        "pre_render"
+      ],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Preserve existing color grade"
+      }
+    }
+  ],
+  "deliverables": [
+    {
+      "kind": "video",
+      "container": "mp4",
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frame_rate": {
+          "numerator": 30,
+          "denominator": 1
+        }
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate_hz": 48000,
+        "channels": 2
+      }
+    }
+  ],
+  "ambiguities": [
+    {
+      "id": "AMB-COLOR-CONTRADICTION",
+      "kind": "CONFLICTING_REQUIREMENTS",
+      "description": "Contradictory requirements: requested color modification conflicts with explicit constraint to preserve color grade",
+      "is_blocking": true,
+      "conflicting_clauses": [
+        "Make warmer by changing color grade",
+        "Preserve existing color grade"
+      ]
+    }
+  ],
+  "validation": {
+    "status": "needs_clarification",
+    "blocking_issue_ids": [
+      "AMB-COLOR-CONTRADICTION",
+      "CONFLICT_COLOR_GRADE"
+    ]
+  }
+}

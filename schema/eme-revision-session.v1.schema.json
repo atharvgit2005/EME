@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EMERevisionSession",
+  "description": "Canonical schema for conversational revision sessions, verified delivery tracking, undo/redo history, and state machine lifecycle (PF-09).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "session_id",
+    "state",
+    "request",
+    "hard_constraints",
+    "concurrency",
+    "history",
+    "undo_redo"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "session_id": {
+      "type": "string",
+      "pattern": "^ses-[a-f0-9]+$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "initialized",
+        "candidate_selection_required",
+        "ready",
+        "revision_pending",
+        "verifying",
+        "revision_verified",
+        "revision_failed",
+        "recovery_required"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "required": ["original_prompt"],
+      "properties": {
+        "original_prompt": { "type": "string" },
+        "brief_id": { "type": "string" },
+        "latest_revision_prompt": { "type": ["string", "null"] }
+      }
+    },
+    "hard_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["constraint_id", "description"],
+        "properties": {
+          "constraint_id": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "strength": { "type": "string", "enum": ["hard", "soft"] },
+          "provenance": { "type": "string" }
+        }
+      }
+    },
+    "preference_profile": {
+      "type": ["object", "null"]
+    },
+    "candidate_set_id": {
+      "type": ["string", "null"]
+    },
+    "selected_candidate_id": {
+      "type": ["string", "null"]
+    },
+    "active_delivery": {
+      "type": ["object", "null"],
+      "properties": {
+        "delivery_run_id": { "type": "string" },
+        "manifest_id": { "type": "string" },
+        "media_path": { "type": "string" },
+        "sha256": { "type": "string" },
+        "revision_id": { "type": "string" },
+        "activated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["revision_id", "status", "timestamp"],
+        "properties": {
+          "revision_id": { "type": "string" },
+          "predecessor_id": { "type": ["string", "null"] },
+          "prompt": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["committed", "failed", "aborted"]
+          },
+          "plan_hash": { "type": "string" },
+          "manifest_id": { "type": ["string", "null"] },
+          "delivery_run_id": { "type": ["string", "null"] },
+          "media_sha256": { "type": ["string", "null"] },
+          "media_path": { "type": ["string", "null"] },
+          "project_path": { "type": ["string", "null"] },
+          "operations_count": { "type": "integer" },
+          "qa_score": { "type": ["number", "null"] },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "error": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "undo_redo": {
+      "type": "object",
+      "required": ["undo_stack", "redo_stack"],
+      "properties": {
+        "current_revision_id": { "type": ["string", "null"] },
+        "undo_stack": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "redo_stack": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "concurrency": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 0 },
+        "last_modified_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["clean", "in_flight", "interrupted"]
+        },
+        "pending_transaction_id": { "type": ["string", "null"] },
+        "last_attempted_revision_id": { "type": ["string", "null"] },
+        "checkpoint_path": { "type": ["string", "null"] }
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

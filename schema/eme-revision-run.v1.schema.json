@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EMERevisionRun",
+  "description": "Canonical schema for conversational revision, constraint preservation & verified iteration (PF-06).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "revision_run_id",
+    "prior_run_id",
+    "raw_revision_prompt",
+    "intent_disentanglement",
+    "plan_diff",
+    "execution_result",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "revision_run_id": {
+      "type": "string",
+      "pattern": "^revrun-[a-f0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "prior_run_id": {
+      "type": "string",
+      "pattern": "^run-[a-f0-9]+$"
+    },
+    "prior_manifest_id": {
+      "type": "string"
+    },
+    "raw_revision_prompt": {
+      "type": "string"
+    },
+    "intent_disentanglement": {
+      "type": "object",
+      "required": ["explicit_changes", "preserved_constraints", "derived_changes", "detected_conflicts"],
+      "properties": {
+        "explicit_changes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "preserved_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "derived_changes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "detected_conflicts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "plan_diff": {
+      "type": "object",
+      "required": ["added_operations", "removed_operations", "modified_operations", "unchanged_operations_count"],
+      "properties": {
+        "added_operations": { "type": "array" },
+        "removed_operations": { "type": "array" },
+        "modified_operations": { "type": "array" },
+        "unchanged_operations_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "execution_result": {
+      "type": "object",
+      "required": ["base_revision", "final_revision", "status"],
+      "properties": {
+        "base_revision": { "type": "integer", "minimum": 0 },
+        "final_revision": { "type": "integer", "minimum": 0 },
+        "status": {
+          "type": "string",
+          "enum": ["committed", "rolled_back", "conflict_blocked"]
+        },
+        "journal_path": { "type": "string" }
+      }
+    },
+    "reverification": {
+      "type": "object",
+      "properties": {
+        "media_qa_summary": { "type": "object" },
+        "semantic_intent_summary": { "type": "object" }
+      }
+    },
+    "deliverable": {
+      "type": "object",
+      "required": ["media_path", "sha256", "manifest_path"],
+      "properties": {
+        "media_path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "manifest_path": { "type": "string" },
+        "manifest_id": { "type": "string" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["verified", "failed", "conflict_blocked", "rolled_back"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

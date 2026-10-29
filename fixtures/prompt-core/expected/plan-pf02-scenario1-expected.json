@@ -1,0 +1,182 @@
+{
+  "diagnostics": {
+    "conflicts": [],
+    "missing_references": [],
+    "rejected_operations": [],
+    "unsupported_requests": []
+  },
+  "dry_run": {
+    "affected_clips": [
+      "clip_1",
+      "clip_2",
+      "clip_3"
+    ],
+    "affected_tracks": [
+      "track_v_main"
+    ],
+    "final_revision": 7,
+    "invariant_checks": {
+      "preserved_properties_verified": true,
+      "track_locks_respected": true,
+      "zero_leak_integrity": true
+    },
+    "simulated_steps": 6,
+    "success": true,
+    "timing_implications": {
+      "duration_seconds": 10,
+      "duration_ticks": 1200000,
+      "end_tick": 1200000,
+      "start_tick": 0
+    }
+  },
+  "operations": [
+    {
+      "dependencies": [],
+      "expected_effects": {
+        "affected_field": "durationTicks",
+        "description": "Trim clip_1 duration to 400000 ticks",
+        "resulting_ticks": 400000
+      },
+      "op_id": "op-trim-1",
+      "params": {
+        "clipId": "clip_1",
+        "durationTicks": 400000,
+        "sourceStartTick": 0,
+        "startTick": 0
+      },
+      "preconditions": {
+        "expectedBaseRevision": 1
+      },
+      "step_index": 0,
+      "target_id": "clip_1",
+      "type": "trim_clip"
+    },
+    {
+      "dependencies": [
+        "op-trim-1"
+      ],
+      "expected_effects": {
+        "affected_field": "startTick",
+        "description": "Position clip_1 at tick 0",
+        "resulting_ticks": 0
+      },
+      "op_id": "op-move-1",
+      "params": {
+        "clipId": "clip_1",
+        "targetTick": 0,
+        "targetTrackId": "track_v_main"
+      },
+      "preconditions": {
+        "expectedBaseRevision": 2
+      },
+      "step_index": 1,
+      "target_id": "clip_1",
+      "type": "move_clip"
+    },
+    {
+      "dependencies": [
+        "op-move-1"
+      ],
+      "expected_effects": {
+        "affected_field": "durationTicks",
+        "description": "Trim clip_2 duration to 400000 ticks",
+        "resulting_ticks": 400000
+      },
+      "op_id": "op-trim-2",
+      "params": {
+        "clipId": "clip_2",
+        "durationTicks": 400000,
+        "sourceStartTick": 0,
+        "startTick": 400000
+      },
+      "preconditions": {
+        "expectedBaseRevision": 3
+      },
+      "step_index": 2,
+      "target_id": "clip_2",
+      "type": "trim_clip"
+    },
+    {
+      "dependencies": [
+        "op-trim-2"
+      ],
+      "expected_effects": {
+        "affected_field": "startTick",
+        "description": "Position clip_2 at tick 400000",
+        "resulting_ticks": 400000
+      },
+      "op_id": "op-move-2",
+      "params": {
+        "clipId": "clip_2",
+        "targetTick": 400000,
+        "targetTrackId": "track_v_main"
+      },
+      "preconditions": {
+        "expectedBaseRevision": 4
+      },
+      "step_index": 3,
+      "target_id": "clip_2",
+      "type": "move_clip"
+    },
+    {
+      "dependencies": [
+        "op-move-2"
+      ],
+      "expected_effects": {
+        "affected_field": "durationTicks",
+        "description": "Trim clip_3 duration to 400000 ticks",
+        "resulting_ticks": 400000
+      },
+      "op_id": "op-trim-3",
+      "params": {
+        "clipId": "clip_3",
+        "durationTicks": 400000,
+        "sourceStartTick": 0,
+        "startTick": 800000
+      },
+      "preconditions": {
+        "expectedBaseRevision": 5
+      },
+      "step_index": 4,
+      "target_id": "clip_3",
+      "type": "trim_clip"
+    },
+    {
+      "dependencies": [
+        "op-trim-3"
+      ],
+      "expected_effects": {
+        "affected_field": "startTick",
+        "description": "Position clip_3 at tick 800000",
+        "resulting_ticks": 800000
+      },
+      "op_id": "op-move-3",
+      "params": {
+        "clipId": "clip_3",
+        "targetTick": 800000,
+        "targetTrackId": "track_v_main"
+      },
+      "preconditions": {
+        "expectedBaseRevision": 6
+      },
+      "step_index": 5,
+      "target_id": "clip_3",
+      "type": "move_clip"
+    }
+  ],
+  "plan_id": "plan-pf02-scenario1-expected",
+  "project_snapshot": {
+    "base_revision": 1,
+    "project_id": "proj_pf02_scenario1",
+    "snapshot_sha256": "cbfddbf87fdaf3a485c7b02eb8fd05c87c9f7e98f349351d3090d309176006b1",
+    "timebase_ticks_per_second": 120000
+  },
+  "schema_version": "1.0.0",
+  "source_brief_id": "brief-pf02-scenario1-001",
+  "source_request_id": "req-pf02-scenario1-001",
+  "target_duration_ticks": 1200000,
+  "validation": {
+    "blocking_issue_ids": [],
+    "status": "ready"
+  }
+}

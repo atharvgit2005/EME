@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf02-conflict-001",
+  "source_request_id": "req-pf02-conflict",
+  "project_snapshot": {
+    "project_id": "proj_pf02_scenario1",
+    "base_revision": 1,
+    "snapshot_sha256": "cbfddbf87fdaf3a485c7b02eb8fd05c87c9f7e98f349351d3090d309176006b1",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Contradictory color grading request",
+    "success_criteria": ["Should be flagged with conflict diagnostic and needs_clarification"]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-COLOR-CONFLICT-001",
+      "domain": "color",
+      "description": "Adjust color grade to make it warmer",
+      "target_ids": ["clip_1"]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-GRADE-PRESERVE-001",
+      "type": "preserve_property",
+      "strength": "hard",
+      "target": {
+        "kind": "entity_ids",
+        "entity_type": "clip",
+        "ids": ["clip_1"]
+      },
+      "property_key": "color_grade",
+      "baseline_revision": 1,
+      "comparison": "canonical_equal",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": ["plan_preflight", "post_execution"],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Do not modify the color grade"
+      }
+    }
+  ],
+  "deliverables": [],
+  "ambiguities": [],
+  "validation": {
+    "status": "ready",
+    "blocking_issue_ids": []
+  }
+}

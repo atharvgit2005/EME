@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf02-missing-clip-001",
+  "source_request_id": "req-pf02-missing-clip",
+  "project_snapshot": {
+    "project_id": "proj_pf02_scenario1",
+    "base_revision": 1,
+    "snapshot_sha256": "cbfddbf87fdaf3a485c7b02eb8fd05c87c9f7e98f349351d3090d309176006b1",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Modify non-existent clip",
+    "success_criteria": ["Should fail closed"]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-MISSING-001",
+      "domain": "timeline",
+      "description": "Trim non-existent clip",
+      "target_ids": ["non_existent_clip_xyz"]
+    }
+  ],
+  "constraints": [],
+  "deliverables": [],
+  "ambiguities": [],
+  "validation": {
+    "status": "ready",
+    "blocking_issue_ids": []
+  }
+}

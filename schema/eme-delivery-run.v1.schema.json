@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EMEDeliveryRun",
+  "description": "Canonical schema for an end-to-end autonomous prompt-to-verified-deliverable orchestration run (PF-05).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "request",
+    "project_snapshot",
+    "plan_summary",
+    "execution",
+    "render_job_id",
+    "qa_summary",
+    "intent_verification",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^run-[a-f0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "request": {
+      "type": "object",
+      "required": ["raw_prompt", "brief_id", "goal"],
+      "properties": {
+        "raw_prompt": { "type": "string" },
+        "brief_id": { "type": "string" },
+        "goal": { "type": "string" },
+        "explicit_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "project_snapshot": {
+      "type": "object",
+      "required": ["project_id", "base_revision", "final_revision"],
+      "properties": {
+        "project_id": { "type": "string" },
+        "base_revision": { "type": "integer", "minimum": 0 },
+        "final_revision": { "type": "integer", "minimum": 0 },
+        "snapshot_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "plan_summary": {
+      "type": "object",
+      "required": ["plan_id", "canonical_plan_hash", "operations_count", "target_duration_ticks"],
+      "properties": {
+        "plan_id": { "type": "string" },
+        "canonical_plan_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "operations_count": { "type": "integer", "minimum": 0 },
+        "target_duration_ticks": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["status", "executed_steps", "atomic"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["committed", "rolled_back", "partially_executed_failed"]
+        },
+        "executed_steps": { "type": "integer", "minimum": 0 },
+        "atomic": { "type": "boolean" },
+        "journal_path": { "type": "string" }
+      }
+    },
+    "render_job_id": {
+      "type": "string",
+      "pattern": "^rjob-[a-f0-9]+$"
+    },
+    "qa_summary": {
+      "type": "object",
+      "required": ["report_id", "decision", "score", "total_checks", "passed_checks", "repair_attempts"],
+      "properties": {
+        "report_id": { "type": "string" },
+        "decision": {
+          "type": "string",
+          "enum": ["PASS", "REPAIRABLE", "FAIL"]
+        },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "total_checks": { "type": "integer", "minimum": 0 },
+        "passed_checks": { "type": "integer", "minimum": 0 },
+        "repair_attempts": { "type": "integer", "minimum": 0, "maximum": 2 }
+      }
+    },
+    "intent_verification": {
+      "type": "object",
+      "required": ["status", "criteria"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["verified", "failed", "unverified"]
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["criterion_id", "description", "status"],
+            "properties": {
+              "criterion_id": { "type": "string" },
+              "description": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["passed", "failed", "unverified"]
+              },
+              "detail": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "deliverable": {
+      "type": "object",
+      "properties": {
+        "media_path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "manifest_path": { "type": "string" },
+        "manifest_id": { "type": "string" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["verified", "failed", "incomplete"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-color-grade.v1.schema.json",
+  "title": "EditingMechanicsEngineColorGrade",
+  "description": "Canonical color grading specification for Editing Mechanics Engine (EME) v1.0.0",
+  "type": "object",
+  "required": [
+    "id",
+    "schemaVersion",
+    "revision",
+    "enabled",
+    "colorSpaces",
+    "exposure",
+    "whiteBalance",
+    "primary",
+    "curves",
+    "hsl"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^grade_[a-zA-Z0-9_-]+$",
+      "description": "Unique stable identifier for the color grade"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing grade mutation revision"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "name": {
+      "type": "string",
+      "default": "Default Grade"
+    },
+    "colorSpaces": {
+      "type": "object",
+      "required": ["input", "working", "output"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "enum": ["rec709", "srgb", "rec2020", "display-p3", "apple-log"],
+          "default": "rec709"
+        },
+        "working": {
+          "type": "string",
+          "enum": ["rec709-linear", "rec709"],
+          "default": "rec709"
+        },
+        "lutDomain": {
+          "type": "string",
+          "enum": ["rec709", "log"],
+          "default": "rec709"
+        },
+        "output": {
+          "type": "string",
+          "enum": ["rec709", "srgb"],
+          "default": "rec709"
+        }
+      }
+    },
+    "exposure": {
+      "type": "number",
+      "minimum": -6.0,
+      "maximum": 6.0,
+      "default": 0.0,
+      "description": "Exposure adjustment in EV stops (-6.0 to +6.0)"
+    },
+    "whiteBalance": {
+      "type": "object",
+      "required": ["temperature", "tint"],
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "default": 0.0,
+          "description": "Color temperature offset (-1.0 cool/blue to +1.0 warm/amber)"
+        },
+        "tint": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "default": 0.0,
+          "description": "Green-magenta tint offset (-1.0 green to +1.0 magenta)"
+        }
+      }
+    },
+    "primary": {
+      "type": "object",
+      "required": ["lift", "gamma", "gain", "offset"],
+      "properties": {
+        "lift": {
+          "type": "array",
+          "items": { "type": "number", "minimum": -1.0, "maximum": 1.0 },
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [0.0, 0.0, 0.0]
+        },
+        "gamma": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0.1, "maximum": 5.0 },
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [1.0, 1.0, 1.0]
+        },
+        "gain": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0.0, "maximum": 5.0 },
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [1.0, 1.0, 1.0]
+        },
+        "offset": {
+          "type": "array",
+          "items": { "type": "number", "minimum": -1.0, "maximum": 1.0 },
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    "curves": {
+      "type": "object",
+      "required": ["master", "red", "green", "blue", "luma"],
+      "properties": {
+        "master": { "$ref": "#/$defs/curve" },
+        "red": { "$ref": "#/$defs/curve" },
+        "green": { "$ref": "#/$defs/curve" },
+        "blue": { "$ref": "#/$defs/curve" },
+        "luma": { "$ref": "#/$defs/curve" }
+      }
+    },
+    "hsl": {
+      "type": "object",
+      "required": [
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "cyan",
+        "blue",
+        "purple",
+        "magenta"
+      ],
+      "properties": {
+        "red": { "$ref": "#/$defs/hslChannel" },
+        "orange": { "$ref": "#/$defs/hslChannel" },
+        "yellow": { "$ref": "#/$defs/hslChannel" },
+        "green": { "$ref": "#/$defs/hslChannel" },
+        "cyan": { "$ref": "#/$defs/hslChannel" },
+        "blue": { "$ref": "#/$defs/hslChannel" },
+        "purple": { "$ref": "#/$defs/hslChannel" },
+        "magenta": { "$ref": "#/$defs/hslChannel" }
+      }
+    },
+    "lut": {
+      "type": "object",
+      "required": ["enabled", "intensity", "interpolation"],
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "assetId": { "type": "string" },
+        "path": { "type": "string" },
+        "sha256": { "type": "string" },
+        "size": { "type": "integer", "enum": [17, 33, 65] },
+        "interpolation": {
+          "type": "string",
+          "enum": ["tetrahedral", "trilinear", "nearest"],
+          "default": "tetrahedral"
+        },
+        "intensity": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 1.0
+        }
+      }
+    },
+    "skinProtection": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "weight": { "type": "number", "minimum": 0.0, "maximum": 1.0, "default": 0.8 },
+        "tolerance": { "type": "number", "minimum": 0.0, "maximum": 1.0, "default": 0.3 }
+      }
+    },
+    "sceneAnalysis": {
+      "type": "object",
+      "description": "Non-mutating recommendation findings from scene intelligence engine",
+      "properties": {
+        "timestamp": { "type": "string" },
+        "provenance": { "type": "string" },
+        "estimatedCCT": { "type": "number" },
+        "estimatedTint": { "type": "number" },
+        "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "recommendedTemperatureOffset": { "type": "number" },
+        "recommendedTintOffset": { "type": "number" },
+        "clippingRisk": {
+          "type": "object",
+          "properties": {
+            "highlights": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "shadows": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+          }
+        },
+        "skinDetected": { "type": "boolean" },
+        "skinCoverage": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    }
+  },
+  "$defs": {
+    "curve": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["x", "y"],
+        "properties": {
+          "x": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "y": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "leftControl": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          },
+          "rightControl": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "hslChannel": {
+      "type": "object",
+      "required": ["hue", "saturation", "lightness"],
+      "properties": {
+        "hue": {
+          "type": "number",
+          "minimum": -180.0,
+          "maximum": 180.0,
+          "default": 0.0,
+          "description": "Hue shift in degrees (-180 to +180)"
+        },
+        "saturation": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "default": 0.0,
+          "description": "Saturation shift (-1.0 desaturate to +1.0 boost)"
+        },
+        "lightness": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "default": 0.0,
+          "description": "Lightness shift (-1.0 darken to +1.0 brighten)"
+        }
+      }
+    }
+  }
+}

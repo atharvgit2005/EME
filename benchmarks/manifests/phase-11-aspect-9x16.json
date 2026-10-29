@@ -1,0 +1,74 @@
+{
+  "id": "proj_p11_aspect_9x16",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 11 Benchmark E: Vertical 9:16 Showcase",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#0b0f19"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 360000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "video_primary_footage",
+      "type": "video",
+      "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    },
+    {
+      "id": "font_inter",
+      "type": "font",
+      "src": "assets/fonts/files/Inter-Variable.ttf"
+    },
+    {
+      "id": "bgm_snowfall",
+      "type": "audio",
+      "src": "assets/bgm/snowfall.mp3"
+    }
+  ],
+  "tracks": [
+    { "id": "track_video_main", "name": "Vertical 9:16 Reframed Footage", "kind": "visual", "zIndex": 10, "muted": false, "locked": false },
+    { "id": "track_title_main", "name": "Vertical Safe Overlay", "kind": "visual", "zIndex": 20, "muted": false, "locked": false },
+    { "id": "track_audio_bgm", "name": "Soundtrack", "kind": "audio", "zIndex": 0, "muted": false, "locked": false }
+  ],
+  "clips": [
+    {
+      "id": "clip_footage_9x16",
+      "trackId": "track_video_main",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 360000 },
+      "startTick": 0,
+      "durationTicks": 360000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_title_9x16",
+      "trackId": "track_title_main",
+      "type": "text",
+      "startTick": 30000,
+      "durationTicks": 300000,
+      "transform": { "x": 540, "y": 1450, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "VERTICAL 9:16 RETARGETED ASSEMBLY", "fontAssetId": "font_syne", "fontSize": 44, "color": "#f8fafc", "textAlign": "center" }
+    },
+    {
+      "id": "clip_bgm_9x16",
+      "trackId": "track_audio_bgm",
+      "type": "audio",
+      "source": { "assetId": "bgm_snowfall", "inTick": 0, "outTick": 360000 },
+      "startTick": 0,
+      "durationTicks": 360000,
+      "volume": 0.8
+    }
+  ]
+}

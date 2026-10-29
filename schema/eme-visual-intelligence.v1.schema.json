@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-visual-intelligence.v1.schema.json",
+  "title": "EditingMechanicsEngineVisualIntelligence",
+  "description": "Deterministic Visual Intelligence auxiliary observation sidecar contract for EME Phase 32",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sidecarId",
+    "source",
+    "proxy",
+    "producer",
+    "coordinateSpace",
+    "frames"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "eme-visual-intelligence.v1",
+      "description": "Exact version identifier for the visual intelligence contract"
+    },
+    "sidecarId": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Content-addressed SHA-256 fingerprint of the sidecar payload"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Full-resolution canonical source asset identification and temporal base",
+      "required": [
+        "assetId",
+        "sha256",
+        "width",
+        "height",
+        "fps",
+        "durationTicks",
+        "timebase"
+      ],
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "description": "Canonical asset identifier in the EME project"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 checksum of the source video media file"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Full-resolution video frame width in pixels"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Full-resolution video frame height in pixels"
+        },
+        "fps": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["numerator", "denominator"],
+          "properties": {
+            "numerator": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "denominator": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "durationTicks": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total duration in integer ticks (120,000 ticks/sec)"
+        },
+        "timebase": {
+          "type": "integer",
+          "const": 120000,
+          "description": "Canonical ticks-per-second timebase constant"
+        }
+      }
+    },
+    "proxy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Low-resolution proxy media and coordinate scaling specification",
+      "required": [
+        "mediaId",
+        "sha256",
+        "width",
+        "height",
+        "scaleFactorX",
+        "scaleFactorY"
+      ],
+      "properties": {
+        "mediaId": {
+          "type": "string",
+          "description": "Proxy file identifier or relative path"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 checksum of proxy media file"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Proxy frame width in pixels"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Proxy frame height in pixels"
+        },
+        "scaleFactorX": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Scale ratio source.width / proxy.width"
+        },
+        "scaleFactorY": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Scale ratio source.height / proxy.height"
+        },
+        "crop": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y", "width", "height"],
+          "properties": {
+            "x": { "type": "number", "minimum": 0 },
+            "y": { "type": "number", "minimum": 0 },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "padding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["top", "left", "bottom", "right"],
+          "properties": {
+            "top": { "type": "number", "minimum": 0 },
+            "left": { "type": "number", "minimum": 0 },
+            "bottom": { "type": "number", "minimum": 0 },
+            "right": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Extractor provenance, configuration, and execution mode",
+      "required": [
+        "pipeline",
+        "version",
+        "modelFamily",
+        "executionMode"
+      ],
+      "properties": {
+        "pipeline": {
+          "type": "string",
+          "description": "Name of extraction pipeline"
+        },
+        "version": {
+          "type": "string",
+          "description": "SemVer of extraction pipeline"
+        },
+        "modelFamily": {
+          "type": "string",
+          "description": "Visual model family identifier"
+        },
+        "modelWeightsSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Optional content hash of model weights if local weights used"
+        },
+        "executionMode": {
+          "type": "string",
+          "enum": ["offline_worker", "precomputed_sidecar", "synthetic_fixture"]
+        }
+      }
+    },
+    "coordinateSpace": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Explicit coordinate system declaration",
+      "required": [
+        "origin",
+        "pixelSemantics",
+        "canonicalSpace",
+        "boundsUnit"
+      ],
+      "properties": {
+        "origin": {
+          "type": "string",
+          "const": "top_left",
+          "description": "Origin (0,0) is located at top-left corner of canvas"
+        },
+        "pixelSemantics": {
+          "type": "string",
+          "const": "pixel_edge",
+          "description": "Coordinates represent continuous pixel boundaries"
+        },
+        "canonicalSpace": {
+          "type": "string",
+          "const": "source_canvas",
+          "description": "Canonical observation bounds are transformed to full source canvas coordinates"
+        },
+        "boundsUnit": {
+          "type": "string",
+          "const": "pixels",
+          "description": "Units are measured in display pixels"
+        }
+      }
+    },
+    "frames": {
+      "type": "array",
+      "description": "Temporal sequence of frame-level visual observations",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tick",
+          "frameIndex",
+          "presentationTimestampSec",
+          "observations"
+        ],
+        "properties": {
+          "tick": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Integer timeline tick aligned to 120,000 ticks/sec"
+          },
+          "frameIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "0-based video frame sequence index"
+          },
+          "presentationTimestampSec": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Presentation time in fractional seconds (tick / 120000)"
+          },
+          "observations": {
+            "type": "array",
+            "description": "Bounded visual observations detected in this frame",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "type",
+                "bounds",
+                "confidence"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for this observation instance"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "face",
+                    "person",
+                    "focal_point",
+                    "salient_region",
+                    "text_region",
+                    "background_region"
+                  ],
+                  "description": "Semantic classification of observed feature"
+                },
+                "bounds": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Bounding box in full source canvas pixel coordinates",
+                  "required": ["x", "y", "width", "height"],
+                  "properties": {
+                    "x": { "type": "number", "minimum": 0 },
+                    "y": { "type": "number", "minimum": 0 },
+                    "width": { "type": "number", "exclusiveMinimum": 0 },
+                    "height": { "type": "number", "exclusiveMinimum": 0 }
+                  }
+                },
+                "proxyBounds": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Original raw bounding box in proxy pixel coordinates before scaling",
+                  "required": ["x", "y", "width", "height"],
+                  "properties": {
+                    "x": { "type": "number", "minimum": 0 },
+                    "y": { "type": "number", "minimum": 0 },
+                    "width": { "type": "number", "exclusiveMinimum": 0 },
+                    "height": { "type": "number", "exclusiveMinimum": 0 }
+                  }
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000,
+                  "description": "Integer-scaled confidence score in inclusive range [0, 1000], where 1000 represents 1.0, 500 represents 0.5, and 0 represents 0.0"
+                },
+                "motion": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Optional instantaneous optical flow or displacement vector",
+                  "required": ["vx", "vy", "speed"],
+                  "properties": {
+                    "vx": { "type": "number", "description": "Horizontal velocity in pixels/second" },
+                    "vy": { "type": "number", "description": "Vertical velocity in pixels/second" },
+                    "speed": { "type": "number", "minimum": 0, "description": "Magnitude sqrt(vx^2 + vy^2)" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "trajectories": {
+      "type": "array",
+      "description": "Optional sparse feature trajectories tracked over temporal frames",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "featureId",
+          "trackType",
+          "points"
+        ],
+        "properties": {
+          "featureId": {
+            "type": "string",
+            "description": "Persistent identifier linking points across frames"
+          },
+          "trackType": {
+            "type": "string",
+            "enum": ["point", "bounding_box"],
+            "description": "Track geometry type"
+          },
+          "points": {
+            "type": "array",
+            "description": "Temporal sequence of track coordinates",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["tick", "x", "y", "confidence"],
+              "properties": {
+                "tick": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Integer timeline tick"
+                },
+                "x": {
+                  "type": "number",
+                  "description": "X coordinate in source canvas space"
+                },
+                "y": {
+                  "type": "number",
+                  "description": "Y coordinate in source canvas space"
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000,
+                  "description": "Tracking confidence score in inclusive range [0, 1000]"
+                },
+                "occluded": {
+                  "type": "boolean",
+                  "description": "True if feature is obscured or temporarily lost"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Auxiliary non-authoritative annotations or diagnostic notes"
+    }
+  }
+}

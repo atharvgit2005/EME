@@ -1,0 +1,51 @@
+{
+  "id": "proj_pf02_locked",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "PF02 Locked Track Test",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1800000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "asset_clip_1",
+      "type": "video",
+      "src": "assets/clips/scene_01.mp4"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v_locked",
+      "kind": "visual",
+      "zIndex": 1,
+      "name": "Locked Track",
+      "enabled": true,
+      "locked": true
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_locked_01",
+      "trackId": "track_v_locked",
+      "assetId": "asset_clip_1",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 600000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 600000,
+      "name": "scene_locked"
+    }
+  ]
+}

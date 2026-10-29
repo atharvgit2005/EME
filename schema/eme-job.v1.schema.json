@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/morluto/rea/schemas/eme-job.v1.schema.json",
+  "title": "EME Orchestrated Editing Job",
+  "description": "Durable, resumable editing job state tracking pipeline progression, asset integrity, operations, renders, and approval gates.",
+  "type": "object",
+  "required": [
+    "jobId",
+    "schemaVersion",
+    "status",
+    "createdAt",
+    "updatedAt",
+    "stateHistory"
+  ],
+  "properties": {
+    "jobId": {
+      "type": "string",
+      "pattern": "^job_[a-zA-Z0-9_-]+$"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "INGESTING",
+        "ANALYZING",
+        "PLANNING",
+        "AWAITING_APPROVAL",
+        "VALIDATING",
+        "EXECUTING",
+        "RENDERING",
+        "QA_EVALUATING",
+        "CORRECTING",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED",
+        "SUSPENDED"
+      ]
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "sourceAnalysisId": { "type": "string" },
+    "planId": { "type": "string" },
+    "projectId": { "type": "string" },
+    "projectRevision": { "type": "integer", "minimum": 0 },
+    "approvalState": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "approved": { "type": "boolean" },
+        "approvedBy": { "type": "string" },
+        "approvedAt": { "type": "string" },
+        "policyReason": { "type": "string" }
+      }
+    },
+    "assetManifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assetId", "path", "sha256"],
+        "properties": {
+          "assetId": { "type": "string" },
+          "path": { "type": "string" },
+          "sha256": { "type": "string" }
+        }
+      }
+    },
+    "stateHistory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fromStatus", "toStatus", "timestamp"],
+        "properties": {
+          "fromStatus": { "type": "string" },
+          "toStatus": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "executedOperations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stepIndex": { "type": "integer" },
+          "type": { "type": "string" },
+          "revision": { "type": "integer" }
+        }
+      }
+    },
+    "renderOutputs": {
+      "type": "object",
+      "properties": {
+        "mp4Path": { "type": "string" },
+        "renderDurationSec": { "type": "number" },
+        "renderDurationRatio": { "type": "number" },
+        "playbackSpeedFactor": { "type": "number" }
+      }
+    },
+    "finalManifest": {
+      "type": "object"
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "phase": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    }
+  }
+}

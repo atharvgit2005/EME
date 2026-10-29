@@ -1,0 +1,144 @@
+{
+  "id": "proj_p10_bench_d_adaptation",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 10 Benchmark D — Cross-Aspect Ratio Adaptation (16:9 -> 9:16 Retargeting)",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#0d1117"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 480000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "video_primary_footage",
+      "type": "video",
+      "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4"
+    },
+    {
+      "id": "font_inter",
+      "type": "font",
+      "src": "assets/fonts/files/Inter-Variable.ttf"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    },
+    {
+      "id": "bgm_snowfall",
+      "type": "audio",
+      "src": "assets/bgm/snowfall.mp3"
+    },
+    {
+      "id": "sfx_woosh",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/12_woosh_original.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_video_retargeted",
+      "name": "Reframed Center-Cropped Footage",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_adapted_overlay",
+      "name": "Vertical Safe-Margin Title Overlay",
+      "kind": "visual",
+      "zIndex": 20,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_adapted_badge",
+      "name": "Vertical Badge Overlay",
+      "kind": "visual",
+      "zIndex": 25,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_bgm",
+      "name": "Audio Soundtrack Continuity",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_sfx",
+      "name": "Impact Accent Audio",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_retargeted_video",
+      "trackId": "track_video_retargeted",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 480000 },
+      "startTick": 0,
+      "durationTicks": 480000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_retargeted_title",
+      "trackId": "track_adapted_overlay",
+      "type": "text",
+      "startTick": 30000,
+      "durationTicks": 420000,
+      "transform": { "x": 540, "y": 1450, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "RETARGETED 9:16 VERTICAL", "fontAssetId": "font_syne", "fontSize": 56, "color": "#f8fafc", "textAlign": "center" }
+    },
+    {
+      "id": "clip_retargeted_badge",
+      "trackId": "track_adapted_badge",
+      "type": "text",
+      "startTick": 60000,
+      "durationTicks": 390000,
+      "transform": { "x": 540, "y": 1540, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "SAFE MARGIN COMPLIANT • 60 FPS", "fontAssetId": "font_inter", "fontSize": 24, "color": "#38bdf8", "textAlign": "center" }
+    },
+    {
+      "id": "clip_bgm_track",
+      "trackId": "track_audio_bgm",
+      "type": "audio",
+      "source": { "assetId": "bgm_snowfall", "inTick": 0, "outTick": 480000 },
+      "startTick": 0,
+      "durationTicks": 480000
+    },
+    {
+      "id": "clip_sfx_whoosh",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "source": { "assetId": "sfx_woosh", "inTick": 0, "outTick": 120000 },
+      "startTick": 30000,
+      "durationTicks": 120000
+    }
+  ],
+  "animations": [
+    {
+      "clipId": "clip_retargeted_title",
+      "property": "transform.opacity",
+      "keyframes": [
+        { "offsetTick": 0, "value": 0, "easing": "linear" },
+        { "offsetTick": 60000, "value": 1, "easing": "easeOut" },
+        { "offsetTick": 360000, "value": 1, "easing": "linear" },
+        { "offsetTick": 420000, "value": 0, "easing": "easeIn" }
+      ]
+    }
+  ]
+}

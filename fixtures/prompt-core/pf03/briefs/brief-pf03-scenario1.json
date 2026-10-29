@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf03-scenario1",
+  "source_request_id": "req-pf03-scenario1",
+  "project_snapshot": {
+    "project_id": "proj-pf03-scenario1",
+    "base_revision": 1,
+    "snapshot_sha256": "b4db858784db5977c66f21a863face7b4158a74f241e623eb344d1e16cc6db70",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Create a 12-second, 9:16 social-media edit using supplied primary footage, music, B-roll, and title text",
+    "success_criteria": [
+      "Keep primary footage in supplied order (clip_1, clip_2, clip_3)",
+      "Place music track at beginning (t=0) on track_a_music",
+      "Align cuts between primary clips to nearest eligible beats",
+      "Add one B-roll cutaway on separate visual track (track_v_broll)",
+      "Add 1-second transition between designated clips clip_1 and clip_2",
+      "Show supplied title during first 3 seconds on track_graphics",
+      "Total timeline duration exactly 1,440,000 ticks (12.0s)",
+      "Produce dry-run plan first with zero project mutation"
+    ]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-TIMELINE-PRIMARY",
+      "domain": "timeline",
+      "description": "Arrange primary footage in supplied order with cuts beat-aligned to music",
+      "target_ids": ["clip_1", "clip_2", "clip_3"]
+    },
+    {
+      "change_id": "CHG-AUDIO-MUSIC",
+      "domain": "audio",
+      "description": "Place background music at timeline start (t=0) on track_a_music",
+      "target_ids": ["track_a_music"]
+    },
+    {
+      "change_id": "CHG-TIMELINE-BROLL",
+      "domain": "timeline",
+      "description": "Add B-roll cutaway on track_v_broll during middle section",
+      "target_ids": ["track_v_broll"]
+    },
+    {
+      "change_id": "CHG-EFFECT-TRANSITION",
+      "domain": "effect",
+      "description": "Apply 1-second cross_dissolve transition between clip_1 and clip_2",
+      "target_ids": ["clip_1", "clip_2"]
+    },
+    {
+      "change_id": "CHG-TYPO-TITLE",
+      "domain": "typography",
+      "description": "Show title text overlay during first 3 seconds on track_graphics",
+      "target_ids": ["track_graphics"]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-DUR-1440K",
+      "type": "preserve_property",
+      "strength": "hard",
+      "target": {
+        "kind": "project",
+        "entity_type": "any",
+        "ids": ["project"]
+      },
+      "property_key": "target_duration",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": ["plan_preflight", "post_execution"],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Create a 12-second edit"
+      }
+    }
+  ],
+  "deliverables": [
+    {
+      "kind": "video",
+      "container": "mp4",
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "frame_rate": {
+          "numerator": 30,
+          "denominator": 1
+        }
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate_hz": 48000,
+        "channels": 2
+      }
+    }
+  ],
+  "ambiguities": [],
+  "validation": {
+    "status": "ready",
+    "blocking_issue_ids": []
+  }
+}

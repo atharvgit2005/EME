@@ -1,0 +1,31 @@
+{
+  "suite": "Phase 11 Benchmark E: 3-Format Aspect Ratio Adaptation",
+  "baseProject": {
+    "title": "Autonomous Editing Engine Core Showcase",
+    "durationTicks": 600000,
+    "fps": 60
+  },
+  "formats": [
+    {
+      "format": "landscape_16x9",
+      "resolution": { "width": 1920, "height": 1080 },
+      "aspectRatio": "16:9",
+      "manifest": "benchmarks/manifests/phase-11-aspect-16x9.json",
+      "outputVideo": "artifacts/phase-11/aspect-adaptation/showcase-16x9.mp4"
+    },
+    {
+      "format": "vertical_9x16",
+      "resolution": { "width": 1080, "height": 1920 },
+      "aspectRatio": "9:16",
+      "manifest": "benchmarks/manifests/phase-11-aspect-9x16.json",
+      "outputVideo": "artifacts/phase-11/aspect-adaptation/showcase-9x16.mp4"
+    },
+    {
+      "format": "square_1x1",
+      "resolution": { "width": 1080, "height": 1080 },
+      "aspectRatio": "1:1",
+      "manifest": "benchmarks/manifests/phase-11-aspect-1x1.json",
+      "outputVideo": "artifacts/phase-11/aspect-adaptation/showcase-1x1.mp4"
+    }
+  ]
+}

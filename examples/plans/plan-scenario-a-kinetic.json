@@ -1,0 +1,92 @@
+{
+  "id": "plan_scenario_a_kinetic_typography",
+  "schemaVersion": "1.0.0",
+  "brief": {
+    "prompt": "Create high-impact 15s kinetic typography title sequence for EME engine release",
+    "creativeGoal": "Deliver modern, reference-driven editorial motion graphics with contrasting typefaces",
+    "targetAudience": "Developers & AI creative technologists",
+    "referenceStyle": "Apple keynote motion typography + Swiss graphic design"
+  },
+  "outputProfile": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "fps": 60,
+    "targetDurationTicks": 1800000
+  },
+  "sourceReferences": [
+    { "assetId": "font_instrument", "path": "assets/fonts/files/InstrumentSerif-Regular.ttf", "type": "font" },
+    { "assetId": "font_syne", "path": "assets/fonts/files/Syne-Variable.ttf", "type": "font" },
+    { "assetId": "bgm_snowfall", "path": "assets/bgm/snowfall.mp3", "type": "audio" }
+  ],
+  "sequenceStructure": [
+    { "actId": "act_hero", "name": "Hero Title Entrance", "startTick": 0, "durationTicks": 600000, "narrativeIntent": "Establish bold cinematic statement" },
+    { "actId": "act_subhead", "name": "Technical Subhead Reveal", "startTick": 600000, "durationTicks": 1200000, "narrativeIntent": "Present core architectural capabilities" }
+  ],
+  "operations": [
+    {
+      "type": "create_project",
+      "params": {
+        "title": "Phase 12 Scenario A: Kinetic Typography",
+        "canvas": { "width": 1080, "height": 1920, "aspectRatio": "9:16", "backgroundColor": "#090a0f" },
+        "timebase": { "fps": { "numerator": 60, "denominator": 1 }, "ticksPerSecond": 120000, "durationTicks": 1800000 }
+      },
+      "intent": "Initialize canonical 9:16 project timebase"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "font_instrument", "type": "font", "src": "assets/fonts/files/InstrumentSerif-Regular.ttf" },
+      "intent": "Load hero typography asset"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "font_syne", "type": "font", "src": "assets/fonts/files/Syne-Variable.ttf" },
+      "intent": "Load badge typeface asset"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "bgm_snowfall", "type": "audio", "src": "assets/bgm/snowfall.mp3" },
+      "intent": "Load background audio stem"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_text", "name": "Hero Typography", "kind": "visual", "zIndex": 10 },
+      "intent": "Add visual typography track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_audio", "name": "Soundtrack", "kind": "audio", "zIndex": 0 },
+      "intent": "Add audio soundtrack track"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_hero_title",
+          "trackId": "track_text",
+          "type": "text",
+          "startTick": 30000,
+          "durationTicks": 540000,
+          "transform": { "x": 540, "y": 960, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+          "typography": { "text": "REFERENCE TO EDIT", "fontAssetId": "font_instrument", "fontSize": 88, "color": "#f8fafc", "textAlign": "center" }
+        }
+      },
+      "intent": "Insert hero title clip"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_bgm",
+          "trackId": "track_audio",
+          "type": "audio",
+          "source": { "assetId": "bgm_snowfall", "trimInTick": 0, "trimOutTick": 1800000 },
+          "startTick": 0,
+          "durationTicks": 1800000,
+          "volume": 0.8
+        }
+      },
+      "intent": "Insert soundtrack audio clip"
+    }
+  ]
+}

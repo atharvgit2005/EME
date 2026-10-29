@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf01-g01-export",
+  "source_request_id": "req-pf01-g01",
+  "project_snapshot": {
+    "project_id": "proj_g01_export",
+    "base_revision": 0,
+    "snapshot_sha256": "55546060279961c79cd4f44beff8c07fc863964ff5653949c1a54409711b79a7",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Export deliverable without modifying project composition",
+    "success_criteria": [
+      "Rendered output matches deliverable specification",
+      "Timeline composition, color grade, and audio remain unchanged"
+    ]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-EXPORT-001",
+      "domain": "render_export",
+      "description": "Export deliverable as specified",
+      "target_ids": [
+        "project"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-MUSIC-001",
+      "type": "forbid_effect",
+      "strength": "hard",
+      "target": {
+        "kind": "project",
+        "entity_type": "any",
+        "ids": []
+      },
+      "forbidden_effects": [
+        "music_content_added",
+        "music_asset_attached",
+        "music_generated"
+      ],
+      "baseline_revision": 0,
+      "comparison": "exact",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": [
+        "plan_preflight",
+        "post_execution",
+        "pre_render"
+      ],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Do not add music"
+      }
+    },
+    {
+      "constraint_id": "C-TIMING-002",
+      "type": "preserve_fields",
+      "strength": "hard",
+      "target": {
+        "kind": "project",
+        "entity_type": "clip",
+        "ids": [
+          "clip_v1",
+          "clip_a1"
+        ]
+      },
+      "fields": [
+        "startTick",
+        "durationTicks"
+      ],
+      "baseline_revision": 0,
+      "comparison": "exact",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": [
+        "plan_preflight",
+        "post_execution",
+        "pre_render"
+      ],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Do not change any existing clip timing"
+      }
+    },
+    {
+      "constraint_id": "C-AUDIO-EDIT-003",
+      "type": "preserve_property",
+      "strength": "hard",
+      "target": {
+        "kind": "entity_ids",
+        "entity_type": "clip",
+        "ids": [
+          "clip_a1"
+        ]
+      },
+      "property_key": "audio",
+      "baseline_revision": 0,
+      "comparison": "canonical_equal",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": [
+        "plan_preflight",
+        "post_execution",
+        "pre_render"
+      ],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "Do not alter the audio edit"
+      }
+    }
+  ],
+  "deliverables": [
+    {
+      "kind": "video",
+      "container": "mp4",
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frame_rate": {
+          "numerator": 30,
+          "denominator": 1
+        }
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate_hz": 48000,
+        "channels": 2
+      }
+    }
+  ],
+  "ambiguities": [],
+  "validation": {
+    "status": "ready",
+    "blocking_issue_ids": []
+  }
+}

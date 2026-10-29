@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-delivery-manifest.v1.schema.json",
+  "title": "EditingMechanicsEngineDeliveryManifest",
+  "description": "Verifiable delivery manifest schema for EME Phase PF-04 certified exports",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "job_id",
+    "provenance",
+    "deliverable",
+    "qa_certification",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^manifest-[a-zA-Z0-9_-]+$"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^rjob-[a-zA-Z0-9_-]+$"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "final_revision",
+        "canonical_plan_hash",
+        "input_assets",
+        "renderer_info"
+      ],
+      "properties": {
+        "project_id": { "type": "string" },
+        "final_revision": { "type": "integer", "minimum": 0 },
+        "canonical_plan_hash": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+        "input_assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "sha256"],
+            "properties": {
+              "id": { "type": "string" },
+              "sha256": { "type": "string" }
+            }
+          }
+        },
+        "renderer_info": {
+          "type": "object",
+          "required": ["engine", "version"],
+          "properties": {
+            "engine": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        }
+      }
+    },
+    "deliverable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_name", "path", "file_size_bytes", "sha256", "format", "streams"],
+      "properties": {
+        "file_name": { "type": "string" },
+        "path": { "type": "string" },
+        "file_size_bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+        "format": {
+          "type": "object",
+          "required": ["container", "duration_seconds"],
+          "properties": {
+            "container": { "type": "string" },
+            "duration_seconds": { "type": "number", "minimum": 0 }
+          }
+        },
+        "streams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["codec_type", "codec_name"],
+            "properties": {
+              "codec_type": { "type": "string", "enum": ["video", "audio"] },
+              "codec_name": { "type": "string" },
+              "width": { "type": "integer" },
+              "height": { "type": "integer" },
+              "channels": { "type": "integer" },
+              "sample_rate": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "qa_certification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_id", "decision", "score", "total_checks", "passed_checks", "repair_attempts"],
+      "properties": {
+        "report_id": { "type": "string" },
+        "decision": { "type": "string", "enum": ["PASS", "FAIL"] },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "total_checks": { "type": "integer", "minimum": 0 },
+        "passed_checks": { "type": "integer", "minimum": 0 },
+        "repair_attempts": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["verified", "failed", "incomplete"]
+    }
+  }
+}

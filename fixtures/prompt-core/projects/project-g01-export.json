@@ -1,0 +1,81 @@
+{
+  "id": "proj_g01_export",
+  "schemaVersion": "1.0.0",
+  "revision": 0,
+  "title": "PF01-G01 Export Only Baseline",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 360000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "raw_clip_01",
+      "type": "video",
+      "src": "assets/video/clip_01.mp4"
+    },
+    {
+      "id": "dialogue_stem",
+      "type": "audio",
+      "src": "assets/audio/dialogue.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v1",
+      "kind": "video",
+      "name": "Main Video",
+      "enabled": true,
+      "locked": false
+    },
+    {
+      "id": "track_a1",
+      "kind": "audio",
+      "name": "Dialogue Track",
+      "enabled": true,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_v1",
+      "trackId": "track_v1",
+      "assetId": "raw_clip_01",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 360000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 360000,
+      "name": "Interview Clip",
+      "colorGrade": {
+        "exposure": 0.1,
+        "contrast": 1.05
+      }
+    },
+    {
+      "id": "clip_a1",
+      "trackId": "track_a1",
+      "assetId": "dialogue_stem",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 360000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 360000,
+      "name": "Dialogue Clip",
+      "audio": {
+        "volume": 1.0,
+        "pan": 0.0
+      }
+    }
+  ]
+}

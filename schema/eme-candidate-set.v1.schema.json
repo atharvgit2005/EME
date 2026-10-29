@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EMECandidateSet",
+  "description": "Canonical schema for candidate generation, multi-variant exploration, independent verification & user selection (PF-07).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "candidate_set_id",
+    "timestamp",
+    "request",
+    "hard_constraints",
+    "authorized_variation_dimensions",
+    "candidates",
+    "selection",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "candidate_set_id": {
+      "type": "string",
+      "pattern": "^cset-[a-f0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "request": {
+      "type": "object",
+      "required": ["prompt"],
+      "properties": {
+        "prompt": { "type": "string" },
+        "brief_id": { "type": "string" },
+        "baseline_run_id": { "type": "string" },
+        "target_duration_ticks": { "type": "integer" }
+      }
+    },
+    "hard_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["constraint_id", "description"],
+        "properties": {
+          "constraint_id": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "strength": { "type": "string", "enum": ["hard", "soft"] }
+        }
+      }
+    },
+    "authorized_variation_dimensions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "adapted_musical_structure": {
+      "type": ["object", "null"]
+    },
+    "preference_profile": {
+      "type": ["object", "null"]
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "variation_profile",
+          "canonical_plan_hash",
+          "execution",
+          "status"
+        ],
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "variation_profile": {
+            "type": "object",
+            "required": ["name", "description"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "pacing": { "type": "string" },
+              "transition_style": { "type": "string" },
+              "typography_style": { "type": "string" },
+              "motion_energy": { "type": "string" }
+            }
+          },
+          "canonical_plan_hash": { "type": "string" },
+          "plan_summary": {
+            "type": "object",
+            "properties": {
+              "operations_count": { "type": "integer" },
+              "target_duration_ticks": { "type": "integer" }
+            }
+          },
+          "execution": {
+            "type": "object",
+            "required": ["status", "executed_steps", "base_revision", "final_revision"],
+            "properties": {
+              "status": { "type": "string", "enum": ["committed", "rolled_back", "failed"] },
+              "executed_steps": { "type": "integer" },
+              "base_revision": { "type": "integer" },
+              "final_revision": { "type": "integer" },
+              "journal_path": { "type": "string" }
+            }
+          },
+          "render_job_id": { "type": ["string", "null"] },
+          "qa_summary": {
+            "type": ["object", "null"],
+            "properties": {
+              "decision": { "type": "string", "enum": ["PASS", "FAIL"] },
+              "score": { "type": "number" },
+              "passed_checks": { "type": "integer" },
+              "total_checks": { "type": "integer" }
+            }
+          },
+          "semantic_verification": {
+            "type": ["object", "null"],
+            "properties": {
+              "status": { "type": "string", "enum": ["verified", "failed"] },
+              "criteria": { "type": "array" }
+            }
+          },
+          "deliverable": {
+            "type": ["object", "null"],
+            "properties": {
+              "media_path": { "type": "string" },
+              "sha256": { "type": "string" },
+              "manifest_path": { "type": "string" },
+              "manifest_id": { "type": "string" }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["verified", "failed", "incomplete"]
+          },
+          "musical_alignment": {
+            "type": ["object", "null"],
+            "properties": {
+              "scorer_version": { "type": "string" },
+              "hard_gates_passed": { "type": "boolean" },
+              "musical_score": { "type": "number" },
+              "composite_score": { "type": "number" },
+              "rank": { "type": ["integer", "null"] },
+              "eligible_for_selection": { "type": "boolean" },
+              "explanation": { "type": "string" }
+            }
+          },
+          "preference_alignment": {
+            "type": ["object", "null"],
+            "properties": {
+              "preference_score": { "type": "number" },
+              "explanation": { "type": "string" }
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "comparison_matrix": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "status"],
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "profile_name": { "type": "string" },
+          "status": { "type": "string" },
+          "cuts_count": { "type": "integer" },
+          "transition_style": { "type": "string" },
+          "pacing_style": { "type": "string" },
+          "qa_score": { "type": "number" },
+          "musical_score": { "type": "number" },
+          "preference_score": { "type": "number" },
+          "total_score": { "type": "number" },
+          "rank": { "type": ["integer", "null"] },
+          "media_sha256": { "type": "string" }
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "required": ["selected_candidate_id"],
+      "properties": {
+        "selected_candidate_id": { "type": ["string", "null"] },
+        "selected_manifest_id": { "type": ["string", "null"] },
+        "selected_at": { "type": ["string", "null"] },
+        "selection_provenance": { "type": "string" },
+        "feedback_record_id": { "type": ["string", "null"] }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ready", "partially_verified", "all_failed", "selection_committed"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

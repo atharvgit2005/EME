@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "brief_id": "brief-pf02-scenario1-001",
+  "source_request_id": "req-pf02-scenario1-001",
+  "project_snapshot": {
+    "project_id": "proj_pf02_scenario1",
+    "base_revision": 1,
+    "snapshot_sha256": "cbfddbf87fdaf3a485c7b02eb8fd05c87c9f7e98f349351d3090d309176006b1",
+    "timebase_ticks_per_second": 120000
+  },
+  "goal": {
+    "objective": "Create a 10-second vertical social-media edit from the three supplied clips in their given order. Trim the edit to exactly 10 seconds, preserve the existing source order, and do not add new media. Produce a dry-run plan first; do not execute it.",
+    "success_criteria": [
+      "Target edit duration is exactly 10 seconds (1,200,000 ticks)",
+      "Three supplied clips preserved in exact source order",
+      "No new media introduced",
+      "Dry-run executed with zero project-state mutation"
+    ]
+  },
+  "requested_changes": [
+    {
+      "change_id": "CHG-PF02-001",
+      "domain": "timeline",
+      "description": "Trim and arrange three clips in sequential order to achieve 10 seconds total duration",
+      "target_ids": ["clip_1", "clip_2", "clip_3"]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-ORDER-001",
+      "type": "preserve_property",
+      "strength": "hard",
+      "target": {
+        "kind": "entity_ids",
+        "entity_type": "clip",
+        "ids": ["clip_1", "clip_2", "clip_3"]
+      },
+      "property_key": "clip_order",
+      "baseline_revision": 1,
+      "comparison": "exact",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": ["plan_preflight", "post_execution"],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "preserve the existing source order"
+      }
+    },
+    {
+      "constraint_id": "C-NOMEDIA-001",
+      "type": "forbid_effect",
+      "strength": "hard",
+      "target": {
+        "kind": "project",
+        "entity_type": "any",
+        "ids": []
+      },
+      "forbidden_effects": ["media_content_added", "source_added"],
+      "baseline_revision": 1,
+      "comparison": "exact",
+      "on_violation": "block",
+      "on_unknown": "block",
+      "verify_at": ["plan_preflight", "post_execution"],
+      "origin": {
+        "kind": "explicit_user",
+        "source_text": "do not add new media"
+      }
+    }
+  ],
+  "deliverables": [
+    {
+      "kind": "video",
+      "container": "mp4",
+      "duration_ticks": 1200000,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "frame_rate": {
+          "numerator": 30,
+          "denominator": 1
+        }
+      }
+    }
+  ],
+  "ambiguities": [],
+  "validation": {
+    "status": "ready",
+    "blocking_issue_ids": []
+  }
+}

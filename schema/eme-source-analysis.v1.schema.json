@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/morluto/rea/schemas/eme-source-analysis.v1.schema.json",
+  "title": "EME Source Media Analysis",
+  "description": "Structured, reproducible timecoded evidence extracted from video, audio, image, and font source assets.",
+  "type": "object",
+  "required": [
+    "analysisId",
+    "schemaVersion",
+    "analyzedAt",
+    "analyzerVersion",
+    "assets"
+  ],
+  "properties": {
+    "analysisId": {
+      "type": "string",
+      "pattern": "^sa_[a-zA-Z0-9_-]+$"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "analyzedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "analyzerVersion": {
+      "type": "string"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assetId", "resolvedPath", "exists", "assetType"],
+        "properties": {
+          "assetId": { "type": "string" },
+          "resolvedPath": { "type": "string" },
+          "exists": { "type": "boolean" },
+          "assetType": {
+            "type": "string",
+            "enum": ["video", "audio", "image", "font", "unknown"]
+          },
+          "fileSizeBytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string" },
+          "videoStream": {
+            "type": "object",
+            "properties": {
+              "codec": { "type": "string" },
+              "width": { "type": "integer", "minimum": 1 },
+              "height": { "type": "integer", "minimum": 1 },
+              "rationalFps": { "type": "string" },
+              "fps": { "type": "number", "minimum": 0 },
+              "durationSec": { "type": "number", "minimum": 0 },
+              "totalFrames": { "type": "integer", "minimum": 0 },
+              "displayAspectRatio": { "type": "string" },
+              "pixelFormat": { "type": "string" }
+            }
+          },
+          "audioStream": {
+            "type": "object",
+            "properties": {
+              "codec": { "type": "string" },
+              "sampleRateHz": { "type": "integer", "minimum": 1 },
+              "channels": { "type": "integer", "minimum": 1 },
+              "durationSec": { "type": "number", "minimum": 0 },
+              "peakDbfs": { "type": "number" },
+              "rmsDbfs": { "type": "number" },
+              "isSilent": { "type": "boolean" }
+            }
+          },
+          "candidateKeyframes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["timestampSec", "frameIndex", "rationale"],
+              "properties": {
+                "timestampSec": { "type": "number", "minimum": 0 },
+                "frameIndex": { "type": "integer", "minimum": 0 },
+                "rationale": { "type": "string" }
+              }
+            }
+          },
+          "fontMetadata": {
+            "type": "object",
+            "properties": {
+              "format": { "type": "string" },
+              "familyName": { "type": "string" }
+            }
+          },
+          "imageMetadata": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "integer", "minimum": 1 },
+              "height": { "type": "integer", "minimum": 1 },
+              "format": { "type": "string" }
+            }
+          },
+          "error": { "type": "string" }
+        }
+      }
+    }
+  }
+}

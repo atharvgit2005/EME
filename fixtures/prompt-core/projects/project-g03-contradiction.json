@@ -1,0 +1,54 @@
+{
+  "id": "proj_g03_contradiction",
+  "schemaVersion": "1.0.0",
+  "revision": 0,
+  "title": "PF01-G03 Contradictory Color Invariants",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 360000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "raw_video_scene",
+      "type": "video",
+      "src": "assets/video/scene.mp4"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v1",
+      "kind": "video",
+      "name": "Video Track",
+      "enabled": true,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_v1",
+      "trackId": "track_v1",
+      "assetId": "raw_video_scene",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 360000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 360000,
+      "name": "Main Shot",
+      "colorGrade": {
+        "exposure": 0.0,
+        "temperature": 5600
+      }
+    }
+  ]
+}

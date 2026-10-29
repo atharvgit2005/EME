@@ -1,0 +1,214 @@
+{
+  "predecessor": "a347c3ca3979976aa7646448d770a576aeb7b621",
+  "source_tracked_diff_sha256": "81d890c2761f083079ccc8a9d57d26aba2461b2334de4ccc2853b25f82928101",
+  "inherited_modifications": [
+    {
+      "path": "src/creative/audio-mixer-engine.js",
+      "sha256": "f1c3206969b150654882fea69a90fce7ca70ce30a51b2167d4402d151cd85723"
+    },
+    {
+      "path": "src/mcp/server.js",
+      "sha256": "dd57a141aa1c5676eb64fdd08cf459367963416577d531c7f19e8020f4288db3"
+    },
+    {
+      "path": "tests/phase35-real-world-workflow.test.js",
+      "sha256": "5447b9aceee019717163c57195289b2f703396f5e3052a2fe643bdbc5c962da4"
+    }
+  ],
+  "contracts": [
+    {
+      "path": "schema/eme-beat-actor-plan.v1.schema.json",
+      "sha256": "03a55df6f1aa86eb1b0299b1fc50e2a4d72524e4efc19a1c1acc4e377c6be527"
+    },
+    {
+      "path": "schema/eme-beat-analysis.v1.schema.json",
+      "sha256": "cbfc24899e8534f23e3755048bbf59621a611eafa7090df7c20079f946a5b574"
+    },
+    {
+      "path": "schema/eme-candidate-set.v1.schema.json",
+      "sha256": "193eab35591098dc3243558041cd5fb4a110a82bf0941d2c68e868aa65f30a84"
+    },
+    {
+      "path": "schema/eme-color-grade.v1.schema.json",
+      "sha256": "0b06c9592f3bdb5c6f18e108eec5abaa58c3ca8e7d5931a16dd411d66feca309"
+    },
+    {
+      "path": "schema/eme-constraint.v1.schema.json",
+      "sha256": "a30ca12026661a72b31af4aed244e1bffea60adc9dd84cb001116614db5132d4"
+    },
+    {
+      "path": "schema/eme-creative-plan.v1.schema.json",
+      "sha256": "89d0d8e815150d98473d169effa41b23563e33565a6d355ecf4c5dd51edb3b43"
+    },
+    {
+      "path": "schema/eme-delivery-manifest.v1.schema.json",
+      "sha256": "368a46efefdf7a5c91a420af2bb34dd0caec0cbe6af280693c38c8ff45aeb75c"
+    },
+    {
+      "path": "schema/eme-delivery-run.v1.schema.json",
+      "sha256": "ca6696842d0792bec117f8a39c58b298beeef30e2f3b4e50b2f33abdf90df394"
+    },
+    {
+      "path": "schema/eme-edit-brief.v1.schema.json",
+      "sha256": "2a63452f90fee8feeac0909ff286351a05d7c7bd0c05c7d412cdb4d89b3638d0"
+    },
+    {
+      "path": "schema/eme-editing-plan.v1.schema.json",
+      "sha256": "6390ebe4285edc70356a5965f3cbd32d875a7f9fc3f29519e7f9b1a2b6f86e70"
+    },
+    {
+      "path": "schema/eme-fusion-evidence.v1.schema.json",
+      "sha256": "2816c2d757e73d13d2d8b402e346684b98b8cb0090c8a76fffe41386aa6711ba"
+    },
+    {
+      "path": "schema/eme-intent-envelope.v1.schema.json",
+      "sha256": "4d7ee59e3a31d6379e7c0e2f1fd492c3c269afcc98eda8c89094cf29bbcfef69"
+    },
+    {
+      "path": "schema/eme-job.v1.schema.json",
+      "sha256": "add308cc374a733860ce721c18033d8e50669072ad494e5b752b69f254767f0e"
+    },
+    {
+      "path": "schema/eme-media-qa-report.v1.schema.json",
+      "sha256": "a14105381587e06d98f3dbbd21cd34f57e8642914731b1c447910f68779fdb04"
+    },
+    {
+      "path": "schema/eme-musical-structure.v1.schema.json",
+      "sha256": "f5f9bcab46c080799cdd32314cb2d89c74937ced33fca9e5943ee206f33e0702"
+    },
+    {
+      "path": "schema/eme-operation-plan.v1.schema.json",
+      "sha256": "deef35ec807ca4b6b8a0500766d952722c4c071a40d8fa80531277c4094e28a8"
+    },
+    {
+      "path": "schema/eme-preference-feedback.v1.schema.json",
+      "sha256": "0d0ed4eb0bce60ba2c62952ad1451c084fe9db45d7d665c79dc2578d8c5f9f75"
+    },
+    {
+      "path": "schema/eme-preference-profile.v1.schema.json",
+      "sha256": "f976697fa50cc0cfb7d8810575cf0670cac26ef0c3065ee59b65b0d3390026b2"
+    },
+    {
+      "path": "schema/eme-project.v1.schema.json",
+      "sha256": "8b238aa487f0a029a080e7dbef7812578339561d7542276ebb8b18a5cb21fafd"
+    },
+    {
+      "path": "schema/eme-render-job.v1.schema.json",
+      "sha256": "d089cd7b1af6bfdd68316bfd9d66d1f6ce0cc3ff061a431fc03268e0bd1083de"
+    },
+    {
+      "path": "schema/eme-revision-run.v1.schema.json",
+      "sha256": "e2148d37f6a9008711b544f43053964e8fff19977e9b682a3bd46f8037ff6a81"
+    },
+    {
+      "path": "schema/eme-revision-session.v1.schema.json",
+      "sha256": "3be4b1cd4d7b8a94873d64f8305a67229460150f9f82f5ebaceb3dcd46181918"
+    },
+    {
+      "path": "schema/eme-sfx-cue.v1.schema.json",
+      "sha256": "464699a89747d59a593a47e46ba6c375476b93df66c86a8190f0db314d2e3de4"
+    },
+    {
+      "path": "schema/eme-source-analysis.v1.schema.json",
+      "sha256": "b2d4159366a7574217754bac6b95f73b37ebe564be5466c40d16de273d5fc953"
+    },
+    {
+      "path": "schema/eme-visual-intelligence.v1.schema.json",
+      "sha256": "539b69e6cbb2222637dd4dd94801e7673cd40e9d2d823311f4357511d8079ee2"
+    },
+    {
+      "path": "schema/eme-vtsm-tracking.v1.schema.json",
+      "sha256": "67192a979e050e32002556f5141c7ef67eb78b5a2a5f70f74a4f89f5e741420c"
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "fixtures/audio/generator.js",
+      "sha256": "7d73324cd489b1cacd4b33733c8ceaab822e5d34af62bfa0674817e5c9b4b788"
+    },
+    {
+      "path": "fixtures/prompt-core/briefs/brief-pf02-conflict.json",
+      "sha256": "61634600ea24a83f3e357c98cd97d61e63b2980a0fcaee4e4734ecad015ecf3f"
+    },
+    {
+      "path": "fixtures/prompt-core/briefs/brief-pf02-missing-clip.json",
+      "sha256": "3b67bf512ba6ddab0674a3f2578f597f3ad0d6c10c7cbfe2361f47a80225ab14"
+    },
+    {
+      "path": "fixtures/prompt-core/briefs/brief-pf02-scenario1.json",
+      "sha256": "f582759366efe654e3a0c1f8876a601359139aa145a3112f52db7aab6b64f045"
+    },
+    {
+      "path": "fixtures/prompt-core/briefs/brief-pf02-stale-rev.json",
+      "sha256": "d4ef9a62723f55713dbccac480e69d6834eaaeb01a2247fcf4a1decf55ce64be"
+    },
+    {
+      "path": "fixtures/prompt-core/expected/brief-g01-expected.json",
+      "sha256": "5eb86585f525dbab278f4004218c8b41459f7bb458b86a008d9f552f4c2ac6e5"
+    },
+    {
+      "path": "fixtures/prompt-core/expected/brief-g02-expected.json",
+      "sha256": "fde135561e08b9df9ad1a1f1552ec8a70c16f873bd02b37f9dd617c57998cc22"
+    },
+    {
+      "path": "fixtures/prompt-core/expected/brief-g03-expected.json",
+      "sha256": "6c7018708c54d1328865226c44f298aa7bf6e4e791baf51db3d834b4488b23a2"
+    },
+    {
+      "path": "fixtures/prompt-core/expected/plan-pf02-scenario1-expected.json",
+      "sha256": "9a34e55c002abe8ed4bafa221f706fda33166ef87a822281115229176926726e"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/beat-analysis/beat-pf03-ambiguous.json",
+      "sha256": "d2b1ddf00156f2b94b1d22d953f057f72014586eb81cb54b22d4b8dc6d2fb3b5"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/beat-analysis/beat-pf03-low-confidence.json",
+      "sha256": "99afaae7e774da053d043f72756fabaa18a80c03d7e635bdb101f7ab024bbff9"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/beat-analysis/beat-pf03-scenario1.json",
+      "sha256": "13aa3770f2909c6102033e18ecb19cca695ba497608e73fae55b9c7db8627159"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/briefs/brief-pf03-scenario1.json",
+      "sha256": "b4be0104d416c1b23707acb61b29dcee1b5dcb743625879f9d51bebca28197f2"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/expected/plan-pf03-scenario1-expected.json",
+      "sha256": "48cc372fb2dd07b8009612c068de04298d9ab290eb9abe7eae2efda25f4d58cc"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/projects/project-pf03-insufficient-handles.json",
+      "sha256": "4a712bb8cda59def16abad8ec27670ce4a94dfb91440d992a3104ba0ef2b1d6c"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/projects/project-pf03-locked-broll.json",
+      "sha256": "f9bff4a3267037f466665bde8f2be7077ebbe47c95bc96be72afaa5efb7a3b90"
+    },
+    {
+      "path": "fixtures/prompt-core/pf03/projects/project-pf03-scenario1.json",
+      "sha256": "83700f7eb579cd235804f01f78412d0dfe6aabdc801e871119c6e56230ec8b6c"
+    },
+    {
+      "path": "fixtures/prompt-core/projects/project-g01-export.json",
+      "sha256": "e8c55be7b5e90020b72e3835bc8c04cb2f9bdd7503411dd4707c4d4a8d4ae4a3"
+    },
+    {
+      "path": "fixtures/prompt-core/projects/project-g02-reel.json",
+      "sha256": "4fae40fa93ab47bb5567b99c4877a0ac5eb3fd4565d8bc3a2a3990dadd432302"
+    },
+    {
+      "path": "fixtures/prompt-core/projects/project-g03-contradiction.json",
+      "sha256": "4231c7be293a525db2e8f84f761ad70af2c9ab7b02bbe0dcc379f5e133b1b2b4"
+    },
+    {
+      "path": "fixtures/prompt-core/projects/project-pf02-locked-track.json",
+      "sha256": "13c03e37452622a1270f1caae603c2309ab90d27510d6f0fea665edb9c255c62"
+    },
+    {
+      "path": "fixtures/prompt-core/projects/project-pf02-scenario1.json",
+      "sha256": "0f6d17c1c268c1208989de4cb24093a996626f9fe40f591231b02bc47e7f0ec1"
+    }
+  ]
+}

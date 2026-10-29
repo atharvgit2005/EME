@@ -1,0 +1,213 @@
+{
+  "id": "proj_p10_bench_b_editorial",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 10 Benchmark B — Footage Assembly & Editorial Pacing (20s @ 60fps)",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#0b0f19"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 2400000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "video_primary_footage",
+      "type": "video",
+      "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4"
+    },
+    {
+      "id": "font_inter",
+      "type": "font",
+      "src": "assets/fonts/files/Inter-Variable.ttf"
+    },
+    {
+      "id": "font_syne",
+      "type": "font",
+      "src": "assets/fonts/files/Syne-Variable.ttf"
+    },
+    {
+      "id": "bgm_snowfall",
+      "type": "audio",
+      "src": "assets/bgm/snowfall.mp3"
+    },
+    {
+      "id": "sfx_woosh",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/12_woosh_original.wav"
+    },
+    {
+      "id": "sfx_shutter",
+      "type": "audio",
+      "src": "assets/sfx/archive_replaced/20_shutter_original.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_video_a_roll",
+      "name": "Primary Assembly A-Roll",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_video_pip",
+      "name": "B-Roll Floating Inset",
+      "kind": "visual",
+      "zIndex": 20,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_titles_lower_third",
+      "name": "Lower Third Metadata Overlays",
+      "kind": "visual",
+      "zIndex": 30,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_bgm",
+      "name": "Soundtrack Continuity Bed",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_sfx",
+      "name": "Editorial Accent Transitions",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_footage_act1",
+      "trackId": "track_video_a_roll",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 720000 },
+      "startTick": 0,
+      "durationTicks": 720000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_title_act1",
+      "trackId": "track_titles_lower_third",
+      "type": "text",
+      "startTick": 60000,
+      "durationTicks": 600000,
+      "transform": { "x": 960, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "ACT I: SOURCE FOOTAGE INGESTION", "fontAssetId": "font_syne", "fontSize": 48, "color": "#f8fafc", "textAlign": "center" }
+    },
+    {
+      "id": "clip_footage_act2",
+      "trackId": "track_video_a_roll",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 720000, "outTick": 1680000 },
+      "startTick": 720000,
+      "durationTicks": 960000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_pip_inset",
+      "trackId": "track_video_pip",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 0, "outTick": 960000 },
+      "startTick": 840000,
+      "durationTicks": 720000,
+      "transform": { "x": 1280, "y": 140, "scaleX": 0.45, "scaleY": 0.45, "opacity": 0.95, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_title_act2",
+      "trackId": "track_titles_lower_third",
+      "type": "text",
+      "startTick": 840000,
+      "durationTicks": 720000,
+      "transform": { "x": 960, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "ACT II: RHYTHMIC CUTTING & PIP INSET", "fontAssetId": "font_inter", "fontSize": 42, "color": "#38bdf8", "textAlign": "center" }
+    },
+    {
+      "id": "clip_footage_act3",
+      "trackId": "track_video_a_roll",
+      "type": "video",
+      "source": { "assetId": "video_primary_footage", "inTick": 1680000, "outTick": 2400000 },
+      "startTick": 1680000,
+      "durationTicks": 720000,
+      "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_title_act3",
+      "trackId": "track_titles_lower_third",
+      "type": "text",
+      "startTick": 1740000,
+      "durationTicks": 600000,
+      "transform": { "x": 960, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "ACT III: PACING & RESOLUTION (20.0s)", "fontAssetId": "font_syne", "fontSize": 48, "color": "#facc15", "textAlign": "center" }
+    },
+    {
+      "id": "clip_bgm_continuous",
+      "trackId": "track_audio_bgm",
+      "type": "audio",
+      "source": { "assetId": "bgm_snowfall", "inTick": 0, "outTick": 2400000 },
+      "startTick": 0,
+      "durationTicks": 2400000
+    },
+    {
+      "id": "clip_sfx_trans_1",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "source": { "assetId": "sfx_woosh", "inTick": 0, "outTick": 120000 },
+      "startTick": 700000,
+      "durationTicks": 120000
+    },
+    {
+      "id": "clip_sfx_trans_2",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "source": { "assetId": "sfx_shutter", "inTick": 0, "outTick": 120000 },
+      "startTick": 1660000,
+      "durationTicks": 120000
+    }
+  ],
+  "animations": [
+    {
+      "clipId": "clip_title_act1",
+      "property": "transform.opacity",
+      "keyframes": [
+        { "offsetTick": 0, "value": 0, "easing": "linear" },
+        { "offsetTick": 60000, "value": 1, "easing": "easeOut" },
+        { "offsetTick": 540000, "value": 1, "easing": "linear" },
+        { "offsetTick": 600000, "value": 0, "easing": "easeIn" }
+      ]
+    },
+    {
+      "clipId": "clip_pip_inset",
+      "property": "transform.opacity",
+      "keyframes": [
+        { "offsetTick": 0, "value": 0, "easing": "linear" },
+        { "offsetTick": 60000, "value": 0.95, "easing": "easeOut" },
+        { "offsetTick": 660000, "value": 0.95, "easing": "linear" },
+        { "offsetTick": 720000, "value": 0, "easing": "easeIn" }
+      ]
+    },
+    {
+      "clipId": "clip_title_act3",
+      "property": "transform.opacity",
+      "keyframes": [
+        { "offsetTick": 0, "value": 0, "easing": "linear" },
+        { "offsetTick": 60000, "value": 1, "easing": "easeOut" },
+        { "offsetTick": 540000, "value": 1, "easing": "linear" },
+        { "offsetTick": 600000, "value": 0, "easing": "easeIn" }
+      ]
+    }
+  ]
+}

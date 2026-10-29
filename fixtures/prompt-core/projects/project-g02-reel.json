@@ -1,0 +1,73 @@
+{
+  "id": "proj_g02_reel",
+  "schemaVersion": "1.0.0",
+  "revision": 2,
+  "title": "PF01-G02 Vertical Reel Cut",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#000000"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1200000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "asset_interview_01",
+      "type": "video",
+      "src": "assets/interviews/interview_01.mp4"
+    },
+    {
+      "id": "asset_interview_dialogue",
+      "type": "audio",
+      "src": "assets/audio/interview_01_dialogue.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v_interview",
+      "kind": "video",
+      "name": "Interview Video",
+      "enabled": true,
+      "locked": false
+    },
+    {
+      "id": "track_a_dialogue",
+      "kind": "audio",
+      "name": "Dialogue Track",
+      "enabled": true,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_interview_01",
+      "trackId": "track_v_interview",
+      "assetId": "asset_interview_01",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 1200000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 1200000,
+      "name": "interview_01"
+    },
+    {
+      "id": "clip_dialogue_01",
+      "trackId": "track_a_dialogue",
+      "assetId": "asset_interview_dialogue",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 1200000,
+      "sourceStartTick": 0,
+      "sourceDurationTicks": 1200000,
+      "name": "interview_dialogue"
+    }
+  ]
+}

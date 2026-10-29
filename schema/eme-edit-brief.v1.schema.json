@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-edit-brief.v1.schema.json",
+  "title": "EditingMechanicsEngineEditBrief",
+  "description": "Canonical normalized EditBrief contract consumed by EME PF-02 task planning",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "brief_id",
+    "source_request_id",
+    "project_snapshot",
+    "goal",
+    "requested_changes",
+    "constraints",
+    "deliverables",
+    "ambiguities",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "brief_id": {
+      "type": "string",
+      "pattern": "^brief-[a-zA-Z0-9_-]+$",
+      "description": "Unique stable identifier for the compiled brief"
+    },
+    "source_request_id": {
+      "type": "string",
+      "description": "Reference to the original IntentEnvelope request_id"
+    },
+    "project_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "base_revision",
+        "snapshot_sha256",
+        "timebase_ticks_per_second"
+      ],
+      "properties": {
+        "project_id": { "type": "string" },
+        "base_revision": { "type": "integer", "minimum": 0 },
+        "snapshot_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "timebase_ticks_per_second": {
+          "type": "integer",
+          "const": 120000
+        }
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective", "success_criteria"],
+      "properties": {
+        "objective": { "type": "string", "minLength": 1 },
+        "success_criteria": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "requested_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["change_id", "domain", "description", "target_ids"],
+        "properties": {
+          "change_id": { "type": "string" },
+          "domain": {
+            "type": "string",
+            "enum": ["timeline", "color", "audio", "typography", "render_export", "effect"]
+          },
+          "description": { "type": "string" },
+          "target_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "eme-constraint.v1.schema.json"
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "container", "video"],
+        "properties": {
+          "kind": { "type": "string", "enum": ["video", "audio", "frames", "manifest"] },
+          "container": { "type": "string", "enum": ["mp4", "mov", "wav", "png", "json"] },
+          "video": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["codec", "width", "height", "frame_rate"],
+            "properties": {
+              "codec": { "type": "string", "enum": ["h264", "hevc", "prores"] },
+              "width": { "type": "integer", "minimum": 1 },
+              "height": { "type": "integer", "minimum": 1 },
+              "frame_rate": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["numerator", "denominator"],
+                "properties": {
+                  "numerator": { "type": "integer", "minimum": 1 },
+                  "denominator": { "type": "integer", "minimum": 1 }
+                }
+              }
+            }
+          },
+          "audio": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["codec", "sample_rate_hz", "channels"],
+            "properties": {
+              "codec": { "type": "string", "enum": ["aac", "pcm_s16le", "pcm_s24le"] },
+              "sample_rate_hz": { "type": "integer", "enum": [44100, 48000, 96000] },
+              "channels": { "type": "integer", "enum": [1, 2, 6] }
+            }
+          },
+          "parameter_sources": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "description", "is_blocking"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["MISSING_INPUT", "CONFLICTING_REQUIREMENTS", "AMBIGUOUS_TARGET", "UNSUPPORTED_REQUEST"]
+          },
+          "description": { "type": "string" },
+          "is_blocking": { "type": "boolean" },
+          "conflicting_clauses": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "blocking_issue_ids"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready", "needs_clarification", "blocked"]
+        },
+        "blocking_issue_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

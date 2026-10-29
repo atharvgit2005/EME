@@ -1,0 +1,114 @@
+{
+  "id": "proj_p10_bench_a_kinetic",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Phase 10 Benchmark A — Kinetic Typography (15s @ 60fps)",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#090a0f"
+  },
+  "timebase": {
+    "fps": { "numerator": 60, "denominator": 1 },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1800000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    { "id": "font_instrument", "type": "font", "src": "assets/fonts/files/InstrumentSerif-Regular.ttf" },
+    { "id": "font_syne", "type": "font", "src": "assets/fonts/files/Syne-Variable.ttf" },
+    { "id": "font_archivo", "type": "font", "src": "assets/fonts/files/ArchivoBlack-Regular.ttf" },
+    { "id": "bgm_snowfall", "type": "audio", "src": "assets/bgm/snowfall.mp3" },
+    { "id": "sfx_woosh", "type": "audio", "src": "assets/sfx/archive_replaced/12_woosh_original.wav" },
+    { "id": "sfx_click", "type": "audio", "src": "assets/sfx/archive_replaced/10_camera_click_original.wav" }
+  ],
+  "tracks": [
+    { "id": "track_bg_accent", "name": "Backdrop Ambient Cards", "kind": "visual", "zIndex": 5, "muted": false, "locked": false },
+    { "id": "track_text_headline", "name": "Kinetic Hero Typography", "kind": "visual", "zIndex": 15, "muted": false, "locked": false },
+    { "id": "track_text_subhead", "name": "Supporting Context Badges", "kind": "visual", "zIndex": 20, "muted": false, "locked": false },
+    { "id": "track_audio_bgm", "name": "Background Music Bed", "kind": "audio", "zIndex": 0, "muted": false, "locked": false },
+    { "id": "track_audio_sfx", "name": "Impact Sound Effects", "kind": "audio", "zIndex": 0, "muted": false, "locked": false }
+  ],
+  "clips": [
+    {
+      "id": "clip_bg_card_1",
+      "trackId": "track_bg_accent",
+      "type": "graphic",
+      "startTick": 30000,
+      "durationTicks": 540000,
+      "transform": { "x": 540, "y": 960, "scaleX": 1.0, "scaleY": 1.0, "opacity": 0.85, "anchorX": 0.5, "anchorY": 0.5 }
+    },
+    {
+      "id": "clip_hero_act1",
+      "trackId": "track_text_headline",
+      "type": "text",
+      "startTick": 30000,
+      "durationTicks": 540000,
+      "transform": { "x": 540, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "ENGINEERING REVOLUTION", "fontAssetId": "font_instrument", "fontSize": 84, "color": "#f8fafc", "textAlign": "center" }
+    },
+    {
+      "id": "clip_badge_act1",
+      "trackId": "track_text_subhead",
+      "type": "text",
+      "startTick": 60000,
+      "durationTicks": 510000,
+      "transform": { "x": 540, "y": 1020, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "AUTONOMOUS EDITING MECHANICS • 15.0s", "fontAssetId": "font_syne", "fontSize": 26, "color": "#38bdf8", "textAlign": "center" }
+    },
+    {
+      "id": "clip_hero_act2",
+      "trackId": "track_text_headline",
+      "type": "text",
+      "startTick": 600000,
+      "durationTicks": 600000,
+      "transform": { "x": 540, "y": 920, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "DETERMINISTIC TIMELINES", "fontAssetId": "font_archivo", "fontSize": 72, "color": "#facc15", "textAlign": "center" }
+    },
+    {
+      "id": "clip_hero_act3",
+      "trackId": "track_text_headline",
+      "type": "text",
+      "startTick": 1230000,
+      "durationTicks": 540000,
+      "transform": { "x": 540, "y": 940, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+      "typography": { "text": "EME V0.1 PROVEN", "fontAssetId": "font_syne", "fontSize": 78, "color": "#4ade80", "textAlign": "center" }
+    },
+    {
+      "id": "clip_bgm_stem",
+      "trackId": "track_audio_bgm",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 1800000,
+      "source": { "assetId": "bgm_snowfall", "trimInTick": 0, "trimOutTick": 1800000 },
+      "audio": {
+        "volume": 0.4,
+        "volumeEnvelope": [
+          { "offsetTick": 0, "volume": 0.0 },
+          { "offsetTick": 60000, "volume": 0.4 },
+          { "offsetTick": 1700000, "volume": 0.4 },
+          { "offsetTick": 1800000, "volume": 0.0 }
+        ]
+      }
+    },
+    {
+      "id": "clip_sfx_1",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "startTick": 30000,
+      "durationTicks": 60000,
+      "source": { "assetId": "sfx_woosh", "trimInTick": 0, "trimOutTick": 60000 },
+      "audio": { "volume": 0.8 }
+    },
+    {
+      "id": "clip_sfx_2",
+      "trackId": "track_audio_sfx",
+      "type": "audio",
+      "startTick": 600000,
+      "durationTicks": 40000,
+      "source": { "assetId": "sfx_click", "trimInTick": 0, "trimOutTick": 40000 },
+      "audio": { "volume": 0.85 }
+    }
+  ]
+}

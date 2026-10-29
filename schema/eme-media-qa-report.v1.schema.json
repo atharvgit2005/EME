@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-media-qa-report.v1.schema.json",
+  "title": "EditingMechanicsEngineMediaQAReport",
+  "description": "Structured independent media inspection QA report for EME Phase PF-04",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "report_id",
+    "job_id",
+    "rendered_file",
+    "checks",
+    "decision",
+    "score"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "report_id": {
+      "type": "string",
+      "pattern": "^qarep-[a-zA-Z0-9_-]+$"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^rjob-[a-zA-Z0-9_-]+$"
+    },
+    "rendered_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "size_bytes", "sha256", "duration_seconds"],
+      "properties": {
+        "path": { "type": "string" },
+        "size_bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+        "duration_seconds": { "type": "number", "minimum": 0 }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "category", "status", "detail"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["container_format", "stream_conformance", "audio_integrity", "video_integrity", "content_timing", "synchronization"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["passed", "failed", "not_measured", "not_applicable"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
+          },
+          "measured_value": {},
+          "threshold": {},
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["PASS", "REPAIRABLE", "FAIL"]
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "repairable_defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["defect_type", "suggested_action"],
+        "properties": {
+          "defect_type": { "type": "string" },
+          "target": { "type": "string" },
+          "suggested_action": { "type": "string" }
+        }
+      }
+    }
+  }
+}

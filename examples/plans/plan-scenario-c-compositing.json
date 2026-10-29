@@ -1,0 +1,119 @@
+{
+  "id": "plan_scenario_c_compositing_stack",
+  "schemaVersion": "1.0.0",
+  "brief": {
+    "prompt": "Create a 10s layered x-ray compositing stack with mathematical difference blend mode",
+    "creativeGoal": "Layer ordering with inverted photographic plates and audio sync",
+    "targetAudience": "Visual effects artists and creative directors",
+    "referenceStyle": "Cyberpunk high-contrast technical UI"
+  },
+  "outputProfile": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "fps": 60,
+    "targetDurationTicks": 1200000
+  },
+  "sourceReferences": [
+    { "assetId": "video_primary_footage", "path": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4", "type": "video" },
+    { "assetId": "font_archivo", "path": "assets/fonts/files/ArchivoBlack-Regular.ttf", "type": "font" },
+    { "assetId": "sfx_shutter", "path": "assets/sfx/archive_replaced/20_shutter_original.wav", "type": "audio" }
+  ],
+  "sequenceStructure": [
+    { "actId": "act_composite", "name": "Difference Blend Layering", "startTick": 0, "durationTicks": 1200000, "narrativeIntent": "Execute multi-track difference blend mode visual effect" }
+  ],
+  "operations": [
+    {
+      "type": "create_project",
+      "params": {
+        "title": "Phase 12 Scenario C: Layered Compositing Stack",
+        "canvas": { "width": 1080, "height": 1920, "aspectRatio": "9:16", "backgroundColor": "#050508" },
+        "timebase": { "fps": { "numerator": 60, "denominator": 1 }, "ticksPerSecond": 120000, "durationTicks": 1200000 }
+      },
+      "intent": "Initialize compositing canvas"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "video_primary_footage", "type": "video", "src": "Aditya Rikhari - Raatein Guzaari [qbvAmlKhWQQ].mp4" },
+      "intent": "Load raw video asset"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "font_archivo", "type": "font", "src": "assets/fonts/files/ArchivoBlack-Regular.ttf" },
+      "intent": "Load geometric font"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "sfx_shutter", "type": "audio", "src": "assets/sfx/archive_replaced/20_shutter_original.wav" },
+      "intent": "Load impact sound effect"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_base", "name": "Base Plate", "kind": "visual", "zIndex": 10 },
+      "intent": "Add base visual track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_overlay", "name": "Composited Overlay", "kind": "visual", "zIndex": 20 },
+      "intent": "Add composited title track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_audio", "name": "SFX Track", "kind": "audio", "zIndex": 0 },
+      "intent": "Add audio track"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_base_video",
+          "trackId": "track_base",
+          "type": "video",
+          "source": { "assetId": "video_primary_footage", "trimInTick": 0, "trimOutTick": 1200000 },
+          "startTick": 0,
+          "durationTicks": 1200000,
+          "transform": { "x": 0, "y": 0, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 }
+        }
+      },
+      "intent": "Insert base footage plate"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_title_comp",
+          "trackId": "track_overlay",
+          "type": "text",
+          "startTick": 120000,
+          "durationTicks": 960000,
+          "transform": { "x": 540, "y": 960, "scaleX": 1.0, "scaleY": 1.0, "opacity": 1.0, "anchorX": 0.5, "anchorY": 0.5 },
+          "typography": { "text": "LAYERED COMPOSITE", "fontAssetId": "font_archivo", "fontSize": 76, "color": "#00ffcc", "textAlign": "center" }
+        }
+      },
+      "intent": "Insert overlay title"
+    },
+    {
+      "type": "apply_effect",
+      "params": {
+        "clipId": "clip_title_comp",
+        "effect": { "type": "blendMode", "parameters": { "mode": "difference" } }
+      },
+      "intent": "Apply difference blend mode to title"
+    },
+    {
+      "type": "insert_clip",
+      "params": {
+        "clip": {
+          "id": "clip_sfx_impact",
+          "trackId": "track_audio",
+          "type": "audio",
+          "source": { "assetId": "sfx_shutter", "trimInTick": 0, "trimOutTick": 120000 },
+          "startTick": 120000,
+          "durationTicks": 120000,
+          "volume": 1.0
+        }
+      },
+      "intent": "Insert impact audio sync"
+    }
+  ]
+}

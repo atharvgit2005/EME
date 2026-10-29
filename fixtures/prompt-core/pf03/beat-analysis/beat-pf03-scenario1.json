@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "eme-beat-analysis.v1",
+  "analysisId": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+  "source": {
+    "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSamples": 661500,
+    "durationTicks": 1800000
+  },
+  "config": {
+    "algorithmVersion": "1.0.0",
+    "sampleRate": 44100,
+    "fftSize": 2048,
+    "hopLength": 512,
+    "window": "hann",
+    "frameCenterConvention": "centered"
+  },
+  "tempo": {
+    "bpm": 120.0,
+    "confidence": 0.98,
+    "alternativesBpm": [60.0, 240.0],
+    "isAmbiguous": false,
+    "phaseOffsetSamples": 0,
+    "phaseOffsetTicks": 0
+  },
+  "events": {
+    "beats": [
+      { "id": "beat_0", "sampleIndex": 0, "ticks": 0, "confidence": 0.99, "strength": 0.95 },
+      { "id": "beat_1", "sampleIndex": 22050, "ticks": 60000, "confidence": 0.98, "strength": 0.85 },
+      { "id": "beat_2", "sampleIndex": 44100, "ticks": 120000, "confidence": 0.98, "strength": 0.88 },
+      { "id": "beat_3", "sampleIndex": 66150, "ticks": 180000, "confidence": 0.98, "strength": 0.82 },
+      { "id": "beat_4", "sampleIndex": 88200, "ticks": 240000, "confidence": 0.99, "strength": 0.96 },
+      { "id": "beat_5", "sampleIndex": 110250, "ticks": 300000, "confidence": 0.98, "strength": 0.84 },
+      { "id": "beat_6", "sampleIndex": 132300, "ticks": 360000, "confidence": 0.98, "strength": 0.87 },
+      { "id": "beat_7", "sampleIndex": 154350, "ticks": 420000, "confidence": 0.98, "strength": 0.83 },
+      { "id": "beat_8", "sampleIndex": 176400, "ticks": 480000, "confidence": 0.99, "strength": 0.97 },
+      { "id": "beat_9", "sampleIndex": 198450, "ticks": 540000, "confidence": 0.98, "strength": 0.86 },
+      { "id": "beat_10", "sampleIndex": 220500, "ticks": 600000, "confidence": 0.98, "strength": 0.89 },
+      { "id": "beat_11", "sampleIndex": 242550, "ticks": 660000, "confidence": 0.98, "strength": 0.81 },
+      { "id": "beat_12", "sampleIndex": 264600, "ticks": 720000, "confidence": 0.99, "strength": 0.95 },
+      { "id": "beat_13", "sampleIndex": 286650, "ticks": 780000, "confidence": 0.98, "strength": 0.85 },
+      { "id": "beat_14", "sampleIndex": 308700, "ticks": 840000, "confidence": 0.98, "strength": 0.88 },
+      { "id": "beat_15", "sampleIndex": 330750, "ticks": 900000, "confidence": 0.98, "strength": 0.83 },
+      { "id": "beat_16", "sampleIndex": 352800, "ticks": 960000, "confidence": 0.99, "strength": 0.96 },
+      { "id": "beat_17", "sampleIndex": 374850, "ticks": 1020000, "confidence": 0.98, "strength": 0.84 },
+      { "id": "beat_18", "sampleIndex": 396900, "ticks": 1080000, "confidence": 0.98, "strength": 0.87 },
+      { "id": "beat_19", "sampleIndex": 418950, "ticks": 1140000, "confidence": 0.98, "strength": 0.82 },
+      { "id": "beat_20", "sampleIndex": 441000, "ticks": 1200000, "confidence": 0.99, "strength": 0.95 },
+      { "id": "beat_21", "sampleIndex": 463050, "ticks": 1260000, "confidence": 0.98, "strength": 0.85 },
+      { "id": "beat_22", "sampleIndex": 485100, "ticks": 1320000, "confidence": 0.98, "strength": 0.87 },
+      { "id": "beat_23", "sampleIndex": 507150, "ticks": 1380000, "confidence": 0.98, "strength": 0.84 },
+      { "id": "beat_24", "sampleIndex": 529200, "ticks": 1440000, "confidence": 0.99, "strength": 0.96 }
+    ],
+    "downbeats": [
+      { "id": "downbeat_0", "barIndex": 0, "ticks": 0, "confidence": 0.99 },
+      { "id": "downbeat_1", "barIndex": 1, "ticks": 240000, "confidence": 0.98 },
+      { "id": "downbeat_2", "barIndex": 2, "ticks": 480000, "confidence": 0.99 },
+      { "id": "downbeat_3", "barIndex": 3, "ticks": 720000, "confidence": 0.98 },
+      { "id": "downbeat_4", "barIndex": 4, "ticks": 960000, "confidence": 0.99 },
+      { "id": "downbeat_5", "barIndex": 5, "ticks": 1200000, "confidence": 0.98 },
+      { "id": "downbeat_6", "barIndex": 6, "ticks": 1440000, "confidence": 0.99 }
+    ],
+    "onsets": [
+      { "id": "onset_0", "sampleIndex": 0, "ticks": 0, "strength": 0.95, "band": "broadband" },
+      { "id": "onset_1", "sampleIndex": 176400, "ticks": 480000, "strength": 0.97, "band": "low" },
+      { "id": "onset_2", "sampleIndex": 352800, "ticks": 960000, "strength": 0.96, "band": "low" }
+    ]
+  },
+  "meter": {
+    "numerator": 4,
+    "denominator": 4,
+    "confidence": 0.99
+  }
+}

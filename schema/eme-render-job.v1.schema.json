@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-render-job.v1.schema.json",
+  "title": "EditingMechanicsEngineRenderJob",
+  "description": "Immutable render job contract for EME Phase PF-04 specifying inputs, output profile, and renderer configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "project_snapshot",
+    "canonical_plan_hash",
+    "source_assets",
+    "output_profile",
+    "renderer_config",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^rjob-[a-zA-Z0-9_-]+$",
+      "description": "Unique immutable identifier for this render execution"
+    },
+    "project_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "revision", "duration_ticks"],
+      "properties": {
+        "project_id": { "type": "string" },
+        "revision": { "type": "integer", "minimum": 0 },
+        "duration_ticks": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "canonical_plan_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 hash of the canonical OperationPlan that produced the current project state"
+    },
+    "source_assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "src", "sha256"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "src": { "type": "string" },
+          "sha256": { "type": "string" }
+        }
+      }
+    },
+    "output_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container", "width", "height", "frame_rate", "video_codec", "audio_codec"],
+      "properties": {
+        "container": { "type": "string", "enum": ["mp4", "mov", "wav"] },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "frame_rate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["numerator", "denominator"],
+          "properties": {
+            "numerator": { "type": "integer", "minimum": 1 },
+            "denominator": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "video_codec": { "type": "string", "enum": ["h264", "hevc", "prores"] },
+        "audio_codec": { "type": "string", "enum": ["aac", "pcm_s16le", "pcm_s24le"] },
+        "audio_sample_rate": { "type": "integer", "enum": [44100, 48000, 96000], "default": 48000 },
+        "audio_channels": { "type": "integer", "enum": [1, 2, 6], "default": 2 }
+      }
+    },
+    "renderer_config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "temp_dir", "output_path"],
+      "properties": {
+        "engine": { "type": "string", "enum": ["hyperframes", "ffmpeg"] },
+        "temp_dir": { "type": "string" },
+        "output_path": { "type": "string" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "rendering", "rendered", "qa_evaluating", "verified", "failed"]
+    }
+  }
+}
