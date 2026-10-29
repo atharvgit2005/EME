@@ -3,6 +3,7 @@ const http = require("node:http"),
   path = require("node:path"),
   crypto = require("node:crypto");
 const { spawn } = require("node:child_process");
+const { SceneService, fileHash, queryScene } = require("../scene/service.js");
 const {
   ApprovalAuthority: A,
   durableWrite,
@@ -76,6 +77,10 @@ class StudioServer {
     this.agentToken = crypto.randomBytes(32).toString("hex");
     this.busy = false;
     this.worker = null;
+    this.sceneHashCache = new Map();
+    this.sceneService = new SceneService({
+      root: path.join(this.root, "scene"),
+    });
     if (fs.existsSync(this.statePath))
       this.state = JSON.parse(fs.readFileSync(this.statePath));
     else
@@ -115,6 +120,13 @@ class StudioServer {
         message:
           "The previous render stopped. Your project is safe; export again.",
       };
+    if (["RUNNING", "CANCELLING"].includes(this.state.sceneJob?.status))
+      this.state.sceneJob = {
+        ...this.state.sceneJob,
+        status: "INTERRUPTED",
+        message: "Tracking stopped when Studio closed. Run the analysis again.",
+      };
+    this.state.sceneAnalyses ||= [];
     this.save();
   }
   project() {
@@ -141,6 +153,7 @@ class StudioServer {
       canUndo: undo.length > 0,
       canRedo: redo.length > 0,
       busy: this.busy,
+      sceneConfigured: !!this.sceneService.configuration().python,
       agentConnected:
         Date.now() - Date.parse(this.state.agentSeen || 0) < 60000,
     };
@@ -650,9 +663,96 @@ class StudioServer {
       .on("error", () => res.destroy())
       .pipe(res);
   }
+  sceneDocument(id) {
+    const record = this.state.sceneAnalyses.find((a) => a.analysisId === id);
+    if (!record) throw error("Scene analysis not found", 404);
+    const media = this.state.media.find((m) => m.id === record.mediaId);
+    if (!media) throw error("Scene source is unavailable", 404);
+    const stat = fs.statSync(media.path, { bigint: true });
+    const stamp = [
+      stat.dev,
+      stat.ino,
+      stat.size,
+      stat.mtimeNs,
+      stat.ctimeNs,
+    ].join(":");
+    const previous = this.sceneHashCache.get(media.id);
+    const sha = previous?.stamp === stamp ? previous.sha : fileHash(media.path);
+    this.sceneHashCache.set(media.id, { stamp, sha });
+    if (sha !== media.sha256)
+      throw error(
+        "The source changed. Analyze the current footage again.",
+        409,
+      );
+    return this.sceneService.read(id, { sourceSha256: media.sha256 });
+  }
+  startScene(media, body) {
+    this.assertIdle();
+    if (media.type !== "video")
+      throw error("Choose video footage for scene tracking.");
+    const id = crypto.randomUUID();
+    this.busy = true;
+    this.state.sceneJob = {
+      id,
+      mediaId: media.id,
+      status: "RUNNING",
+      startedAt: new Date().toISOString(),
+    };
+    this.save();
+    this.scenePromise = this.sceneService
+      .analyze({
+        mediaPath: media.path,
+        assetId: media.id,
+        expectedSha256: media.sha256,
+        bounds: body.bounds,
+        seconds: body.seconds ?? 6,
+        label: body.label || "Selected subject",
+      })
+      .then(({ analysis, cached }) => {
+        const entry = {
+          analysisId: analysis.analysisId,
+          mediaId: media.id,
+          sourceSha256: analysis.source.sha256,
+          frameCount: analysis.frames.length,
+          observedFrames: analysis.frames.filter((f) => f.observed).length,
+          endTick: analysis.source.endTick,
+          device: analysis.producer.device,
+          createdAt: new Date().toISOString(),
+        };
+        if (
+          !this.state.sceneAnalyses.some(
+            (a) => a.analysisId === entry.analysisId,
+          )
+        )
+          this.state.sceneAnalyses.push(entry);
+        this.state.sceneJob = {
+          ...this.state.sceneJob,
+          status: "SUCCEEDED",
+          analysisId: analysis.analysisId,
+          cached,
+        };
+      })
+      .catch((e) => {
+        this.state.sceneJob = {
+          ...this.state.sceneJob,
+          status:
+            this.state.sceneJob?.status === "CANCELLING"
+              ? "CANCELLED"
+              : "FAILED",
+          message: e.message,
+        };
+      })
+      .finally(() => {
+        this.busy = false;
+        this.scenePromise = null;
+        this.save();
+      });
+    return this.state.sceneJob;
+  }
   context() {
     return {
       requests: this.state.requests.filter((r) => r.status === "QUEUED"),
+      sceneAnalyses: this.state.sceneAnalyses,
       project: this.project(),
       snapshot: digest(this.project()),
       media: this.state.media,
@@ -732,9 +832,54 @@ class StudioServer {
           });
           return this.json(res, 200, { success: true });
         }
+        if (p === "/api/agent/scene" && req.method === "POST") {
+          const b = await this.body(req);
+          const doc = this.sceneDocument(b.analysisId);
+          return this.json(
+            res,
+            200,
+            queryScene(doc, {
+              startTick: b.startTick ?? 0,
+              endTick: b.endTick ?? doc.source.endTick,
+              requireVisible: b.requireVisible ?? true,
+            }),
+          );
+        }
         throw error("Unknown agent route", 404);
       }
       if (req.method === "POST") this.browserAuth(req);
+      if (req.method === "POST" && p === "/api/scene/analyze") {
+        const b = await this.body(req);
+        const media = this.state.media.find((m) => m.id === b.mediaId);
+        if (!media) throw error("Media not found", 404);
+        return this.json(res, 202, this.startScene(media, b));
+      }
+      if (req.method === "POST" && p === "/api/scene/cancel") {
+        if (this.state.sceneJob?.status !== "RUNNING")
+          throw error("No tracking job is running.", 409);
+        this.state.sceneJob.status = "CANCELLING";
+        this.sceneService.cancel();
+        this.save();
+        return this.json(res, 202, this.state.sceneJob);
+      }
+      if (req.method === "GET" && p.startsWith("/api/scene/")) {
+        const parts = p.split("/");
+        const doc = this.sceneDocument(parts[3]);
+        if (parts.length === 4) return this.json(res, 200, doc);
+        if (parts.length === 6 && parts[4] === "mask")
+          return this.serveFile(
+            req,
+            res,
+            this.sceneService.artifact(
+              doc.analysisId,
+              parts[5],
+              doc.source.sha256,
+            ),
+            { type: "image/png" },
+          );
+        throw error("Scene resource not found", 404);
+      }
+
       if (req.method === "GET" && p === "/api/state")
         return this.json(res, 200, this.view());
       if (req.method === "GET" && p === "/api/connection")
@@ -873,7 +1018,10 @@ class StudioServer {
               : "video/mp4",
         });
       }
-      if (req.method === "GET" && ["/", "/app.js", "/style.css"].includes(p)) {
+      if (
+        req.method === "GET" &&
+        ["/", "/app.js", "/scene.js", "/style.css"].includes(p)
+      ) {
         let content = fs.readFileSync(
           path.join(PUBLIC, p === "/" ? "index.html" : p.slice(1)),
         );
@@ -921,6 +1069,7 @@ class StudioServer {
     });
   }
   close() {
+    this.sceneService.cancel();
     this.worker?.kill();
     return new Promise((resolve) => this.server.close(resolve));
   }

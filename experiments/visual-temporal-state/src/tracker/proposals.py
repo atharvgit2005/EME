@@ -5,14 +5,19 @@ supporting both high-recall shot-start proposals and fast point/box prompt decod
 """
 
 import sys
+import os
 from pathlib import Path
 import numpy as np
 import cv2
 import torch
 
 EXPERIMENT_ROOT = Path(__file__).resolve().parents[2]
-MOBILESAM_DIR = EXPERIMENT_ROOT / "third_party" / "MobileSAM"
-WEIGHTS_PATH = MOBILESAM_DIR / "weights" / "mobile_sam.pt"
+MOBILESAM_DIR = Path(
+    os.environ.get("EME_MOBILESAM_HOME", EXPERIMENT_ROOT / "third_party" / "MobileSAM")
+)
+WEIGHTS_PATH = Path(
+    os.environ.get("EME_MOBILESAM_WEIGHTS", MOBILESAM_DIR / "weights" / "mobile_sam.pt")
+)
 
 if str(MOBILESAM_DIR) not in sys.path:
     sys.path.insert(0, str(MOBILESAM_DIR))
@@ -25,14 +30,22 @@ class MobileSamProposalAdapter:
     Adapter for MobileSAM inference, supporting frame encoding and prompted mask extraction.
     """
 
-    def __init__(self, device=None):
+    def __init__(self, device=None, reject_dark_regions=True):
+        self.reject_dark_regions = reject_dark_regions
         if device is None:
             # Use MPS on Apple Silicon if available, else CPU
-            self.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
+            self.device = (
+                torch.device("mps")
+                if torch.backends.mps.is_available()
+                else torch.device("cpu")
+            )
         else:
             self.device = torch.device(device)
 
-        print(f"[MobileSamProposalAdapter] Initializing MobileSAM on {self.device}...")
+        print(
+            f"[MobileSamProposalAdapter] Initializing MobileSAM on {self.device}...",
+            file=sys.stderr,
+        )
         self.model = sam_model_registry["vit_t"](checkpoint=str(WEIGHTS_PATH))
         self.model.to(self.device)
         self.model.eval()
@@ -64,8 +77,7 @@ class MobileSamProposalAdapter:
             box_tensor = np.array([x, y, x + w, y + h])
 
             masks, scores, _ = self.predictor.predict(
-                box=box_tensor[None, :],
-                multimask_output=False
+                box=box_tensor[None, :], multimask_output=False
             )
 
             best_mask = masks[0]
@@ -83,15 +95,17 @@ class MobileSamProposalAdapter:
             # Appearance validation: reject dark occluder / background if frame_bgr is provided
             if frame_bgr is not None and best_mask.any():
                 mean_val = float(np.mean(frame_bgr[best_mask]))
-                if mean_val < 50.0:
+                if self.reject_dark_regions and mean_val < 50.0:
                     continue  # Subject is occluded by dark pillar / obstacle
 
-            results.append({
-                "bbox": actual_box,
-                "mask": best_mask,
-                "confidence": score,
-                "source": "mobilesam_prompt"
-            })
+            results.append(
+                {
+                    "bbox": actual_box,
+                    "mask": best_mask,
+                    "confidence": score,
+                    "source": "mobilesam_prompt",
+                }
+            )
 
         return results
 
@@ -116,7 +130,9 @@ class MobileSamProposalAdapter:
         chroma = max_c - min_c
 
         # Foreground objects exhibit color saturation (chroma > 35 & max_c > 100) or high brightness (max_c > 180)
-        is_salient = (((chroma > 35) & (max_c > 100)) | (max_c > 180)).astype("uint8") * 255
+        is_salient = (((chroma > 35) & (max_c > 100)) | (max_c > 180)).astype(
+            "uint8"
+        ) * 255
 
         # Morphological opening removes thin background grid lines (1-3px)
         kernel_open = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
@@ -126,7 +142,9 @@ class MobileSamProposalAdapter:
         kernel_close = cv2.getStructuringElement(cv2.MORPH_RECT, (11, 11))
         closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_close, iterations=2)
 
-        contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(
+            closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
 
         frame_h, frame_w = frame_bgr.shape[:2]
         max_area = frame_h * frame_w * 0.5  # Reject frame-spanning background
@@ -137,10 +155,12 @@ class MobileSamProposalAdapter:
             if min_area <= area <= max_area:
                 x, y, w, h = cv2.boundingRect(c)
                 if w < frame_w * 0.8 and h < frame_h * 0.8:
-                    proposals.append({
-                        "bbox": [float(x), float(y), float(w), float(h)],
-                        "mask": None,
-                        "confidence": float(min(1.0, 0.7 + (area / 10000.0))),
-                        "source": "proposal_segmentation"
-                    })
+                    proposals.append(
+                        {
+                            "bbox": [float(x), float(y), float(w), float(h)],
+                            "mask": None,
+                            "confidence": float(min(1.0, 0.7 + (area / 10000.0))),
+                            "source": "proposal_segmentation",
+                        }
+                    )
         return proposals

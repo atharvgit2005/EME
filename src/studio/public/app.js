@@ -139,9 +139,11 @@ function renderMedia() {
   $("media-list").innerHTML = state.media
     .map(
       (m) =>
-        `<article class="media-card">${m.type === "video" ? `<img class="media-image" src="/api/media/${m.id}?poster" alt="${escape(m.name)}"><span class="media-duration">${clock(m.duration)}</span>` : '<div class="audio-thumb">♫</div>'}<div class="media-info"><span class="media-name" title="${escape(m.name)}">${escape(m.name)}</span><button class="media-add" data-media="${m.id}" aria-label="Add ${escape(m.name)} to timeline">＋</button></div><div class="media-caption">${m.type === "video" ? m.width + " × " + m.height : "AUDIO"} · ${m.generated ? "GENERATED DEMO" : "LOCAL FILE"}</div></article>`,
+        `<article class="media-card">${m.type === "video" ? `<img class="media-image" src="/api/media/${m.id}?poster" alt="${escape(m.name)}"><span class="media-duration">${clock(m.duration)}</span>` : '<div class="audio-thumb">♫</div>'}<div class="media-info"><span class="media-name" title="${escape(m.name)}">${escape(m.name)}</span><button class="media-add" data-media="${m.id}" aria-label="Add ${escape(m.name)} to timeline">＋</button></div><button class="scene-open text-button" data-scene="${m.id}" ${m.type === "video" ? "" : "hidden"}>Understand scene ↗</button><div class="media-caption">${m.type === "video" ? m.width + " × " + m.height : "AUDIO"} · ${m.generated ? "GENERATED DEMO" : "LOCAL FILE"}</div></article>`,
     )
     .join("");
+  for (const button of document.querySelectorAll("[data-scene]"))
+    button.onclick = () => window.emeScene?.open(button.dataset.scene);
   for (const button of document.querySelectorAll("[data-media]"))
     button.onclick = () =>
       action(() => api("import", { mediaId: button.dataset.media }));
@@ -347,6 +349,7 @@ async function refresh() {
   try {
     const next = await api("state");
     state = next;
+    window.emeScene?.update(state);
     renderMedia();
     renderMessages();
     renderProposal();

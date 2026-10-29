@@ -3,6 +3,23 @@ const fs = require("node:fs"),
 const { EmeMcpServer, TOOL_DEFINITIONS } = require("../mcp/server.js");
 const definitions = [
   {
+    name: "eme_studio_get_scene",
+    description:
+      "Read a source-bound scene analysis interval. Returns observed regions, predictions, uncertainty and mask IDs. Read-only: cannot authorize edits. Coordinates are source pixels, not project canvas pixels.",
+    inputSchema: {
+      type: "object",
+      required: ["analysisId"],
+      properties: {
+        analysisId: { type: "string" },
+        startTick: { type: "integer" },
+        endTick: { type: "integer" },
+        requireVisible: { type: "boolean" },
+      },
+      additionalProperties: false,
+    },
+  },
+
+  {
     name: "eme_studio_get_inbox",
     description:
       "Read queued editing requests, the actual project, imported media, and editing constraints from local Studio. Read before planning. Never authorizes edits.",
@@ -72,11 +89,13 @@ class StudioMcpServer extends EmeMcpServer {
     if (url.protocol !== "http:" || url.hostname !== "127.0.0.1")
       throw Error("Studio must be a local loopback service.");
     const route =
-      name === "eme_studio_get_inbox"
-        ? "context"
-        : name === "eme_studio_submit_plan"
-          ? "plan"
-          : "reply";
+      name === "eme_studio_get_scene"
+        ? "scene"
+        : name === "eme_studio_get_inbox"
+          ? "context"
+          : name === "eme_studio_submit_plan"
+            ? "plan"
+            : "reply";
     const response = await fetch(new URL("/api/agent/" + route, url), {
       method: route === "context" ? "GET" : "POST",
       headers: {

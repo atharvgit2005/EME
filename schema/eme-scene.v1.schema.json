@@ -1,0 +1,484 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "eme-scene.v1"
+    },
+    "analysisId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "requestFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ticksPerSecond": {
+          "type": "integer",
+          "const": 120000
+        },
+        "timeBase": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*/[1-9][0-9]*$"
+        },
+        "ptsOrigin": {
+          "type": "string",
+          "pattern": "^-?[0-9]+$"
+        },
+        "startTick": {
+          "type": "integer",
+          "const": 0
+        },
+        "endTick": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "assetId",
+        "sha256",
+        "width",
+        "height",
+        "ticksPerSecond",
+        "timeBase",
+        "ptsOrigin",
+        "startTick",
+        "endTick"
+      ]
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "eme-anchored-mobilesam"
+        },
+        "version": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string",
+          "enum": ["model", "synthetic_fixture"]
+        },
+        "device": {
+          "type": "string",
+          "enum": ["mps", "cpu"]
+        },
+        "weightsSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "codeSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "torch": {
+              "type": "string"
+            },
+            "opencv": {
+              "type": "string"
+            },
+            "numpy": {
+              "type": "string"
+            },
+            "timm": {
+              "type": "string"
+            }
+          },
+          "required": ["torch", "opencv", "numpy", "timm"]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "origin",
+        "device",
+        "weightsSha256",
+        "codeSha256",
+        "dependencies"
+      ]
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trackId": {
+          "type": "string",
+          "const": "subject-1"
+        },
+        "label": {
+          "type": "string"
+        },
+        "labelOrigin": {
+          "type": "string",
+          "const": "user_hint"
+        },
+        "bounds": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": 0
+            },
+            "y": {
+              "type": "number",
+              "minimum": 0
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": ["x", "y", "width", "height"]
+        }
+      },
+      "required": ["trackId", "label", "labelOrigin", "bounds"]
+    },
+    "proxy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scaleX": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "scaleY": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["width", "height", "scaleX", "scaleY"]
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subjectTracking": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        },
+        "binarySegmentation": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        },
+        "softMatting": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        },
+        "depth": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        },
+        "surfaceNormals": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        },
+        "gaze": {
+          "type": "string",
+          "enum": ["available", "unavailable"]
+        }
+      },
+      "required": [
+        "subjectTracking",
+        "binarySegmentation",
+        "softMatting",
+        "depth",
+        "surfaceNormals",
+        "gaze"
+      ]
+    },
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "frameIndex": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tick": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "endTick": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sourcePts": {
+            "type": "string",
+            "pattern": "^-?[0-9]+$"
+          },
+          "shotId": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["visible", "unknown", "lost", "cut"]
+          },
+          "observed": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "bounds": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "width": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "height": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "required": ["x", "y", "width", "height"]
+              },
+              "maskId": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "method": {
+                "type": "string",
+                "enum": ["anchor_segmentation", "resegmentation", "flow"]
+              },
+              "modelScore": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "flowQuality": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": ["bounds", "maskId", "method"]
+          },
+          "predictedBounds": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": 0
+              },
+              "y": {
+                "type": "number",
+                "minimum": 0
+              },
+              "width": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "height": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": ["x", "y", "width", "height"]
+          },
+          "camera": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "valid": {
+                "type": "boolean"
+              },
+              "dx": {
+                "type": "number"
+              },
+              "dy": {
+                "type": "number"
+              },
+              "inlierRatio": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": ["valid", "dx", "dy", "inlierRatio"]
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "frameIndex",
+          "tick",
+          "endTick",
+          "sourcePts",
+          "shotId",
+          "visibility",
+          "observed",
+          "predictedBounds",
+          "camera",
+          "diagnostics"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 1800
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "kind": {
+            "type": "string",
+            "const": "binary_mask"
+          },
+          "mimeType": {
+            "type": "string",
+            "const": "image/png"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "frameIndex": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "sha256",
+          "kind",
+          "mimeType",
+          "width",
+          "height",
+          "frameIndex"
+        ]
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "elapsedMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "frameCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "segmentationFrames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "flowFrames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unobservedFrames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "peakRssMb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mpsAllocatedMb": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "elapsedMs",
+        "frameCount",
+        "segmentationFrames",
+        "flowFrames",
+        "unobservedFrames",
+        "peakRssMb",
+        "mpsAllocatedMb"
+      ]
+    },
+    "confidenceConvention": {
+      "type": "string",
+      "const": "provider_raw_uncalibrated"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "analysisId",
+    "requestFingerprint",
+    "source",
+    "producer",
+    "selection",
+    "proxy",
+    "capabilities",
+    "frames",
+    "artifacts",
+    "metrics",
+    "confidenceConvention"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/eme-scene.v1.schema.json",
+  "title": "EME source-bound scene evidence"
+}

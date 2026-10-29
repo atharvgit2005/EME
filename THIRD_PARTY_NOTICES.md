@@ -50,3 +50,9 @@ All npm packages produced via `npm pack` enforce the `files` allowlist:
 - `README.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`
 
 No proprietary or unverified audio/video/font assets are packaged into the release candidate.
+
+## Optional scene perception runtime
+
+The scene worker can load an external MobileSAM checkout (Chaoning Zhang et al., Apache-2.0 in the tested upstream checkout) and a user-supplied checkpoint. Model files and the SDK are not redistributed by this repository. Preserve upstream licensing and notices when distributing those separately. The optional environment also uses PyTorch, torchvision, OpenCV, NumPy, and timm under their upstream licenses. Setup and tested identities are documented in docs/studio/SCENE.md.
+
+The ff-tracking project by Mustafa Saraç (MIT) was inspected as an architectural reference for shared frame coordinates and camera projection. No ff-tracking source or assets are redistributed in this prototype.

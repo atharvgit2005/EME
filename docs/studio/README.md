@@ -31,7 +31,7 @@ an audible source-audio or soundtrack clip. Silent-video export is not implement
 Click **Connect IDE** in Studio and copy the generated MCP configuration into your
 IDE's supported MCP settings. It uses `bin/eme-studio-mcp.js` and the active workspace
 root. No private IDE endpoints, browser credentials, or external model API keys are used.
-This adds three Studio tools to the existing 26 EME tools:
+The original editing flow adds three Studio tools to the existing 26 EME tools; scene tracking adds a fourth:
 
 - `eme_studio_get_inbox`: read requests, current project, media, and constraints.
 - `eme_studio_submit_plan`: submit grounded operations for human review.
@@ -98,3 +98,7 @@ suite. It covers origin/capability separation, exact/stale review, real media im
 MCP proposals, history, project duration changes, actual rendering, and range/download
 responses. `npm run test:legacy` retains the broad historical suite, which can depend
 on external assets and fixed cleanup paths. Review it before use.
+
+## Scene understanding prototype
+
+Use **Understand scene** on a video card to select and track a region with the optional local MPS worker. [Setup, contract, and scope](SCENE.md). The Studio MCP server now has 30 tools, including the read-only scene interval query.

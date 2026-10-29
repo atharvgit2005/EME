@@ -248,6 +248,88 @@
         >Download project JSON ↗</a
       >
     </dialog>
+    <dialog id="scene-dialog" class="scene-dialog">
+      <button class="dialog-close" data-close aria-label="Close scene preview">
+        ×
+      </button>
+      <span class="tiny-label">VISUAL UNDERSTANDING · PROTOTYPE</span>
+      <h2>Follow your subject.</h2>
+      <p>
+        Draw a box around the subject in the first frame. Track a short shot,
+        then scrub through the evidence.
+      </p>
+      <div class="scene-stage" id="scene-stage">
+        <video id="scene-player" playsinline muted preload="auto"></video>
+        <div id="scene-mask" class="scene-mask" hidden></div>
+        <canvas
+          id="scene-overlay"
+          aria-label="Draw the subject selection"
+        ></canvas>
+      </div>
+      <div class="scene-transport">
+        <button id="scene-play" class="quiet">▶ Play</button
+        ><input
+          id="scene-scrub"
+          type="range"
+          min="0"
+          max="6"
+          step="0.001"
+          value="0"
+          aria-label="Scene time"
+        /><span id="scene-time">00:00.0</span>
+      </div>
+      <div class="scene-options">
+        <label
+          >Analyze first
+          <input
+            id="scene-seconds"
+            type="number"
+            min="0.1"
+            max="15"
+            step="0.1"
+            value="6"
+          />
+          seconds</label
+        ><label
+          ><input id="scene-show-mask" type="checkbox" checked /> Show
+          segmentation</label
+        ><button id="scene-reselect" class="quiet">Reselect subject</button
+        ><button id="scene-analyze" class="primary" disabled>
+          Track selected subject ↗</button
+        ><button id="scene-cancel" class="quiet" hidden>Cancel tracking</button>
+      </div>
+      <details class="scene-coordinates">
+        <summary>Adjust selection in source pixels</summary>
+        <div class="scene-options">
+          <label
+            >X <input id="scene-box-x" type="number" min="0" value="0" /></label
+          ><label
+            >Y <input id="scene-box-y" type="number" min="0" value="0" /></label
+          ><label
+            >Width
+            <input
+              id="scene-box-width"
+              type="number"
+              min="4"
+              value="0" /></label
+          ><label
+            >Height
+            <input id="scene-box-height" type="number" min="4" value="0"
+          /></label>
+        </div>
+      </details>
+      <p id="scene-status" role="status">Draw a box to begin.</p>
+      <p id="scene-readout" class="small muted">
+        Orange: model segmentation · teal: optical-flow propagation · dashed:
+        prediction only.
+      </p>
+      <p class="small muted">
+        The selected region is a user hint. Tracking scores are uncalibrated
+        diagnostics. Missing observations remain unknown; these binary masks are
+        not soft mattes.
+      </p>
+    </dialog>
     <script src="/app.js"></script>
+    <script src="/scene.js"></script>
   </body>
 </html>

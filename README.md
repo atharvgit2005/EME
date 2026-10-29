@@ -17,6 +17,8 @@ configuration to submit conversational editing requests. Requests wait for the I
 agent to read the inbox and propose a plan; Studio does not run a background model.
 See [Studio setup, agent workflow, scope, and partner status](docs/studio/README.md).
 
+The optional [scene understanding prototype](docs/studio/SCENE.md) tracks a selected region with MobileSAM on MPS, preserves timestamped masks and uncertainty, and exposes the same evidence in Studio and the IDE.
+
 This repository imports the audited `codex/eme-remediation` implementation and
 additional source tools and experiments into a new eight-commit history on `main`.
 See [source import notes](docs/import/README.md) for provenance and repository scope.
