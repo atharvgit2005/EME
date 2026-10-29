@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/audio-repair-contract.v1.json",
+  "title": "AudioRepairContract",
+  "description": "Defines structured, verifiable audio repair findings and proposals for Closed-Loop Audio Defect Repair (Phase 27).",
+  "type": "object",
+  "required": ["version", "contract_type"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "contract_type": {
+      "type": "string",
+      "enum": ["finding", "proposal", "batch"]
+    },
+    "finding": {
+      "type": "object",
+      "required": ["id", "category", "type", "source_evidence", "measured", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^chk-repair-[a-zA-Z0-9_-]+$" },
+        "category": { "type": "string", "enum": ["synchronization", "loudness", "audio_integrity"] },
+        "type": { "type": "string", "enum": ["sync_offset", "true_peak_overflow", "loudness_deviation", "sfx_defect"] },
+        "source_evidence": {
+          "type": "object",
+          "required": ["project_revision", "media_path", "clip_id", "track_id"],
+          "additionalProperties": false,
+          "properties": {
+            "project_revision": { "type": "integer", "minimum": 0 },
+            "media_path": { "type": "string", "minLength": 1 },
+            "media_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+            "clip_id": { "type": "string", "minLength": 1 },
+            "track_id": { "type": "string", "minLength": 1 },
+            "cut_time_seconds": { "type": ["number", "null"] },
+            "sound_onset_seconds": { "type": ["number", "null"] }
+          }
+        },
+        "measured": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "offset_ms": { "type": ["number", "null"] },
+            "offset_ticks": { "type": ["integer", "null"] },
+            "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1.0 },
+            "true_peak_dbtp": { "type": ["number", "null"] },
+            "ceiling_dbtp": { "type": ["number", "null"] },
+            "integrated_lufs": { "type": ["number", "null"] }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "DISCARDED_STALE", "REPAIRED", "UNACTIONABLE"]
+        }
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "required": ["proposal_id", "finding_id", "strategy", "target_clip_id", "target_track_id", "parameters", "preconditions", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "proposal_id": { "type": "string", "pattern": "^prop-repair-[a-zA-Z0-9_-]+$" },
+        "finding_id": { "type": "string" },
+        "strategy": { "type": "string", "enum": ["SYNC_RETIME", "PEAK_ATTENUATION", "ADVISORY_NOOP"] },
+        "target_clip_id": { "type": "string", "minLength": 1 },
+        "target_track_id": { "type": "string", "minLength": 1 },
+        "parameters": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "shift_ticks": { "type": "integer" },
+            "target_start_tick": { "type": "integer", "minimum": 0 },
+            "gain_reduction_db": { "type": "number", "minimum": 0 },
+            "target_linear_volume": { "type": "number", "minimum": 0, "maximum": 2.0 },
+            "volume_keyframes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["offsetTick", "volume"],
+                "properties": {
+                  "offsetTick": { "type": "integer", "minimum": 0 },
+                  "volume": { "type": "number", "minimum": 0, "maximum": 2.0 }
+                }
+              }
+            }
+          }
+        },
+        "preconditions": {
+          "type": "object",
+          "required": ["expected_base_revision", "current_start_tick", "bounds_valid"],
+          "additionalProperties": false,
+          "properties": {
+            "expected_base_revision": { "type": "integer", "minimum": 0 },
+            "current_start_tick": { "type": "integer", "minimum": 0 },
+            "bounds_valid": { "type": "boolean" },
+            "collision_free": { "type": "boolean" },
+            "track_unlocked": { "type": "boolean" }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PLANNED", "REJECTED", "COMMITTED", "REVERTED"]
+        },
+        "rejection_reason": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

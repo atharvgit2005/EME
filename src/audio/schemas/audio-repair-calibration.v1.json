@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.internal/schemas/audio-repair-calibration.v1.json",
+  "title": "AudioRepairCalibrationContract",
+  "description": "Internal contract defining post-repair outcome efficacy evaluation, bounded confidence calibration, and diminishing returns tracking for Phase 29.",
+  "type": "object",
+  "required": [
+    "calibration_version",
+    "lineage_key",
+    "clip_id",
+    "operation_type",
+    "pass_number",
+    "evaluation_status",
+    "metric_efficacy",
+    "prior_confidence",
+    "posterior_confidence",
+    "confidence_delta",
+    "diminishing_returns",
+    "routing_disposition"
+  ],
+  "properties": {
+    "calibration_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "lineage_key": {
+      "type": "string",
+      "description": "Stable lineage identifier (e.g. clip_id:operation_type or finding_fingerprint) preventing penalty evasion."
+    },
+    "clip_id": {
+      "type": "string"
+    },
+    "operation_type": {
+      "type": "string",
+      "enum": ["SYNC_RETIME", "PEAK_ATTENUATION"]
+    },
+    "pass_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "evaluation_status": {
+      "type": "string",
+      "enum": [
+        "OPTIMAL_REPAIR",
+        "PARTIAL_IMPROVEMENT",
+        "UNDER_CORRECTION",
+        "OVER_CORRECTION",
+        "INEFFECTIVE",
+        "REGRESSION",
+        "PROTECTED_METRIC_REGRESSION",
+        "NO_EXPECTED_IMPROVEMENT",
+        "INCONCLUSIVE"
+      ]
+    },
+    "metric_efficacy": {
+      "type": "object",
+      "required": ["metric_name", "pre_value", "post_value", "expected_delta", "observed_delta"],
+      "properties": {
+        "metric_name": { "type": "string" },
+        "pre_value": { "type": "number" },
+        "post_value": { "type": "number" },
+        "target_value": { "type": ["number", "null"] },
+        "expected_delta": { "type": "number" },
+        "observed_delta": { "type": "number" },
+        "efficacy_ratio": { "type": ["number", "null"] },
+        "tolerance": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "prior_confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "posterior_confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 0.9800
+    },
+    "confidence_delta": {
+      "type": "number"
+    },
+    "diminishing_returns": {
+      "type": "boolean"
+    },
+    "consecutive_diminishing_passes": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "routing_disposition": {
+      "type": "string",
+      "enum": [
+        "AUTOMATIC_ELIGIBLE",
+        "ROUTED_HUMAN_REVIEW",
+        "HUMAN_ESCALATION_REQUIRED",
+        "DISCARD_SPECULATIVE",
+        "NEEDS_RECONCILIATION"
+      ]
+    },
+    "protected_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "rationale": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

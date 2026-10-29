@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/earshot-qa-request.v1.json",
+  "title": "EarshotQaRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "media_path",
+    "timebase",
+    "options"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^req-earshot-[a-zA-Z0-9_-]+$"
+    },
+    "media_path": {
+      "type": "string",
+      "description": "Absolute path to rendered MP4 video or WAV audio file"
+    },
+    "timebase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duration_ticks",
+        "ticks_per_second",
+        "fps_numerator",
+        "fps_denominator"
+      ],
+      "properties": {
+        "duration_ticks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ticks_per_second": {
+          "type": "integer",
+          "const": 120000
+        },
+        "fps_numerator": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "fps_denominator": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "cues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time_seconds",
+          "kind"
+        ],
+        "properties": {
+          "frame": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "time_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "kind": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1.0
+          }
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "fast_dsp",
+            "full_perception"
+          ],
+          "description": "fast_dsp runs model-free measure (<50ms); full_perception runs timeline & critique"
+        },
+        "generate_sheet": {
+          "type": "boolean",
+          "default": false
+        },
+        "sheet_output_path": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "target_lufs": {
+              "type": "number",
+              "default": -14.0
+            },
+            "lufs_tolerance": {
+              "type": "number",
+              "default": 2.0
+            },
+            "true_peak_ceiling_dbtp": {
+              "type": "number",
+              "default": -1.0
+            },
+            "sync_tolerance_ms": {
+              "type": "number",
+              "default": 40.0
+            }
+          }
+        }
+      }
+    }
+  }
+}

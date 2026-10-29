@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.audio/schemas/audio-repair-confidence.v1.json",
+  "title": "AudioRepairConfidencePolicy",
+  "description": "Defines deterministic scoring weights, thresholds, and evidence validation rules for repair proposal confidence calibration.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "policy_name",
+    "weights",
+    "thresholds"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "policy_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "weights": {
+      "type": "object",
+      "required": ["evidence", "geometry", "risk_suitability"],
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "geometry": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "risk_suitability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "required": ["autonomous_execution", "minimum_execution"],
+      "additionalProperties": false,
+      "properties": {
+        "autonomous_execution": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "minimum_execution": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "penalties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_penalty": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.50
+        },
+        "tight_boundary_penalty": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.15
+        },
+        "unstable_history_penalty": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.20
+        }
+      }
+    },
+    "rounding_precision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8,
+      "default": 4
+    }
+  }
+}

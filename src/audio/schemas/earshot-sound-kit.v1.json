@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.local/schemas/earshot-sound-kit.v1.json",
+  "title": "EarshotSoundKitContracts",
+  "description": "Internal schemas for Earshot declarative sound kit definitions and lockfiles conforming to EME Phase 26 requirements",
+  "type": "object",
+  "definitions": {
+    "kitDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kit", "name", "sr", "roles"],
+      "properties": {
+        "kit": { "type": "integer", "const": 1 },
+        "name": { "type": "string", "pattern": "^[a-zA-Z0-9_-]+$" },
+        "sr": { "type": "integer", "enum": [44100, 48000, 88200, 96000] },
+        "note": { "type": "string" },
+        "roles": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)*$"
+          },
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["sound"],
+                "properties": {
+                  "sound": { "type": "string", "minLength": 1 },
+                  "takes": { "type": "integer", "minimum": 1, "maximum": 32 },
+                  "seed": { "type": "integer" },
+                  "edits": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "dur": { "type": "number", "minimum": 0.01 },
+                      "apex": { "type": "number", "minimum": 0 },
+                      "pitch": { "type": ["string", "number"] },
+                      "peak_db": { "type": "number", "maximum": 0 },
+                      "weight": { "type": "number" }
+                    }
+                  },
+                  "pitches": {
+                    "type": "array",
+                    "items": { "type": ["string", "number"] },
+                    "minItems": 1
+                  },
+                  "align": { "type": "string", "enum": ["onset", "peak", "end"] },
+                  "max_s": { "type": "number", "minimum": 0.01 },
+                  "level_db": { "type": "number", "maximum": 0 },
+                  "note": { "type": "string" }
+                }
+              }
+            ]
+          }
+        },
+        "off": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)*$"
+          },
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "takeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "seed",
+        "onset_s",
+        "peak_s",
+        "end_s",
+        "dur_s",
+        "peak_db",
+        "lufs_m_max",
+        "sha1",
+        "key",
+        "checks"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.-]+\\.wav$"
+        },
+        "seed": { "type": "integer" },
+        "planned_seed": { "type": "integer" },
+        "pitch": { "type": ["string", "number", "null"] },
+        "onset_s": { "type": "number", "minimum": 0 },
+        "peak_s": { "type": "number", "minimum": 0 },
+        "end_s": { "type": "number", "minimum": 0 },
+        "dur_s": { "type": "number", "exclusiveMinimum": 0 },
+        "peak_db": { "type": "number", "maximum": 0 },
+        "lufs_m_max": { "type": "number" },
+        "sha1": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+        "key": { "type": "string" },
+        "checks": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "kitLock": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["kit", "earshot", "bank", "sr", "name", "roles"],
+      "properties": {
+        "kit": { "type": "integer", "const": 1 },
+        "earshot": { "type": "string" },
+        "bank": { "type": "string" },
+        "sr": { "type": "integer", "enum": [44100, 48000, 88200, 96000] },
+        "name": { "type": "string" },
+        "roles": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)*$"
+          },
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "required": ["sound", "align", "takes"],
+                "properties": {
+                  "sound": { "type": "string" },
+                  "align": { "type": "string", "enum": ["onset", "peak", "end"] },
+                  "level_db": { "type": "number" },
+                  "max_s": { "type": ["number", "null"] },
+                  "takes": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/takeRecord" }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "stats": { "type": "object" },
+        "summary": { "type": "string" },
+        "file": { "type": "string" }
+      }
+    }
+  }
+}

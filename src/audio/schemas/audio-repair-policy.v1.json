@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eme.internal/schemas/audio-repair-policy.v1.json",
+  "title": "AudioRepairPolicyContract",
+  "description": "Internal contract defining multi-proposal conflict classification, dependency ordering, and anti-oscillation policy for Phase 28.",
+  "type": "object",
+  "required": ["policy_version", "conflict_rules", "priority_rules", "convergence_bounds"],
+  "properties": {
+    "policy_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "conflict_rules": {
+      "type": "object",
+      "required": ["interval_semantics", "conflict_types"],
+      "properties": {
+        "interval_semantics": {
+          "type": "string",
+          "enum": ["HALF_OPEN_TICKS"],
+          "description": "Half-open interval semantics [start, end) where abutment start==end is non-overlapping."
+        },
+        "conflict_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "TIMELINE_INTERVAL_OVERLAP",
+              "CLIP_OVERLAP",
+              "SAME_CLIP_PROPERTY_CONFLICT",
+              "MUTUALLY_EXCLUSIVE",
+              "CYCLIC_DEPENDENCY",
+              "STALE_REVISION",
+              "TRACK_LOCKED"
+            ]
+          }
+        }
+      }
+    },
+    "priority_rules": {
+      "type": "object",
+      "required": ["operation_type_precedence", "timeline_sort_order", "tie_breaker"],
+      "properties": {
+        "operation_type_precedence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["SYNC_RETIME", "PEAK_ATTENUATION"]
+          },
+          "description": "Structural retiming shifts precede level/envelope adjustments."
+        },
+        "timeline_sort_order": {
+          "type": "string",
+          "enum": ["EARLIEST_START_TICK_FIRST"]
+        },
+        "tie_breaker": {
+          "type": "string",
+          "enum": ["LEXICOGRAPHIC_CLIP_ID"]
+        },
+        "proposal_tie_breaker": {
+          "type": "string",
+          "enum": ["LEXICOGRAPHIC_PROPOSAL_ID"]
+        }
+      }
+    },
+    "convergence_bounds": {
+      "type": "object",
+      "required": ["max_passes", "max_cumulative_shift_ticks", "max_cumulative_attenuation_db"],
+      "properties": {
+        "max_passes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 3
+        },
+        "max_cumulative_shift_ticks": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 240000,
+          "description": "Maximum cumulative timeline shift across all passes (240,000 ticks = 2.0s)."
+        },
+        "max_cumulative_attenuation_db": {
+          "type": "number",
+          "minimum": 0.0,
+          "default": 12.0,
+          "description": "Maximum cumulative volume reduction across all passes in decibels."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
