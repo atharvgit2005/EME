@@ -173,6 +173,25 @@ class ApprovalAuthority {
       this._write(ticket, storageDir); return { request_id: requestId, status: ticket.status };
     } finally { lock.release(); }
   }
+  /** Called only by the local Studio review surface after its origin/CSRF checks.
+   * This records a browser review, not physical-human authentication. MCP never exposes it.
+   */
+  static confirmReviewedExecution({ requestId, executionDigest, storageDir = this.DEFAULT_STORAGE_DIR }) {
+    const shown = this.getTicket(requestId, storageDir); this._requirePending(shown);
+    const lock = this._coordinator(storageDir).acquireHierarchicalLocks(`approval-project-${digest(shown.project_id)}`, requestId);
+    try {
+      const ticket = this.getTicket(requestId, storageDir); this._requirePending(ticket);
+      if (ticket.execution_digest !== executionDigest || ticket.signature !== shown.signature) {
+        fail('ERR_APPROVAL_INTEGRITY_MISMATCH', 'The reviewed execution has changed');
+      }
+      this._requireFresh(ticket, storageDir);
+      const token = `${requestId}.${crypto.randomBytes(32).toString('hex')}`;
+      ticket.status = 'AUTHORIZED'; ticket.token_sha256 = digest(token);
+      ticket.confirmed_by = 'local_browser_review'; ticket.confirmed_at = new Date().toISOString();
+      this._write(ticket, storageDir);
+      return { token, request_id: requestId, execution_digest: ticket.execution_digest };
+    } finally { lock.release(); }
+  }
   static _requestId(token) {
     if (typeof token !== 'string' || !/^req_[a-f0-9]{32}\.[a-f0-9]{64}$/.test(token)) fail('ERR_UNTRUSTED_APPROVAL', 'A trusted approval token is required');
     return token.split('.')[0];

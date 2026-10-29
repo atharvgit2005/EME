@@ -65,6 +65,14 @@ class OperationExecutor {
           affectedIds = (candidate.clips || []).map(clip => clip.id);
           break;
         }
+        case 'set_project_duration': {
+          const duration = opParams.durationTicks;
+          if (!Number.isSafeInteger(duration) || duration <= 0) throw new Error('Project duration must be a positive integer number of ticks');
+          if ((candidate.clips || []).some(clip => clip.startTick + clip.durationTicks > duration)) throw new Error('Trim clips before shortening the project duration');
+          candidate.timebase.durationTicks = duration;
+          affectedIds = [candidate.id];
+          break;
+        }
         case 'create_project': {
           const res = this._opCreateProject(candidate, opParams);
           affectedIds = res.affectedIds;

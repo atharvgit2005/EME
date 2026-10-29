@@ -40,12 +40,13 @@ Do not interpret their historical reports as current product acceptance.
 Run `npm run test:remediation` to verify contract and fixture hashes, portable asset
 directories, approval/execution protections, native rendering, audio, and stdio MCP.
 The runner allocates its output under new temporary directories. Read the root
-README before running the broader historical `npm test` suite, which has external
+README before running the broader historical `npm run test:legacy` suite, which has external
 asset and cleanup assumptions.
 
 The source manifest records SHA-256 hashes of the imported files before these
 repository-specific documentation and ignore-file changes. It also lists excluded
 tracked generated records. It is an import inventory, not a signed runtime manifest.
 
-Live agent inference, a polished hackathon editing flow, wider platform/performance
-testing, and partner integrations remain separate implementation milestones.
+This document records the initial import. Later Studio implementation and verification
+are documented separately under `docs/studio/`; import hashes are not current release
+hashes after subsequent development.

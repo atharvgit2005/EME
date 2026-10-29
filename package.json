@@ -1,12 +1,14 @@
 {
   "name": "editing-mechanics-engine",
-  "version": "0.1.0-rc1",
-  "description": "Deterministic editing, native rendering and verified delivery engine for Antigravity IDE over local stdio MCP",
+  "version": "0.2.0",
+  "description": "Local video editing studio with IDE-agent proposals, deterministic rendering, and verified delivery over stdio MCP",
   "main": "src/creative/index.js",
   "bin": {
     "eme": "bin/eme.js",
     "eme-mcp": "bin/eme-mcp.js",
-    "eme-confirm": "bin/eme-confirm.js"
+    "eme-confirm": "bin/eme-confirm.js",
+    "eme-studio": "bin/eme-studio.js",
+    "eme-studio-mcp": "bin/eme-studio-mcp.js"
   },
   "files": [
     "bin/",
@@ -14,13 +16,15 @@
     "schema/",
     "README.md",
     "LICENSE",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "docs/studio/",
+    "scripts/studio-agent-call.cjs"
   ],
   "engines": {
     "node": ">=20.20.1"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js tests/**/*.test.js",
+    "test": "npm run test:remediation && npm run test:studio",
     "doctor": "node bin/eme.js doctor",
     "capabilities": "node bin/eme.js capabilities",
     "validate:schema": "node tools/validate-schema.js",
@@ -31,7 +35,11 @@
     "test:native": "node scripts/verify-native-delivery.cjs",
     "test:contracts": "node scripts/verify-contract-baseline.cjs",
     "test:remediation": "node scripts/verify-remediation.cjs",
-    "test:portable": "node scripts/verify-portable-inputs.cjs"
+    "test:portable": "node scripts/verify-portable-inputs.cjs",
+    "start": "node bin/eme-studio.js",
+    "studio": "node bin/eme-studio.js",
+    "test:studio": "node --test tests/studio.test.js",
+    "test:legacy": "node --test tests/*.test.js tests/**/*.test.js"
   },
   "keywords": [
     "video-editing",

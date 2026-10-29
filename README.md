@@ -1,8 +1,21 @@
 # Editing Mechanics Engine
 
-EME is the deterministic editing, rendering, audio and verification engine for
-Antigravity IDE. Antigravity supplies creative reasoning through local stdio JSON-RPC
-MCP. EME does not call an external model provider or require a model API key.
+EME combines a local video editor with a deterministic editing, rendering, audio,
+and verification engine. Your local IDE agent supplies creative reasoning through
+stdio MCP; no model API key is needed by the engine.
+
+## EME Studio
+
+```sh
+npm start
+```
+
+Open **http://127.0.0.1:4720**. Import footage or try the generated sample, review
+and apply edits, preview the timeline, then export a verified MP4. Undo/redo and
+revision history preserve earlier edits. Connect your IDE through the in-app MCP
+configuration to submit conversational editing requests. Requests wait for the IDE
+agent to read the inbox and propose a plan; Studio does not run a background model.
+See [Studio setup, agent workflow, scope, and partner status](docs/studio/README.md).
 
 This repository imports the audited `codex/eme-remediation` implementation and
 additional source tools and experiments into a new eight-commit history on `main`.
@@ -90,7 +103,7 @@ These runners preserve raw TAP/JSON summaries under uniquely allocated OS tempor
 They use synthetic media and test-only automated PTYs, not genuine IDE inference or human
 authentication. The native suite also exercises the actual production stdio entry point.
 `schema/` hashes are checked against the versioned baseline. Never run the broad historical
-`npm test` command against valuable scratch/evidence directories without reviewing cleanup
+`npm run test:legacy` command against valuable scratch/evidence directories without reviewing cleanup
 and external-asset assumptions; historical milestones are not current acceptance evidence.
 
 A deterministic local benchmark harness is available for the existing 1920x1080 before/after

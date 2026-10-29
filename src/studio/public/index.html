@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="eme-review" content="__REVIEW_TOKEN__" />
+    <title>EME — Make your next move</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="wordmark" href="/" aria-label="Editing Mechanics Engine"
+        >M<span>/</span>E<span class="wordmark-label"
+          >EDITING MECHANICS</span
+        ></a
+      >
+      <div class="project-name">
+        <span class="project-dot"></span><span>Untitled project</span
+        ><span class="local-label">LOCAL</span>
+      </div>
+      <div class="top-actions">
+        <button id="connect" class="quiet">
+          <span class="connection-dot"></span
+          ><span id="connection-label">Connect IDE</span></button
+        ><button id="export" class="primary">
+          Export video <span>↗</span>
+        </button>
+      </div>
+    </header>
+    <main class="workspace">
+      <aside class="library">
+        <div class="section-title">
+          <h2>Your media</h2>
+          <span id="media-count" class="count">0</span>
+        </div>
+        <button class="upload-button" id="upload-button">
+          <span>＋</span> Import footage</button
+        ><input id="file-input" type="file" accept="video/*,audio/*" hidden />
+        <p class="muted small">Video or audio · up to 250 MB</p>
+        <div id="media-list" class="media-list"></div>
+        <div class="library-bottom">
+          <div class="tiny-label">A LITTLE HEAD START</div>
+          <p>Get a feel for the workflow.</p>
+          <button id="demo" class="text-button">
+            Try the sample project <span>↗</span>
+          </button>
+          <p class="muted small">Generated footage. Yours to explore.</p>
+        </div>
+      </aside>
+      <section class="editing-area">
+        <div class="preview-heading">
+          <div>
+            <span class="tiny-label">THE CANVAS</span>
+            <h1>Make your next move.</h1>
+          </div>
+          <div class="view-tabs">
+            <button id="view-source" class="selected">Timeline</button
+            ><button id="view-export">Latest export</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <div class="canvas" id="canvas">
+            <video id="player" playsinline preload="metadata"></video>
+            <div id="text-overlays"></div>
+            <div id="empty-canvas">
+              <div class="empty-symbol">M<span>/</span>E</div>
+              <h2>A little footage.<br />A lot of possibility.</h2>
+              <p>
+                Import a video, then tell your editor<br />what you have in
+                mind.
+              </p>
+              <button id="empty-demo" class="light-button">
+                Explore with sample footage <span>↗</span>
+              </button>
+            </div>
+            <div class="canvas-corner">EME STUDIO <span>●</span></div>
+          </div>
+        </div>
+        <div class="transport">
+          <div class="transport-left">
+            <button id="play" class="icon-button" aria-label="Play or pause">
+              ▶</button
+            ><span id="timecode">00:00.0 <span>/ 00:12.0</span></span>
+          </div>
+          <span id="preview-status" class="muted small"
+            >Your canvas is ready</span
+          ><button id="mute" class="icon-button" aria-label="Mute or unmute">
+            ♪
+          </button>
+        </div>
+        <div class="timeline">
+          <div class="timeline-toolbar">
+            <div>
+              <span class="tiny-label">TIMELINE</span
+              ><span id="revision" class="revision">Revision 0</span>
+            </div>
+            <div>
+              <button id="undo" class="icon-button" aria-label="Undo">↶</button
+              ><button id="redo" class="icon-button" aria-label="Redo">↷</button
+              ><button id="add-title" class="quiet">
+                T <span>Add title</span>
+              </button>
+            </div>
+          </div>
+          <div id="ruler" class="ruler"></div>
+          <div id="tracks" class="tracks">
+            <div class="empty-track">
+              Your story starts here. Add a clip from your media.
+            </div>
+          </div>
+          <div class="timeline-footer">
+            <span id="selection-label"
+              >Select a clip to give your request context</span
+            ><span>120k timebase · 30 fps</span>
+          </div>
+        </div>
+        <div id="render-banner" class="render-banner" hidden></div>
+        <div class="bottom-note">
+          <span class="save-dot"></span> Saved on this device
+          <span class="bottom-note-right"
+            >You direct. EME handles the mechanics.</span
+          >
+        </div>
+      </section>
+      <aside class="assistant">
+        <div class="assistant-heading">
+          <div class="assistant-avatar">✳</div>
+          <div>
+            <h2>Your editing partner</h2>
+            <span id="agent-status" class="muted small">Local IDE agent</span>
+          </div>
+          <button
+            id="history-button"
+            class="icon-button"
+            aria-label="View revision history"
+          >
+            ◷
+          </button>
+        </div>
+        <div id="chat" class="chat">
+          <div class="welcome">
+            <span class="tiny-label">LET’S MAKE SOMETHING</span>
+            <h2>The edit is<br />in your hands.</h2>
+            <p>
+              Describe the change. Review the plan.<br />Keep what works, refine
+              the rest.
+            </p>
+            <div class="example-prompt">
+              “Add a title for the first four seconds.”
+            </div>
+            <div class="example-prompt">
+              “Move the title lower. Keep the rest.”
+            </div>
+            <div class="agent-explainer">
+              Connect your IDE agent to turn requests into edit proposals. Quick
+              actions work locally.
+            </div>
+          </div>
+        </div>
+        <div id="proposal" class="proposal" hidden></div>
+        <div id="queue-status" class="queue-status" hidden>
+          <span class="spinner"></span> Queued · ask your IDE to process the
+          inbox
+        </div>
+        <form id="prompt-form" class="composer">
+          <label for="prompt" class="sr-only">Describe your edit</label
+          ><textarea
+            id="prompt"
+            rows="3"
+            placeholder="What would you like to change?"
+          ></textarea>
+          <div class="composer-actions">
+            <button
+              id="dictate"
+              type="button"
+              class="dictation"
+              title="Use Wispr Flow dictation in this field"
+            >
+              ◉ <span>Dictate with Flow</span></button
+            ><button
+              id="send"
+              type="submit"
+              class="send-button"
+              aria-label="Send editing request"
+            >
+              ↑
+            </button>
+          </div>
+        </form>
+        <div class="assistant-footnote">
+          Every change starts with your approval.
+        </div>
+      </aside>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <dialog id="connect-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button
+      ><span class="tiny-label">YOUR LOCAL EDITING PARTNER</span>
+      <h2>Bring your IDE<br />into the edit.</h2>
+      <p>
+        Start the EME Studio MCP server in your IDE. Your agent can read
+        requests and propose changes. You approve them here.
+      </p>
+      <pre id="mcp-config"></pre>
+      <button id="copy-config" class="primary">Copy configuration</button>
+      <div class="integration-note">
+        <strong>Wispr Flow</strong>
+        <p>
+          Dictate into the request field using Flow’s desktop shortcut. No
+          embedded voice service is claimed.
+        </p>
+        <strong>Dodo Payments</strong>
+        <p id="billing-status">Checking checkout configuration…</p>
+        <a
+          id="billing-link"
+          href="/api/billing"
+          target="_blank"
+          rel="noopener"
+          hidden
+          >Open checkout ↗</a
+        >
+      </div>
+    </dialog>
+    <dialog id="title-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button
+      ><span class="tiny-label">A FEW WORDS GO A LONG WAY</span>
+      <h2>Give it a title.</h2>
+      <form id="title-form">
+        <label for="title-input">Title text</label
+        ><input
+          id="title-input"
+          maxlength="150"
+          placeholder="Make your next move."
+          required
+        />
+        <p class="muted small">
+          A quick action creates a proposal for you to review.
+        </p>
+        <button class="primary">Review title</button>
+      </form>
+    </dialog>
+    <dialog id="history-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button
+      ><span class="tiny-label">ROOM TO EXPERIMENT</span>
+      <h2>Every move, saved.</h2>
+      <div id="history-list"></div>
+      <a class="text-button" href="/api/project/download" download
+        >Download project JSON ↗</a
+      >
+    </dialog>
+    <script src="/app.js"></script>
+  </body>
+</html>
