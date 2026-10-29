@@ -1,0 +1,42 @@
+Dear ChatGPT Architecture Lead,
+
+Milestone VTSM-03 is formally closed and accepted under ADR-VTSM03-01. As directed by leadership, we are now launching the next major strategic evolution of the Editing Mechanics Engine (EME):
+
+### Strategic Vision: Intelligent Color Grading Engine & CapCut-Grade Manual Interactive Timeline
+
+Our objective is to bridge deterministic AI video generation with human-in-the-loop creative control:
+1. **Intelligent Color Grading Engine**:
+   - **Scene Intelligence & True Tone**: Automated scene understanding (white balance, color temperature / CCT, tint / green-magenta balance, exposure estimation, and skin tone detection / protection along the vectorscope I-line).
+   - **Multi-LUT Engine & Real-Time Try-On**: Fast 3D LUT parsing (`.cube` format, 17x17x17 to 65x65x65 with tetrahedral interpolation), instant multi-LUT preview matrix (Kodak 2383, Teal & Orange, Fuji, Bleach Bypass, Cine B&W, etc.), intensity blending (0.0–1.0), and color space transforms.
+   - **Professional Grading Controls**: 3-way color wheels (Lift/Gamma/Gain + Offset), Bézier cubic RGB/Luma curves, and 8-channel selective HSL adjustments.
+   - **Execution Engine**: Hardware-accelerated GPU preview pipeline (60 FPS interactive preview) coupled with deterministic headless FFmpeg rendering (`lut3d`, `curves`, `eq`).
+
+2. **CapCut-Grade Interactive Manual Timeline (NLE Workspace)**:
+   - **Post-Generation Fine-Tuning**: Once EME produces an automated edit, the user requires an interactive manual timeline to adjust pacing, swap frames, trim/split clips, reorder layers, inspect element-wise breakdowns, and refine audio/visual alignment.
+   - **REA Technical Reconnaissance on Local CapCut macOS App**:
+     We inspected the local CapCut Desktop installation (`/Users/atharvpaharia100/Downloads/CapCut.app`) and reverse-engineered draft project files from `~/Movies/CapCut/User Data/Projects/com.lveditor.draft/`:
+     - **Timing Model**: Microsecond integer timebase (`source_timerange`, `target_timerange` with `start` and `duration`).
+     - **Track & Material Architecture**: Multi-track separation (video, audio, text, sticker, effect), segment transforms (`scale`, `transform`, `rotation`, `alpha`, `flip`), and referenced materials:
+       - `color_curves`: Cubic Bézier curves for Master/Luma and RGB with `anchor`, `left_control`, `right_control`, `sync_direction_control`.
+       - `hsl`: 8-channel selective color adjustments (`hue`, `saturation`, `lightness`).
+       - `speeds`: Linear and Bézier `curve_speed` retiming.
+       - `realtime_denoises` & `video_effects`: Parameterized shader effects with normalized value arrays.
+   - **Bidirectional EME Round-Trip Architecture**:
+     - EME Canonical Project Model (`schema/eme-project.v1.schema.json` using 120,000 ticks/sec timebase, half-open intervals) $\leftrightarrow$ Interactive NLE Timeline State $\leftrightarrow$ Real-Time Web/Canvas/WebGL Playback $\leftrightarrow$ Deterministic FFmpeg Render Pipeline.
+     - Essential Editing Mechanics: Frame-accurate playhead scrubbing, magnetic snapping, ripple trim, split at playhead, slip/slide, multi-track drag-and-drop, audio waveform display, and live audio scrubbing.
+
+---
+
+### Request for Architectural Directives & Milestone Plan
+
+As Chief Architecture Lead, please provide:
+1. **Milestone & Phase Breakdown**: Recommend the phase sequencing (e.g. Phase 17: Intelligent Color Grading Engine, Phase 18: CapCut-Grade Interactive Timeline UI, Phase 19: Full End-to-End Integration & Round-Trip Validation).
+2. **Core Architectural Invariants & Data Contracts**:
+   - Timebase mapping between EME canonical 120,000 ticks/sec and NLE timeline / CapCut microsecond representations.
+   - Color grading pipeline execution graph (Input $\to$ White Balance / True Tone $\to$ Lift/Gamma/Gain $\to$ Curves $\to$ HSL $\to$ 3D LUT Blend $\to$ Output).
+   - Non-destructive project mutation invariants.
+3. **Phase 17 Kickoff Specification & Directives**:
+   - Detailed specification for Milestone CG-01 / Phase 17 (Color Grading Engine).
+   - Concrete test fixtures, acceptance benchmarks, and step-by-step implementation prompts to begin work immediately.
+
+We stand fully authorized to execute under GSD guidelines until full implementation is complete. Please issue your initial directives.

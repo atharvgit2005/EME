@@ -1,0 +1,87 @@
+{
+  "id": "proj_creator_reel_qa_10s",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Social Creator Reel Audio QA 10s",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#0a0a0f"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 1200000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "asset_qa_video_reel",
+      "type": "video",
+      "src": "fixtures/qa-audio-defects.mp4",
+      "sha256": "c177a4a9a07e824c3704ba0ec138a30252eae11eb60703bf18f2df02f1e0a6a7"
+    },
+    {
+      "id": "asset_creator_clean_audio",
+      "type": "audio",
+      "src": "assets/creator_reel_soundtrack_20s.wav",
+      "sha256": "1b8183af7135d64b1ee7d1d15d007fd1516a42bf41a7a64d3e66c5237d59b628"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_video_main",
+      "name": "V1 - Social Reel Visuals",
+      "kind": "visual",
+      "zIndex": 1,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_main",
+      "name": "A1 - Dialogue and Acoustic Stems",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_video_part1",
+      "trackId": "track_video_main",
+      "type": "video",
+      "startTick": 0,
+      "durationTicks": 600000,
+      "assetId": "asset_qa_video_reel"
+    },
+    {
+      "id": "clip_video_part2",
+      "trackId": "track_video_main",
+      "type": "video",
+      "startTick": 600000,
+      "durationTicks": 600000,
+      "assetId": "asset_qa_video_reel"
+    },
+    {
+      "id": "clip_audio_part1",
+      "trackId": "track_audio_main",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 600000,
+      "assetId": "asset_qa_video_reel"
+    },
+    {
+      "id": "clip_audio_part2",
+      "trackId": "track_audio_main",
+      "type": "audio",
+      "startTick": 600000,
+      "durationTicks": 600000,
+      "assetId": "asset_qa_video_reel"
+    }
+  ]
+}

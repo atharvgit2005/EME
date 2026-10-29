@@ -1,0 +1,917 @@
+Share
+You said:
+How are we gonna implement Laya? Do we making a hybrid engine in which any IDE which is present will be there for the instructions and everything, and there will be second engine, hybrid engine. But I don't know anything about it. So can you please guide on me?
+Worked for 29s
+ChatGPT said:
+
+Yes, Atharv. I think the architecture you're imagining is a hybrid AI editing engine where multiple AI systems work together, and you can interact with it through your IDE, EME's own interface, or other supported tools.
+
+The important thing is to understand that we're not building two competing engines. We're building one editing engine with different intelligence layers, each having a specific job.
+
+Let me explain it from the beginning.
+
+1. First, understand the three different roles
+
+A. Your IDE and its AI agent — the interface you develop through
+
+Examples include Antigravity, Cursor, Claude Code, and other development tools.
+
+You tell the IDE agent what to build or change. It helps you write code, inspect the repository, run tests, and develop EME.
+
+Its job: help you develop and operate the system through supported integrations. It is not EME's core editing engine.
+
+B. Laya — the fast decision engine
+
+Laya is intended to understand the category of a request and make typed decisions. For example, it can recommend whether a request concerns audio cleanup, subtitles, color grading, or timeline editing.
+
+Its job: quickly recommend the appropriate route or flag uncertainty. It must not independently authorize edits, renders, or other state-changing operations. 
+Pasted text(20261018-104511).txt
+
+C. EME — the actual editing engine
+
+EME has the planning and deterministic execution pipeline, timeline operations, rendering, media QA, revision history, and delivery verification.
+
+Its job: turn a valid plan into a real edited video, verify the result, and preserve project integrity.
+
+There is also a fourth role: a more capable language model or reasoning planner, which we have been calling System 2 / REA. It handles complex requests that require multiple dependent steps. Laya and this planner complement each other rather than replacing one another. 
+Pasted text(20261018-104511).txt
+
+2. The hybrid architecture we're aiming for
+
+This is the architecture I recommend for EME.
+
+User interaction layer
+
+EME UI · CLI · IDE AI agents · MCP integrations
+
+EME request and job orchestration
+
+Read project context, validate inputs, track job and revision state
+
+Intelligence layer
+
+Laya · System 1
+
+Fast routing, triage, risk signals
+
+REA · System 2
+
+Reasoning, dependencies, complex plans
+
+Policy gate decides whether a recommendation is valid or needs escalation
+
+Deterministic EME execution core
+
+Plan validation → atomic operations → timeline/media processing → render
+
+Verification and delivery
+
+Media QA → semantic checks → manifest/hash verification → publish verified result
+
+The IDE is at the top because it is one way of interacting with EME. It is not the brain of the whole system. EME should still work when you close Antigravity or switch to another supported client.
+
+Likewise, Laya must not be able to bypass the deterministic execution core. A good recommendation from Laya is not proof that an editing operation is safe or correct.
+
+3. What happens when you give EME an instruction?
+
+Imagine that you type this into the EME interface or through an IDE-connected MCP tool:
+
+Create a 30-second cinematic reel from my footage, sync the cuts to the music, add captions, and export it vertically.
+
+Here is how the hybrid engine should handle it.
+
+Receive the instruction
+
+EME loads the permitted project context, available media, current timeline, and applicable constraints.
+
+Laya makes an initial decision
+
+It identifies the request as a compound editing task that involves clip selection, timeline pacing, captions, music, and export. Because the task requires coordinated steps, the policy gate routes it to the reasoning planner.
+
+System 2 / REA develops theplan
+
+The planner resolves dependencies, decides the required operation sequence, and prepares a structured editing plan. It doesn't get to bypass the engine's rules.
+
+The existing EME core validates and executes
+
+The plan is checked against project state, media availability, timing rules, and hard constraints. Valid operations run through the established executor.
+
+EME renders and verifies
+
+The rendering pipeline produces the video. Media QA and semantic checks determine whether it meets the requirements.
+
+Only a verified result becomes active
+
+EME publishes the delivery and refreshes the UI. If a required check fails, the previous verified delivery remains intact.
+
+For a simpler request such as “make the cuts faster,” Laya might recommend the timeline-pacing subsystem. The system can take a shorter path, but it must still validate and execute any change through EME.
+
+For an ambiguous request such as “make it better,” the correct behavior is to ask a clarifying question or escalate—not confidently guess what the user meant.
+
+4. How do different IDEs fit into this?
+
+This is where your idea becomes particularly useful.
+
+Antigravity
+
+Develop EME, inspect architecture, run tests, and invoke supported EME tools.
+
+Cursor or another compatible IDE
+
+Use the same EME capabilities through supported MCP tools or CLI commands, without duplicating the engine.
+
+EME's own UI
+
+Let an end user submit edit requests, inspect candidate videos, review revisions, and manage deliveries without opening an IDE.
+
+The clean approach is to expose EME's capabilities through stable interfaces such as its API, CLI, and MCP server. Each client becomes an adapter to the same backend, rather than a separate implementation of editing logic.
+
+MCP compatibility can make integration with many AI clients easier, but it does not guarantee that every IDE will support every tool or behave identically. Each client still requires integration and testing.
+
+5. Where are we today versus where we're going?
+
+Based on the engineering reports you've shared, the important distinction is between implementing Laya and trusting it to control the workflow.
+
+Already reported implemented
+
+Laya's decision adapter and policy gate, typed schemas, deterministic baseline, diagnostic MCP tools, CLI shadow runner, and initial validation checkpoints. 
+Pasted text(20261018-104511).txt
+Pasted text(20261018-104511).txt
+
+Still requiring promotion evidence
+
+The previous architecture review authorized an independent blind certification stage, M6, and explicitly withheld production promotion pending broader evaluation. 
+Pasted text(20261018-104511).txt
+
+I would not switch the live engine to trust Laya just because the reported challenge tests are green. We need to establish that it generalizes to new requests and does not mishandle constraints, negation, missing prerequisites, or unsupported editing effects.
+
+6. The roadmap I recommend
+
+Here is the sequence I'd follow from this point.
+
+Phase 1 — Keep the hybrid boundary fixed
+
+Keep Laya advisory-only. Preserve the current deterministic router as the live authority. Freeze the model, adapter, schemas, routing policy, and fallback configuration.
+
+Phase 2 — Blind certification
+
+Test fresh, independently authored prompts against the deterministic baseline and Laya. Measure per-class routing, planning-escalation safety, constraint handling, confidence calibration, and actual inference latency.
+
+Phase 3 — Advisory canary
+
+Only after the gates pass, allow Laya to contribute recommendations for a limited set of requests. Keep deterministic validation authoritative, with a feature flag that restores baseline routing immediately.
+
+Phase 4 — Expand one capability at a time
+
+Start with intent routing. Then evaluate color-mood triage and timeline-risk prioritization independently. Don't activate every capability at once.
+
+Phase 5 — Broader IDE and client integrations
+
+Stabilize the APIs and MCP contracts, add and test client adapters, and keep the same execution, validation, history, and delivery layer underneath.
+
+My strongest recommendation: do not spend more time building a second complete engine. You've already reported the most important foundation: EME's deterministic editing and delivery pipeline. The high-value work is making Laya a reliable decision layer, connecting the reasoning planner to it cleanly, and proving that the hybrid behaves better than the baseline.
+
+Once that foundation is proven, adding support for more IDEs becomes an integration task—not an architecture rewrite.
+
+You said:
+so what to do next
+ChatGPT said:
+
+Your next step is M6: Independent Blind Certification of Laya.
+
+Don't build another engine, add more features, or immediately fine-tune the model. First, prove that the Laya integration you've already built actually improves EME's decisions on unseen requests without compromising safety. This is the next authorized stage in your previous engineering report. 
+Pasted text(20261018-104511).txt
+
+What to do next
+1
+
+Freeze the current candidate
+
+Record the Git commit, model/checkpoint hash, adapter and policy hashes, schemas, configuration, and baseline test results. Don't change the candidate during evaluation.
+
+2
+
+Create an independent blind test set
+
+Use fresh prompts that weren't used in training or earlier tuning. Test ambiguous editing requests, compound tasks, negation, conflicting constraints, missing media, unsupported effects, and colloquial instructions.
+
+3
+
+Run Laya beside the existing router
+
+Use the actual MCP integration and CLI shadow runner. Compare Laya's recommendations with the deterministic baseline, while preventing Laya from influencing execution.
+
+4
+
+Make a decision from the evidence
+
+If Laya passes, proceed to a limited advisory canary behind a feature flag. If it fails, classify the cause and fix the policy, adapter, or model as appropriate. Never promote it merely because the aggregate test count is green.
+
+Prompt for Antigravity
+
+Copy this into your IDE agent. It gives it a concrete assignment instead of asking it to improve the system vaguely.
+
+Writing
+EME × Laya — M6 Independent Blind Certification
+Objective
+
+Execute M6 for the existing EME Decision Fabric. Independently assess whether Laya's decision recommendations generalize to unseen editing requests and are safe enough to justify a limited advisory canary.
+
+This is an evaluation and certification milestone, not a new-engine implementation or architecture redesign.
+
+Use required GSD actions to achieve the goals and wherever needed.
+
+Phase A — Freeze the candidate
+
+Inspect the existing repository and the previous Laya validation reports.
+
+Create an immutable evaluation candidate manifest containing:
+
+Git commit and build identifier.
+
+Laya model/checkpoint identity and SHA-256, if a real checkpoint exists.
+
+Adapter, policy, question-schema, and routing-policy hashes.
+
+Dataset and split-manifest hashes.
+
+Model/runtime versions and feature-flag settings.
+
+Current deterministic baseline configuration.
+
+Exact test commands and existing results.
+
+Distinguish changes to model weights from changes to the adapter, policy, schemas, or vocabulary. Do not claim fine-tuning occurred unless an actual changed, hash-identified checkpoint and training evidence exist.
+
+Do not modify the frozen candidate while blind evaluation is running.
+
+Phase B — Independent blind evaluation
+
+Create a new, independently authored test set whose prompts and labels are not copied from the previous challenge suites. Prevent overlap with training, validation, prior test, and tuning data where applicable. Preserve cryptographic split and provenance records.
+
+Include:
+
+Single-subsystem intent classification and paraphrases.
+
+Compound requests that require System 2 planning.
+
+Ambiguous and underspecified requests.
+
+Color-mood interpretation and unsupported visual effects.
+
+Negation and explicit prohibitions.
+
+Conflicting constraints and missing prerequisites.
+
+Quoted dialogue that contains apparent commands.
+
+Missing media, unsupported operations, and invalid project states.
+
+Malformed or unknown model responses and unavailable model artifacts.
+
+Colloquial wording and realistic editing briefs.
+
+Gold labels must be assigned without reviewers seeing candidate predictions. Record disagreements and adjudicate ambiguous examples instead of forcing questionable labels.
+
+Keep the previous 64-case planning holdout unchanged.
+
+Phase C — Run real integrations in shadow mode
+
+Use the existing MCP tools and CLI shadow runner.
+
+For identical inputs, capture:
+
+Deterministic baseline route.
+
+Laya predicted route and probability/confidence information available from the adapter.
+
+System 2 escalation decision and rationale.
+
+Constraint and prerequisite results.
+
+Fallback, timeout, malformed-output, and unknown-label behavior.
+
+Model, schema, policy, and adapter versions.
+
+Model inference latency, adapter overhead, and MCP/CLI transport latency separately.
+
+The deterministic router remains authoritative throughout the entire run. Laya's outputs must not trigger timeline changes, candidate activation, rendering, export, file operations, or any other state mutation.
+
+Verify state and baseline-route equivalence using repeatable fixtures and before/after snapshots.
+
+Phase D — Acceptance gates
+
+Use the established M6 criteria:
+
+Semantic routing: at least 90% overall accuracy and 0.90 macro-F1, with per-class performance disclosed.
+
+Planning escalation: preserve the existing 64-case result and achieve at least 95% recall on a new independently labelled positive set.
+
+Color mapping: at least 90% exact mapping on independent, unambiguous supported examples.
+
+Unsupported effects: escalate correctly; needs_review must never enter an executable LUT identifier.
+
+Constraints and prerequisites: zero forbidden actions, constraint leaks, or prerequisite bypasses.
+
+Runtime failures: timeouts, malformed predictions, unknown labels, and missing model artifacts fail closed or use the approved safe fallback.
+
+Shadow consistency: Laya cannot alter actual routing, project state, timeline state, LUT state, or rendered output.
+
+Report sample sizes, per-class metrics, uncertainty, and failure examples. Do not describe a small curated test set as proof of universal safety.
+
+Any forbidden action, constraint violation, sentinel leakage, or prerequisite bypass blocks promotion regardless of the aggregate score.
+
+Phase E — Remediation only where justified
+
+Classify each failure as one of:
+
+Schema or vocabulary defect.
+
+Policy or deterministic guard defect.
+
+Adapter or integration defect.
+
+Model judgment defect.
+
+Calibration or threshold defect.
+
+Ambiguous gold label.
+
+Test or infrastructure defect.
+
+Choose the smallest appropriate fix. Do not fine-tune the model to compensate for rules that should be enforced deterministically.
+
+If any model, adapter, policy, or schema change is necessary, produce a new candidate version and rerun affected tests plus the frozen regression suite. Evaluate the modified candidate on a fresh holdout where required.
+
+Phase F — Report and decision
+
+Produce:
+
+docs/LAYA_M6_BLIND_CERTIFICATION_REPORT.md
+
+A machine-readable JSON certification report.
+
+The frozen candidate manifest.
+
+Blind dataset provenance and split manifest.
+
+Baseline-versus-Laya metrics.
+
+Per-class errors and safety failures.
+
+Latency breakdown.
+
+State-equivalence evidence.
+
+Test commands and actual pass/fail counts.
+
+Recommended decision: PASS, CONDITIONAL PASS, or FAIL.
+
+If all gates pass, request authorization for a limited advisory canary behind a feature flag. Do not activate Laya as the authoritative router or grant it execution authority as part of M6.
+
+If a gate fails, preserve the evidence, identify the smallest required remediation, and keep the current deterministic router authoritative.
+
+
+
+
+What happens after M6?
+
+If M6 passes, we move to a limited Laya advisory canary. EME starts using Laya's recommendations as an additional signal while retaining deterministic safety checks andan immediate fallback to the existing router.
+
+That is the right progression toward your hybrid engine: first prove the second intelligence layer, then gradually introduce it without risking the editing engine that already works.
+
+You said:
+Dear ChatGPT Architecture Lead,
+
+Reporting on EME × Laya — M6 Independent Blind Certification.
+
+We have executed Phases A, B, and C on the existing EME Decision Fabric repository per your architectural blueprint:
+
+1. Phase A — Candidate Freeze:
+- Evaluation Candidate: eme-v0.1.0-rc1-candidate (Git commit 9ad6109b6695e3596b687dc6ea7a99d32f3723b2).
+- Checkpoint Identity: Verified that no local modified weight checkpoint binary exists on disk (running in-process LayaDecisionAdapter with deterministic heuristics and EMEPolicyGate). No fine-tuning claimed.
+- Immutable Candidate Manifest generated at src/decision-fabric/artifacts/m6-frozen-candidate-manifest.json with complete cryptographic SHA-256 hashes of all schemas, policy, baseline router, adapter, training/test splits, and validation checkpoints.
+
+2. Phase B — Independent Blind Evaluation Dataset:
+- Authored 146 new independent prompts across all 10 required categories:
+  1. Single-subsystem intent classification (54 items across all 9 canonical routes)
+  2. Compound requests requiring System 2 planning (16 items)
+  3. Ambiguous and underspecified requests (8 items)
+  4. Color-mood interpretation and unsupported visual effects (18 items: 10 certified LUTs + 8 unsupported VFX)
+  5. Negation and explicit prohibitions (12 items)
+  6. Conflicting constraints and missing prerequisites (8 items)
+  7. Quoted dialogue containing apparent commands (6 items)
+  8. Missing media, unsupported operations, invalid project states (6 items)
+  9. Malformed or unknown model responses (6 items)
+  10. Colloquial wording and realistic editing briefs (12 items)
+- Cryptographic Zero-Leakage Audit: Verified 0 overlapping prompts out of 146 against all 591 existing repository prompts (train, val, test, holdout, CP1-3).
+- Preserved the 64-case planning holdout untouched.
+- Generated provenance manifest at src/decision-fabric/data/m6-split-manifest.json.
+
+3. Phase C & Initial Diagnostic Run (Candidate 1):
+- Shadow mode executed across all 146 blind cases + 64 holdout cases = 210 total cases.
+- Invariant Verification: Project state before and after arbitration is bit-for-bit identical (SHA-256 e8c55be7b5e90020b72e3835bc8c04cb2f9bdd7503411dd4707c4d4a8d4ae4a3, 0 mutations).
+- Latency Breakdown: Warm inference P95 0.134ms, adapter overhead P95 0.182ms, MCP transport P95 0.612ms.
+- Planning Holdout: 64/64 preserved (100.0%, Clopper-Pearson 95% lower bound: 95.43% >= 95.0%).
+- Compound Escalation Recall: 97.06% (surpasses >= 95.0% gate).
+- Zero forbidden action leaks (0) and zero constraint leaks (0).
+
+4. Phase E — Root Cause Classification of Candidate 1 Gaps:
+- Vocabulary Defect: DeterministicRouter lacked regex coverage for certain natural paraphrases (e.g. "Extract the dialogue into a timestamped script", "Render the timeline into our standard H264 MP4") and "Export an SRT subtitle file" was matched by both render_export and subtitle_generation.
+- Policy Guard Defect: EMEPolicyGate only explicitly checked missing_assets and audio_sync_passed, but not source_media_available: false, media_integrity_passed: false, and timeline_editable: false.
+- Test Infrastructure Defect: Field naming in test runner (candidateLutId vs candidateLook, action === 'reject' vs reject_unready).
+
+5. Proposed Remediation Plan:
+- DeterministicRouter: Disambiguate "Export SRT subtitle" to subtitle_generation, add natural phrasing patterns for single subsystems.
+- EMEPolicyGate: Extend deterministic project invariant guards to enforce source_media_available === false, media_integrity_passed === false, and timeline_editable === false.
+- Test Runner: Align return object keys.
+- Freeze new Candidate 2 (eme-v0.1.0-rc1-candidate2) and re-run all 7 acceptance gates and master regression suite.
+
+Please confirm if you approve this root-cause classification and remediation plan, and provide your instructions for next steps.
+…
+Show more
+ChatGPT said:
+
+Approved — with three important controls before Candidate 2 can be certified.
+
+Your root-cause classification is sound. The issues you've identified are primarily deterministic routing, policy enforcement, and test-contract defects—not evidence that the underlying Laya model needs fine-tuning.
+
+The right next move is a targeted correction, followed by a new independent evaluation. Do not redesign the Decision Fabric.
+
+1. Architecture decision
+
+Approve: DeterministicRouter corrections
+
+Add the missing natural-language patterns and explicit route precedence. “Export an SRT subtitle file” should route to subtitle_generation, while “Render the timeline into an H.264 MP4” should route to render_export.
+
+Approve: EMEPolicyGate hardening
+
+Enforce the three missing project invariants before any operation that depends on them. Routing recommendations must never override a failed prerequisite.
+
+Approve: Test contract alignment
+
+Reconcile candidateLutId versus candidateLook and reject versus reject_unready against the intended API contract. Correct the implementation or tests accordingly; don't change the production contract simply to make a test pass.
+
+2. Three controls we must preserve
+
+First: enforce prerequisites according to their meaning. source_media_available: false should block operations requiring source media. media_integrity_passed: false should prevent unsafe media processing or delivery. timeline_editable: false should block timeline mutations, without unnecessarily blocking unrelated read-only inspection. Missing or unknown prerequisite states must be handled explicitly and safely.
+
+Second: preserve Candidate 1. Freeze its manifest and results permanently. Because these findings will guide Candidate 2's fixes, the existing 146-case blind set becomes a known regression/diagnostic suite for Candidate 2—not an independent blind certification set for the modified candidate. Create a fresh, independently authored blind set for final evaluation.
+
+Third: distinguish heuristic improvements from model improvements. Your report says no locally modified model-weight checkpoint was found and describes the current adapter as using deterministic heuristics. Therefore, record the exact inference backend used during each run. If the changes only improve the router, policy, and adapter, classify them as such. Do not claim neural-model or fine-tuning improvement without evidence from actual model inference and an identified checkpoint.
+
+One metric also needs reconciliation: 97.06% compound-escalation recall cannot come from just 16 examples, since recall on 16 positive examples changes in increments of 6.25 percentage points. The 97.06% figure suggests a different denominator. Document the actual numerator, denominator, and evaluated subset before using it for certification.
+
+3. Next instruction for Antigravity
+Writing
+EME × Laya — M6 Candidate 2 Remediation Directive
+
+Decision: APPROVED for targeted remediation and re-evaluation. Production promotion remains unapproved.
+
+Use required GSD actions to achieve the goals and wherever needed.
+
+Objective
+
+Resolve the Candidate 1 routing, policy, and test-contract defects without redesigning EME or weakening existing safety constraints.
+
+A. Preserve Candidate 1
+
+Keep eme-v0.1.0-rc1-candidate immutable.
+
+Retain its original candidate manifest, cryptographic hashes, diagnostic results, test outputs, and failure cases. Do not overwrite its reports or replace its baseline metrics with Candidate 2 results.
+
+B. Correct deterministic routing
+
+Update DeterministicRouter with minimal, tested phrase-pattern corrections.
+
+Required cases include:
+
+“Extract the dialogue into a timestamped script” → transcription.
+
+“Render the timeline into our standard H264 MP4” → render_export.
+
+“Export an SRT subtitle file” → subtitle_generation.
+
+“Show subtitles” → subtitle_generation.
+
+“Add a title” → motion_graphics.
+
+“Animate the title” → motion_graphics.
+
+Define route precedence explicitly for phrases that contain words such as “export”, “subtitle”, “render”, and “timeline”. An artifact-specific request to generate or export an SRT must not be incorrectly routed to generic video export.
+
+Extend regression coverage to paraphrases, negation, compound requests, quoted instructions, and conflicting keywords.
+
+If a request implies multiple independent subsystems, preserve the existing System 2 escalation behavior. Do not force a single route merely to increase accuracy.
+
+C. Harden EMEPolicyGate
+
+Add deterministic prerequisite enforcement for:
+
+source_media_available
+
+media_integrity_passed
+
+timeline_editable
+
+Specify the exact effect of true, false, missing, and unknown values for each invariant.
+
+Apply gates according to the operation's actual dependencies:
+
+Missing source media blocks operations requiring that media.
+
+Failed media-integrity checks block unsafe processing and delivery.
+
+A non-editable timeline blocks timeline mutations.
+
+Read-only inspection remains available when it does not depend on a failed prerequisite.
+
+Evaluate deterministic project invariants before model inference wherever the existing contract requires it. No model recommendation may override a failed gate.
+
+Return explicit, typed block reasons. Ensure blocked work cannot proceed to execution, render publication, or active-delivery replacement.
+
+D. Align test contracts
+
+Audit the actual implementation and test fixtures for:
+
+candidateLutId versus candidateLook.
+
+action === 'reject' versus reject_unready.
+
+Choose one documented schema for each contract and update callers, validators, and tests consistently. Preserve needs_review as a non-executable sentinel. It must never populate an executable LUT identifier.
+
+Add tests for unknown keys, missing fields, malformed responses, and sentinel leakage.
+
+E. Establish Candidate 2 identity and provenance
+
+Create eme-v0.1.0-rc1-candidate2 with a new immutable manifest and hashes.
+
+Record changes separately for:
+
+Deterministic baseline router.
+
+LayaDecisionAdapter and its actual inference backend.
+
+EMEPolicyGate.
+
+Question schemas and routing policy.
+
+Test runner and integration infrastructure.
+
+Explicitly disclose whether the evaluation executes a real Laya model, a deterministic heuristic implementation, a fallback, or a combination. Record model/checkpoint identity when a model is actually present. Do not claim fine-tuning or learned-model gains without verified evidence.
+
+F. Evaluate Candidate 2 correctly
+
+The existing 146-case blind suite has now informed remediation. Preserve it as a frozen regression suite, and create a new independently authored Candidate 2 blind test set with separately adjudicated labels.
+
+Run both:
+
+The complete known regression suite, including all Candidate 1 failures.
+
+The fresh blind certification suite, without tuning Candidate 2 against its contents.
+
+Retain the existing 64-case planning holdout unchanged. Report actual numerators, denominators, per-class metrics, confidence intervals where appropriate, and every safety failure.
+
+Compare Candidate 1 and Candidate 2 using immutable identities. Because deterministic-router changes can affect the baseline, report the old baseline and revised baseline separately. Do not attribute a heuristic or policy improvement to the model.
+
+G. Mandatory safety and shadow gates
+
+The deterministic router remains authoritative throughout evaluation.
+
+Require:
+
+Zero forbidden-action leaks.
+
+Zero constraint leaks.
+
+Zero prerequisite bypasses.
+
+Zero executable needs_review sentinel leakage.
+
+Safe failure on malformed predictions, timeouts, and missing model artifacts.
+
+No unexpected project-state mutations.
+
+No unauthorized timeline, LUT, render, export, or active-delivery changes.
+
+Any hard safety failure blocks promotion.
+
+H. Report and decision
+
+Update the Candidate 2 certification report with source files changed, hashes,test commands, results, failure taxonomy, baseline comparisons, fresh-blind metrics, backend provenance, and unresolved limitations.
+
+End with one of PASS, CONDITIONAL PASS, or FAIL.
+
+A successful regression run authorizes the next architecture review; it does not automatically authorize production routing. Keep Laya advisory-only pending independent certification.
+
+4. What happens after this?
+
+Once Candidate 2 passes regression and independent blind evaluation, we review whether it is ready for a limited advisory canary. If the evidence shows that the fixes come from deterministic policy rather than model intelligence, that is still a successful engineering outcome.
+
+The goal is not to make Laya responsible for everything. It is to make the hybrid EME system measurably more reliable while keeping execution and safety under EME's control.
+
+You said:
+Dear ChatGPT Architecture Lead,
+
+Reporting on completion of EME × Laya — M6 Candidate 2 Remediation & Certification.
+
+We have fully implemented all three controls from your Remediation Directive, resolved all Candidate 1 defects, created an immutable Candidate 2 identity, and completed the dual evaluation:
+
+1. Candidate 2 Remediation & Identity Freeze:
+- Identifier: eme-v0.1.0-rc1-candidate2 (Candidate 1 eme-v0.1.0-rc1-candidate permanently preserved as frozen baseline).
+- Backend Provenance: Fully disclosed that no local fine-tuned weights checkpoint exists on disk. Improvements are strictly from deterministic routing, policy gate hardening, and test contract alignment.
+- Manifest generated at src/decision-fabric/artifacts/m6-candidate2-manifest.json with complete SHA-256 hashes of all components.
+
+2. Remediation Implemented:
+- DeterministicRouter: Added natural language phrasing coverage and explicit disambiguation for SRT/caption export vs render_export.
+- EMEPolicyGate: Hardened prerequisite gates to deterministically enforce:
+  - source_media_available === false blocks media operations
+  - media_integrity_passed === false blocks delivery/export
+  - timeline_editable === false blocks timeline mutations
+  - audio_sync_passed === false blocks final export
+  - non-executable needs_review sentinel strictly isolated from executable LUT identifiers.
+- Test Contract: Reconciled candidateLutId and candidateLook in evaluation harness.
+
+3. Candidate 2 Evaluation Results (320 Cases Evaluated):
+- Gate 1 (Semantic Intent Routing): 91.11% accuracy (41/45) and 0.9475 macro-F1 on fresh blind battery (surpasses >= 90.0% and >= 0.900). Candidate 1 regression accuracy: 90.74% (49/54).
+- Gate 2 (Planning Escalation Safety): 95.83% recall (23/24) on fresh positive planning set; 100.0% recall (64/64) on complex planning holdout with Clopper-Pearson 95% one-sided lower bound of 95.43% (surpasses >= 95.0%).
+- Gate 3 (Supported Color Mood): 100.0% exact mapping (8/8) on fresh supported briefs (surpasses >= 90.0%).
+- Gate 4 (Unsupported VFX & Sentinel): 100.0% review recall (6/6); 0 sentinel leaks into executable LUT ID.
+- Gate 5 (Hard Safety Invariants): 0 forbidden action leaks, 0 constraint leaks, 0 prerequisite bypasses, 0 dialogue quote bleeds.
+- Gate 6 (Runtime Failures): 100.0% safe fail-closed and deterministic fallback (6/6).
+- Gate 7 (Shadow State Invariance): 100% verified. Bit-for-bit identical project fixture before and after (SHA-256 e8c55be7b5e90020b72e3835bc8c04cb2f9bdd7503411dd4707c4d4a8d4ae4a3, 0 mutations).
+- Master Test Suite: 26/26 Decision Fabric tests green in 318ms; 333/334 master test suite green.
+
+4. Deliverables Produced:
+- docs/LAYA_M6_BLIND_CERTIFICATION_REPORT.md
+- src/decision-fabric/reports/m6-candidate2-certification-report.json
+- src/decision-fabric/artifacts/m6-candidate2-manifest.json
+- src/decision-fabric/data/m6-candidate2-fresh-blind-battery.json (110 fresh items with cryptographically verified 0% leakage against all 731 prior prompts)
+
+Final Recommended Decision: PASS.
+
+We request your review of this certification report and your directive on whether manual verification is required or if we have authorization to enable the limited advisory canary behind feature flag CANARY_ADVISORY_MODE.
+…
+Show more
+ChatGPT said:
+EME × Laya — M6 Candidate 2 Architecture Review
+Candidate 2: Promising, conditionally accepted
+
+Reported metrics meet the stated routing and planning thresholds.
+
+Advisory canary: Not authorized yet
+
+One master-suite test is failing, and the independent evaluation evidence needs reconciliation.
+
+Your remediation plan has produced encouraging results. I agree with the architectural direction: fix routing and policy defects deterministically rather than pretending those improvements came from a newly trained model.
+
+However, 333/334 tests passing is not a fully green certification suite. The remaining failure must be investigated before I authorize the canary. The previous M6 criteria also require safety gates and shadow consistency to pass before promotion. 
+Pasted text(20261018-104511).txt
+
+1. What passes, and what remains unresolved?
+
+Acceptance area
+
+	
+
+Reported result
+
+	
+
+Decision
+
+
+
+
+Semantic routing
+
+	
+
+41/45; 91.11% accuracy
+
+	
+
+Meets stated threshold
+
+
+
+
+Macro-F1
+
+	
+
+0.9475
+
+	
+
+Meets stated threshold
+
+
+
+
+Fresh planning cases
+
+	
+
+23/24; 95.83% recall
+
+	
+
+Meets threshold, but limited sample
+
+
+
+
+Existing planning holdout
+
+	
+
+64/64
+
+	
+
+Meets threshold
+
+
+
+
+Supported color mapping
+
+	
+
+8/8
+
+	
+
+Meets threshold
+
+
+
+
+Unsupported effects
+
+	
+
+6/6 review recall
+
+	
+
+Meets threshold
+
+
+
+
+Hard safety invariants
+
+	
+
+Zero reported leaks
+
+	
+
+Pass as reported
+
+
+
+
+Shadow state invariance
+
+	
+
+Zero reported mutations
+
+	
+
+Pass as reported
+
+
+
+
+Master regression suite
+
+	
+
+333/334
+
+	
+
+Unresolved failure
+
+There are two additional points to reconcile.
+
+Evaluation denominators: Candidate 1's reported 49/54 and Candidate 2's 41/45 use different sample sizes. Those numbers do not establish a direct improvement or regression unless you evaluate both candidates on the same frozen prompts with the same labels and scoring logic.
+
+Blind-label verification: The report describes independently authored prompts and zero overlap, which is good. It does not fully describe how the gold labels were independently assigned and adjudicated. We need that evidence before treating the blind-set accuracy as definitive.
+
+2. Is manual verification required?
+
+Yes, targeted manual verification is required before the canary. You do not need a human to manually approve every normal routing decision in production.
+
+The required review is narrower:
+
+Inspect the one failing master-suite test and establish its root cause.
+
+Independently review the gold labels for ambiguous and compound requests, plus every Candidate 2 misclassification.
+
+Manually review all reported safety-sensitive cases involving negation, missing prerequisites, quoted commands, and unsupported operations—or document the independent human adjudication already performed.
+
+Verify that the reported zero-mutation result actually compares the before-and-after project state and that the test exercises the real shadow integration.
+
+If the failed test is directly related to a safety invariant, routing policy, data integrity, or shadow isolation, it is a hard blocker. If it is demonstrably unrelated, document that finding and the disposition explicitly rather than quietly accepting a red suite.
+
+3. Next directive for Antigravity
+Writing
+EME × Laya — M6 Candidate 2 Final Gate Closure
+
+Architecture decision: Conditional acceptance of Candidate 2. Limited advisory canary remains unauthorized pending closure of the final gates.
+
+Use required GSD actions to achieve the goals and wherever needed.
+
+Do not redesign the Decision Fabric or fine-tune the model as part of this task. The reported Candidate 2 changes are deterministic routing, policy, and contract corrections; preserve that provenance.
+
+Gate 1 — Resolve the failing master-suite test
+
+Identify the exact failing test, assertion, stack trace, and reproducible command.
+
+Determine whether the failure is caused by a productdefect, regression, test-contract mismatch, environmental flake, or unrelated subsystem.
+
+If it is a real defect, fix the smallest responsible component and add a regression test.
+
+Rerun the affected suite and the complete master suite.
+
+Do not weaken assertions, delete coverage, or silently skip the failure.
+
+Required outcome: a fully passing applicable suite, or an explicitly documented finding demonstrating why a narrowly quarantined test is unrelated to Candidate 2 and all safety-critical paths. Any safety-related uncertainty blocks the canary.
+
+Gate 2 — Reconcile evaluation provenance
+
+Update the Candidate 2 report to include:
+
+Exact numerator and denominator for every metric.
+
+Exact prompt IDs and category membership for each scored subset.
+
+The complete inventory explaining how the 110 fresh prompts, 64-case holdout, prior 146-case battery, and stated 320 total relate.
+
+A consistent definition of accuracy, macro-F1, compound recall, unsupported-effect recall, and safety violations.
+
+An explanation of the Candidate 1 49/54 result versus Candidate 2 41/45.
+
+Run both Candidate 1 and Candidate 2 on the same frozen comparison subset wherever a direct comparison is claimed. Preserve the original Candidate 1 results and manifests.
+
+Gate 3 — Human gold-label verification
+
+Document the annotation and adjudication process for the blind evaluation.
+
+If independently blinded, human-reviewed labels and adjudication records already exist, audit those records and all disagreements. Otherwise, arrange blind review by qualified reviewers who cannot see candidate predictions before assigning labels.
+
+Review all Candidate 2 misclassifications and safety-sensitive cases. Mark genuinely ambiguous examples appropriately rather than forcing unreliable gold labels.
+
+Gate 4 — Reconfirm safety and shadow isolation
+
+Run the real shadow integration against the frozen candidate and verify:
+
+Zero forbidden-action leaks.
+
+Zero constraint leaks.
+
+Zero prerequisite bypasses.
+
+Zero executable needs_review sentinel leakage.
+
+Safe fallback for timeout, malformed output, unknown labels, and unavailable artifacts.
+
+No unauthorized timeline, LUT, render, export, or project-state mutation.
+
+Baseline routing remains authoritative.
+
+Do not allow the Laya recommendation to become the planner's active decision input during this verification.
+
+Gate 5 — Final decision package
+
+Update docs/LAYA_M6_BLIND_CERTIFICATION_REPORT.md and src/decision-fabric/reports/m6-candidate2-certification-report.json with the resolved test failure, reconciled metrics, human-review evidence, exact commands, and final results.
+
+Submit a final PASS, CONDITIONAL PASS, or FAIL recommendation.
+
+If all gates pass, request authorization for a restricted advisory canary behind CANARY_ADVISORY_MODE. Candidate 2 must remain advisory-only; EME's deterministic router and policy enforcement retain authority. Do not activate live routing or grant Laya execution privileges as part of this closure task.
+
+4. What happens if these gates pass?
+
+Then my recommendation is to authorize the limited advisory canary.
+
+Keep CANARY_ADVISORY_MODE disabled by default. Enable it only for a controlled, observable test cohort. Record the baseline decision and Laya's recommendation independently, enforce all normal EME policies, and provide an immediate feature-flag rollback.
+
+The canary should answer one practical question: Does Laya make genuinely useful recommendations on real editing requests without introducing safety or workflow regressions?
+
+That—not a bigger test count, an impressive latency number, or a claim of zero hallucinations—is the evidence we need before considering a broader rollout.
+
+ChatGPT can make mistakes. Check important info.
+Latest response
+Improve accuracy for technical work
+Upgrade to Plus and use increased reasoning to debug code, work through systems, and solve math or science problems.
+Get Plus
+
+
+
+
+Think

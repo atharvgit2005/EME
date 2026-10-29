@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://eme.local/schema/vtsm-state.v1.schema.json",
+  "title": "VTSM-01 Visual Temporal State Model Schema",
+  "description": "Canonical schema for timestamp-accurate visual temporal state in EME: entities, trajectories, camera motion, and events.",
+  "type": "object",
+  "required": [
+    "version",
+    "source",
+    "timebase",
+    "shots",
+    "entities",
+    "frames",
+    "events",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": ["1.0.0", "v1"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["sha256", "filePath", "dimensions", "durationSec", "totalFrames"],
+      "additionalProperties": false,
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "dimensions": {
+          "type": "object",
+          "required": ["width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "durationSec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "totalFrames": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "timebase": {
+      "type": "object",
+      "required": ["ticksPerSecond", "rationalFps", "durationTicks"],
+      "additionalProperties": false,
+      "properties": {
+        "ticksPerSecond": {
+          "type": "integer",
+          "enum": [120000]
+        },
+        "rationalFps": {
+          "type": "object",
+          "required": ["numerator", "denominator"],
+          "additionalProperties": false,
+          "properties": {
+            "numerator": { "type": "integer", "minimum": 1 },
+            "denominator": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "durationTicks": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["shotId", "startFrame", "endFrame", "startPts", "endPts", "cutConfidence", "cutType"],
+        "additionalProperties": false,
+        "properties": {
+          "shotId": { "type": ["string", "integer"] },
+          "startFrame": { "type": "integer", "minimum": 0 },
+          "endFrame": { "type": "integer", "minimum": 0 },
+          "startPts": { "type": "number", "minimum": 0 },
+          "endPts": { "type": "number", "minimum": 0 },
+          "cutConfidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "cutType": {
+            "type": "string",
+            "enum": ["initial", "hard_cut", "dissolve", "fade", "final"]
+          }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entityId", "label", "shotId", "policyAcrossCuts"],
+        "additionalProperties": false,
+        "properties": {
+          "entityId": { "type": "string" },
+          "label": { "type": "string" },
+          "shotId": { "type": ["string", "integer"] },
+          "policyAcrossCuts": {
+            "type": "string",
+            "enum": ["reset_on_cut", "reid_probabilistic", "persistent_global"]
+          }
+        }
+      }
+    },
+    "frames": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["frameIndex", "pts", "tick", "shotId", "cameraMotion", "observations"],
+        "additionalProperties": false,
+        "properties": {
+          "frameIndex": { "type": "integer", "minimum": 0 },
+          "pts": { "type": "number", "minimum": 0 },
+          "tick": { "type": "integer", "minimum": 0 },
+          "shotId": { "type": ["string", "integer"] },
+          "cameraMotion": {
+            "type": "object",
+            "required": ["model", "translation", "scale", "rotation", "confidence", "valid"],
+            "additionalProperties": false,
+            "properties": {
+              "model": {
+                "type": "string",
+                "enum": ["identity", "translation", "affine", "homography", "perspective_3d"]
+              },
+              "translation": {
+                "type": "object",
+                "required": ["dx", "dy"],
+                "additionalProperties": false,
+                "properties": {
+                  "dx": { "type": "number" },
+                  "dy": { "type": "number" }
+                }
+              },
+              "scale": { "type": "number", "minimum": 0 },
+              "rotation": { "type": "number" },
+              "transformMatrix": {
+                "type": "array",
+                "items": { "type": "number" }
+              },
+              "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+              "valid": { "type": "boolean" }
+            }
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "entityId",
+                "bbox",
+                "center",
+                "visibility",
+                "visibilityConfidence",
+                "trackingConfidence",
+                "motion"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "entityId": { "type": "string" },
+                "bbox": {
+                  "type": "object",
+                  "required": ["pixel", "normalized"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "pixel": {
+                      "type": "object",
+                      "required": ["x", "y", "width", "height"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" },
+                        "width": { "type": "number", "minimum": 0 },
+                        "height": { "type": "number", "minimum": 0 }
+                      }
+                    },
+                    "normalized": {
+                      "type": "object",
+                      "required": ["x", "y", "width", "height"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" },
+                        "width": { "type": "number", "minimum": 0 },
+                        "height": { "type": "number", "minimum": 0 }
+                      }
+                    }
+                  }
+                },
+                "center": {
+                  "type": "object",
+                  "required": ["pixel", "normalized"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "pixel": {
+                      "type": "array",
+                      "items": { "type": "number" },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "normalized": {
+                      "type": "array",
+                      "items": { "type": "number" },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  }
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": ["visible", "partially_occluded", "occluded", "out_of_frame"]
+                },
+                "visibilityConfidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                "trackingConfidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                "motion": {
+                  "type": "object",
+                  "required": ["raw", "compensated"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "raw": {
+                      "type": "object",
+                      "required": ["dx", "dy", "valid"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "dx": { "type": "number" },
+                        "dy": { "type": "number" },
+                        "valid": { "type": "boolean" }
+                      }
+                    },
+                    "compensated": {
+                      "type": "object",
+                      "required": ["dx", "dy", "valid"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "dx": { "type": "number" },
+                        "dy": { "type": "number" },
+                        "valid": { "type": "boolean" }
+                      }
+                    }
+                  }
+                },
+                "landmarks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "x", "y"],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "x": { "type": "number" },
+                      "y": { "type": "number" },
+                      "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+                    }
+                  }
+                },
+                "maskRef": {
+                  "type": ["string", "object"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["eventId", "type", "frameIndex", "pts", "confidence"],
+        "additionalProperties": false,
+        "properties": {
+          "eventId": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "entrance",
+              "exit",
+              "occlusion_start",
+              "occlusion_end",
+              "zoom_change",
+              "motion_discontinuity",
+              "shot_boundary"
+            ]
+          },
+          "entityId": { "type": "string" },
+          "frameIndex": { "type": "integer", "minimum": 0 },
+          "pts": { "type": "number", "minimum": 0 },
+          "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "details": { "type": "object" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["extractor", "version", "license", "parameters", "timestamp"],
+      "additionalProperties": false,
+      "properties": {
+        "extractor": { "type": "string" },
+        "version": { "type": "string" },
+        "model": { "type": "string" },
+        "weights": { "type": "string" },
+        "weightsSha256": { "type": "string" },
+        "license": { "type": "string" },
+        "parameters": { "type": "object" },
+        "timestamp": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "id": "proj_trial_motion_graphics",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "EME Real-Time Video Trial — Shotcraft Editorial & Visual Assembly",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "backgroundColor": "#080b11"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 720000,
+    "endpointConvention": "half-open"
+  },
+  "deliveryProfile": {
+    "truePeakCeiling": -1,
+    "loudnessTargetLKFS": -16
+  },
+  "assets": [
+    {
+      "id": "asset_shotcraft_video",
+      "type": "video",
+      "src": "/Users/atharvpaharia100/editing-mechanics-engine/trials/motion-graphics/assets/shotcraft-source.mp4"
+    },
+    {
+      "id": "font_inter",
+      "type": "font",
+      "src": "/Users/atharvpaharia100/editing-mechanics-engine/assets/fonts/files/Inter-Variable.ttf",
+      "metadata": {
+        "fontFamily": "Inter"
+      }
+    },
+    {
+      "id": "audio_soundtrack",
+      "type": "audio",
+      "src": "/Users/atharvpaharia100/editing-mechanics-engine/assets/bgm/snowfall.mp3"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_v1_primary",
+      "name": "Primary Editorial A-Roll",
+      "kind": "visual",
+      "zIndex": 10,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_v2_overlay",
+      "name": "Typography & Lower-Third Overlays",
+      "kind": "visual",
+      "zIndex": 30,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_a1_music",
+      "name": "Soundtrack Continuity Bed",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_act1_sceneA",
+      "trackId": "track_v1_primary",
+      "type": "video",
+      "source": {
+        "assetId": "asset_shotcraft_video",
+        "inTick": 0,
+        "outTick": 360000
+      },
+      "startTick": 0,
+      "durationTicks": 360000,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1
+      }
+    },
+    {
+      "id": "clip_act2_sceneB",
+      "trackId": "track_v1_primary",
+      "type": "video",
+      "source": {
+        "assetId": "asset_shotcraft_video",
+        "inTick": 720000,
+        "outTick": 1080000
+      },
+      "startTick": 360000,
+      "durationTicks": 360000,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1
+      }
+    },
+    {
+      "id": "clip_title_overlay",
+      "trackId": "track_v2_overlay",
+      "type": "text",
+      "startTick": 0,
+      "durationTicks": 420000,
+      "typography": {
+        "text": "ARC STUDIO // SHOTCRAFT PROMO",
+        "fontAssetId": "font_inter",
+        "fontSize": 44,
+        "color": "#ffffff",
+        "textAlign": "center",
+        "letterSpacing": 4
+      },
+      "transform": {
+        "x": 0,
+        "y": 380,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 0.95
+      }
+    },
+    {
+      "id": "clip_audio_bed",
+      "trackId": "track_a1_music",
+      "type": "audio",
+      "source": {
+        "assetId": "audio_soundtrack",
+        "inTick": 0,
+        "outTick": 720000
+      },
+      "startTick": 0,
+      "durationTicks": 720000,
+      "audio": {
+        "volume": 0.8,
+        "volumeEnvelope": [
+          {
+            "offsetTick": 0,
+            "volume": 0
+          },
+          {
+            "offsetTick": 60000,
+            "volume": 0.75
+          },
+          {
+            "offsetTick": 360000,
+            "volume": 0.45
+          },
+          {
+            "offsetTick": 660000,
+            "volume": 0.75
+          },
+          {
+            "offsetTick": 720000,
+            "volume": 0
+          }
+        ]
+      }
+    }
+  ],
+  "animations": [
+    {
+      "clipId": "clip_title_overlay",
+      "property": "transform.opacity",
+      "keyframes": [
+        {
+          "offsetTick": 0,
+          "value": 0,
+          "easing": "linear"
+        },
+        {
+          "offsetTick": 60000,
+          "value": 0.95,
+          "easing": "easeOut"
+        },
+        {
+          "offsetTick": 360000,
+          "value": 0.95,
+          "easing": "linear"
+        },
+        {
+          "offsetTick": 420000,
+          "value": 0,
+          "easing": "easeIn"
+        }
+      ]
+    }
+  ]
+}

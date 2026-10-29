@@ -1,0 +1,3713 @@
+{
+  "version": "1.0.0",
+  "source": {
+    "sha256": "46c8e1f6a7f622cebf0ad29b4b22dc1f377add88ffafc2763cf6063ec0da59b7",
+    "filePath": "fixtures/fixture_b.mp4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "durationSec": 2,
+    "totalFrames": 60
+  },
+  "timebase": {
+    "ticksPerSecond": 120000,
+    "rationalFps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "durationTicks": 240000
+  },
+  "shots": [
+    {
+      "shotId": "shot_01",
+      "startFrame": 0,
+      "endFrame": 59,
+      "startPts": 0,
+      "endPts": 1.9666666666666666,
+      "cutConfidence": 1,
+      "cutType": "initial"
+    }
+  ],
+  "entities": [
+    {
+      "entityId": "ent_01",
+      "label": "subject",
+      "shotId": "shot_01",
+      "policyAcrossCuts": "reset_on_cut"
+    }
+  ],
+  "frames": [
+    {
+      "frameIndex": 0,
+      "pts": 0,
+      "tick": 0,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 0,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 1000,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5208333333333334,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1060,
+              540
+            ],
+            "normalized": [
+              0.5520833333333334,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": 0,
+              "dy": 0,
+              "valid": false
+            },
+            "compensated": {
+              "dx": 0,
+              "dy": 0,
+              "valid": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 1,
+      "pts": 0.03333333333333333,
+      "tick": 4000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 992,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5166666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1052,
+              540
+            ],
+            "normalized": [
+              0.5479166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 2,
+      "pts": 0.06666666666666667,
+      "tick": 8000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 984,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5125,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1044,
+              540
+            ],
+            "normalized": [
+              0.54375,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 3,
+      "pts": 0.1,
+      "tick": 12000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 976,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5083333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1036,
+              540
+            ],
+            "normalized": [
+              0.5395833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 4,
+      "pts": 0.13333333333333333,
+      "tick": 16000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 968,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5041666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1028,
+              540
+            ],
+            "normalized": [
+              0.5354166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 5,
+      "pts": 0.16666666666666666,
+      "tick": 20000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 960,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.5,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1020,
+              540
+            ],
+            "normalized": [
+              0.53125,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 6,
+      "pts": 0.2,
+      "tick": 24000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 952,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.49583333333333335,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1012,
+              540
+            ],
+            "normalized": [
+              0.5270833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 7,
+      "pts": 0.23333333333333334,
+      "tick": 28000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 944,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.49166666666666664,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              1004,
+              540
+            ],
+            "normalized": [
+              0.5229166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 8,
+      "pts": 0.26666666666666666,
+      "tick": 32000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 936,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4875,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              996,
+              540
+            ],
+            "normalized": [
+              0.51875,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 9,
+      "pts": 0.3,
+      "tick": 36000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 928,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.48333333333333334,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              988,
+              540
+            ],
+            "normalized": [
+              0.5145833333333334,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 10,
+      "pts": 0.3333333333333333,
+      "tick": 40000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 920,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4791666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              980,
+              540
+            ],
+            "normalized": [
+              0.5104166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 11,
+      "pts": 0.36666666666666664,
+      "tick": 44000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 912,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.475,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              972,
+              540
+            ],
+            "normalized": [
+              0.50625,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 12,
+      "pts": 0.4,
+      "tick": 48000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 904,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4708333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              964,
+              540
+            ],
+            "normalized": [
+              0.5020833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 13,
+      "pts": 0.43333333333333335,
+      "tick": 52000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 896,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4666666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              956,
+              540
+            ],
+            "normalized": [
+              0.4979166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 14,
+      "pts": 0.4666666666666667,
+      "tick": 56000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 888,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4625,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              948,
+              540
+            ],
+            "normalized": [
+              0.49375,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 15,
+      "pts": 0.5,
+      "tick": 60000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 880,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4583333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              940,
+              540
+            ],
+            "normalized": [
+              0.4895833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 16,
+      "pts": 0.5333333333333333,
+      "tick": 64000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 872,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.45416666666666666,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              932,
+              540
+            ],
+            "normalized": [
+              0.48541666666666666,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 17,
+      "pts": 0.5666666666666667,
+      "tick": 68000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 864,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.45,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              924,
+              540
+            ],
+            "normalized": [
+              0.48125,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 18,
+      "pts": 0.6,
+      "tick": 72000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 856,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.44583333333333336,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              916,
+              540
+            ],
+            "normalized": [
+              0.47708333333333336,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 19,
+      "pts": 0.6333333333333333,
+      "tick": 76000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 848,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.44166666666666665,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              908,
+              540
+            ],
+            "normalized": [
+              0.47291666666666665,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 20,
+      "pts": 0.6666666666666666,
+      "tick": 80000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 840,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4375,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              900,
+              540
+            ],
+            "normalized": [
+              0.46875,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 21,
+      "pts": 0.7,
+      "tick": 84000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 832,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.43333333333333335,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              892,
+              540
+            ],
+            "normalized": [
+              0.46458333333333335,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 22,
+      "pts": 0.7333333333333333,
+      "tick": 88000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 824,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.42916666666666664,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              884,
+              540
+            ],
+            "normalized": [
+              0.46041666666666664,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 23,
+      "pts": 0.7666666666666667,
+      "tick": 92000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 816,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.425,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              876,
+              540
+            ],
+            "normalized": [
+              0.45625,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 24,
+      "pts": 0.8,
+      "tick": 96000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 808,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.42083333333333334,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              868,
+              540
+            ],
+            "normalized": [
+              0.45208333333333334,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 25,
+      "pts": 0.8333333333333334,
+      "tick": 100000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 800,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4166666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              860,
+              540
+            ],
+            "normalized": [
+              0.4479166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 26,
+      "pts": 0.8666666666666667,
+      "tick": 104000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 792,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4125,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              852,
+              540
+            ],
+            "normalized": [
+              0.44375,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 27,
+      "pts": 0.9,
+      "tick": 108000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 784,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4083333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              844,
+              540
+            ],
+            "normalized": [
+              0.4395833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 28,
+      "pts": 0.9333333333333333,
+      "tick": 112000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 776,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4041666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              836,
+              540
+            ],
+            "normalized": [
+              0.4354166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 29,
+      "pts": 0.9666666666666667,
+      "tick": 116000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 768,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.4,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              828,
+              540
+            ],
+            "normalized": [
+              0.43125,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 30,
+      "pts": 1,
+      "tick": 120000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 760,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3958333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              820,
+              540
+            ],
+            "normalized": [
+              0.4270833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 31,
+      "pts": 1.0333333333333334,
+      "tick": 124000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 752,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.39166666666666666,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              812,
+              540
+            ],
+            "normalized": [
+              0.42291666666666666,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 32,
+      "pts": 1.0666666666666667,
+      "tick": 128000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 744,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3875,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              804,
+              540
+            ],
+            "normalized": [
+              0.41875,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 33,
+      "pts": 1.1,
+      "tick": 132000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 736,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.38333333333333336,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              796,
+              540
+            ],
+            "normalized": [
+              0.41458333333333336,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 34,
+      "pts": 1.1333333333333333,
+      "tick": 136000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 728,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.37916666666666665,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              788,
+              540
+            ],
+            "normalized": [
+              0.41041666666666665,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 35,
+      "pts": 1.1666666666666667,
+      "tick": 140000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 720,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.375,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              780,
+              540
+            ],
+            "normalized": [
+              0.40625,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 36,
+      "pts": 1.2,
+      "tick": 144000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 712,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.37083333333333335,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              772,
+              540
+            ],
+            "normalized": [
+              0.40208333333333335,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 37,
+      "pts": 1.2333333333333334,
+      "tick": 148000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 704,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.36666666666666664,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              764,
+              540
+            ],
+            "normalized": [
+              0.39791666666666664,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 38,
+      "pts": 1.2666666666666666,
+      "tick": 152000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 696,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3625,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              756,
+              540
+            ],
+            "normalized": [
+              0.39375,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 39,
+      "pts": 1.3,
+      "tick": 156000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 688,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.35833333333333334,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              748,
+              540
+            ],
+            "normalized": [
+              0.38958333333333334,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 40,
+      "pts": 1.3333333333333333,
+      "tick": 160000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 680,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3541666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              740,
+              540
+            ],
+            "normalized": [
+              0.3854166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 41,
+      "pts": 1.3666666666666667,
+      "tick": 164000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 672,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.35,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              732,
+              540
+            ],
+            "normalized": [
+              0.38125,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 42,
+      "pts": 1.4,
+      "tick": 168000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 664,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3458333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              724,
+              540
+            ],
+            "normalized": [
+              0.3770833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 43,
+      "pts": 1.4333333333333333,
+      "tick": 172000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 656,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3416666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              716,
+              540
+            ],
+            "normalized": [
+              0.3729166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 44,
+      "pts": 1.4666666666666666,
+      "tick": 176000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 648,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3375,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              708,
+              540
+            ],
+            "normalized": [
+              0.36875,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 45,
+      "pts": 1.5,
+      "tick": 180000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 640,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3333333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              700,
+              540
+            ],
+            "normalized": [
+              0.3645833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 46,
+      "pts": 1.5333333333333334,
+      "tick": 184000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 632,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.32916666666666666,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              692,
+              540
+            ],
+            "normalized": [
+              0.36041666666666666,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 47,
+      "pts": 1.5666666666666667,
+      "tick": 188000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 624,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.325,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              684,
+              540
+            ],
+            "normalized": [
+              0.35625,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 48,
+      "pts": 1.6,
+      "tick": 192000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 616,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.32083333333333336,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              676,
+              540
+            ],
+            "normalized": [
+              0.35208333333333336,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 49,
+      "pts": 1.6333333333333333,
+      "tick": 196000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 608,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.31666666666666665,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              668,
+              540
+            ],
+            "normalized": [
+              0.34791666666666665,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 50,
+      "pts": 1.6666666666666667,
+      "tick": 200000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 600,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3125,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              660,
+              540
+            ],
+            "normalized": [
+              0.34375,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 51,
+      "pts": 1.7,
+      "tick": 204000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 592,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.30833333333333335,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              652,
+              540
+            ],
+            "normalized": [
+              0.33958333333333335,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 52,
+      "pts": 1.7333333333333334,
+      "tick": 208000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 584,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.30416666666666664,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              644,
+              540
+            ],
+            "normalized": [
+              0.33541666666666664,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 53,
+      "pts": 1.7666666666666666,
+      "tick": 212000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 576,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.3,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              636,
+              540
+            ],
+            "normalized": [
+              0.33125,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 54,
+      "pts": 1.8,
+      "tick": 216000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 568,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.29583333333333334,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              628,
+              540
+            ],
+            "normalized": [
+              0.32708333333333334,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 55,
+      "pts": 1.8333333333333333,
+      "tick": 220000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 560,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.2916666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              620,
+              540
+            ],
+            "normalized": [
+              0.3229166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 56,
+      "pts": 1.8666666666666667,
+      "tick": 224000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 552,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.2875,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              612,
+              540
+            ],
+            "normalized": [
+              0.31875,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 57,
+      "pts": 1.9,
+      "tick": 228000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 544,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.2833333333333333,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              604,
+              540
+            ],
+            "normalized": [
+              0.3145833333333333,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 58,
+      "pts": 1.9333333333333333,
+      "tick": 232000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 536,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.2791666666666667,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              596,
+              540
+            ],
+            "normalized": [
+              0.3104166666666667,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "frameIndex": 59,
+      "pts": 1.9666666666666666,
+      "tick": 236000,
+      "shotId": "shot_01",
+      "cameraMotion": {
+        "model": "translation",
+        "translation": {
+          "dx": 12,
+          "dy": 0
+        },
+        "scale": 1,
+        "rotation": 0,
+        "confidence": 1,
+        "valid": true
+      },
+      "observations": [
+        {
+          "entityId": "ent_01",
+          "bbox": {
+            "pixel": {
+              "x": 528,
+              "y": 460,
+              "width": 120,
+              "height": 160
+            },
+            "normalized": {
+              "x": 0.275,
+              "y": 0.42592592592592593,
+              "width": 0.0625,
+              "height": 0.14814814814814814
+            }
+          },
+          "center": {
+            "pixel": [
+              588,
+              540
+            ],
+            "normalized": [
+              0.30625,
+              0.5
+            ]
+          },
+          "visibility": "visible",
+          "visibilityConfidence": 1,
+          "trackingConfidence": 1,
+          "motion": {
+            "raw": {
+              "dx": -8,
+              "dy": 0,
+              "valid": true
+            },
+            "compensated": {
+              "dx": 4,
+              "dy": 0,
+              "valid": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "provenance": {
+    "extractor": "vtsm-synthetic-generator",
+    "version": "1.0.0",
+    "license": "MIT",
+    "parameters": {
+      "fixtureId": "b",
+      "name": "Horizontal camera pan (+12 px/frame) with moving subject"
+    },
+    "timestamp": "2026-10-17T15:23:52.429Z"
+  }
+}

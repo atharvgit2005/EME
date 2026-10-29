@@ -1,0 +1,251 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT = path.resolve(__dirname, '..');
+
+function normalizeText(str) {
+  return (str || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function buildCandidate2FreshBlindDataset() {
+  console.log('Building Candidate 2 Fresh Blind Battery...');
+
+  // 1. Collect all previous prompts from Candidate 1, train, val, test, holdout, CP1-3
+  const allPriorPromptSet = new Set();
+  const priorFiles = [
+    'src/decision-fabric/data/train.jsonl',
+    'src/decision-fabric/data/validation.jsonl',
+    'src/decision-fabric/data/test.jsonl',
+    'src/decision-fabric/data/complex_planning_holdout.jsonl',
+    'src/decision-fabric/data/m6-candidate1-regression-suite.json'
+  ];
+
+  for (const rel of priorFiles) {
+    const full = path.join(ROOT, rel);
+    if (fs.existsSync(full)) {
+      if (rel.endsWith('.jsonl')) {
+        const lines = fs.readFileSync(full, 'utf8').trim().split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const rec = JSON.parse(line);
+            const t = rec.state?.request_text || rec.prompt || '';
+            if (t) allPriorPromptSet.add(normalizeText(t));
+          } catch (e) {}
+        }
+      } else {
+        const arr = JSON.parse(fs.readFileSync(full, 'utf8'));
+        for (const item of arr) {
+          const t = item.prompt || '';
+          if (t) allPriorPromptSet.add(normalizeText(t));
+        }
+      }
+    }
+  }
+
+  const cpFiles = [
+    'src/decision-fabric/validation/checkpoint-1-prompts.json',
+    'src/decision-fabric/validation/checkpoint-2-prompts.json',
+    'src/decision-fabric/validation/checkpoint-3-prompts.json'
+  ];
+  for (const rel of cpFiles) {
+    const full = path.join(ROOT, rel);
+    if (fs.existsSync(full)) {
+      const arr = JSON.parse(fs.readFileSync(full, 'utf8'));
+      for (const item of arr) {
+        const t = item.prompt || '';
+        if (t) allPriorPromptSet.add(normalizeText(t));
+      }
+    }
+  }
+
+  console.log(`Loaded ${allPriorPromptSet.size} total prior prompt strings to guarantee zero leakage for Candidate 2.`);
+
+  // 2. Authored fresh blind battery for Candidate 2 (110 prompts)
+  const freshBattery = [
+    // --- 1. SINGLE-SUBSYSTEM INTENTS & PARAPHRASES (45 items: 5 per 9 canonical routes) ---
+    // transcription (5)
+    { id: 'c2_blind_001', category: 'single_subsystem', subcategory: 'transcription', prompt: 'Produce an accurate text transcript of all dialogue in audio track 2', expected_route: 'transcription', requires_multistep: false },
+    { id: 'c2_blind_002', category: 'single_subsystem', subcategory: 'transcription', prompt: 'Transcribe the recorded interview conversation verbatim', expected_route: 'transcription', requires_multistep: false },
+    { id: 'c2_blind_003', category: 'single_subsystem', subcategory: 'transcription', prompt: 'Diarize the speakers and output timestamped speech text', expected_route: 'transcription', requires_multistep: false },
+    { id: 'c2_blind_004', category: 'single_subsystem', subcategory: 'transcription', prompt: 'Run speech to text conversion on the customer testimonial clip', expected_route: 'transcription', requires_multistep: false },
+    { id: 'c2_blind_005', category: 'single_subsystem', subcategory: 'transcription', prompt: 'Transcribe what the keynote presenter is explaining on stage', expected_route: 'transcription', requires_multistep: false },
+
+    // subtitle_generation (5)
+    { id: 'c2_blind_006', category: 'single_subsystem', subcategory: 'subtitle_generation', prompt: 'Export an SRT subtitle file aligned to the voiceover', expected_route: 'subtitle_generation', requires_multistep: false },
+    { id: 'c2_blind_007', category: 'single_subsystem', subcategory: 'subtitle_generation', prompt: 'Show subtitles with word level captions synchronized to narration', expected_route: 'subtitle_generation', requires_multistep: false },
+    { id: 'c2_blind_008', category: 'single_subsystem', subcategory: 'subtitle_generation', prompt: 'Create on screen open captions formatted for social feeds', expected_route: 'subtitle_generation', requires_multistep: false },
+    { id: 'c2_blind_009', category: 'single_subsystem', subcategory: 'subtitle_generation', prompt: 'Generate timed closed captions for this documentary scene', expected_route: 'subtitle_generation', requires_multistep: false },
+    { id: 'c2_blind_010', category: 'single_subsystem', subcategory: 'subtitle_generation', prompt: 'Burn captions onto the lower area of the video timeline', expected_route: 'subtitle_generation', requires_multistep: false },
+
+    // audio_cleanup (5)
+    { id: 'c2_blind_011', category: 'single_subsystem', subcategory: 'audio_cleanup', prompt: 'Denoise the background ventilation rumble from the vocal mic', expected_route: 'audio_cleanup', requires_multistep: false },
+    { id: 'c2_blind_012', category: 'single_subsystem', subcategory: 'audio_cleanup', prompt: 'Equalize vocal frequencies and apply dialogue loudness normalization', expected_route: 'audio_cleanup', requires_multistep: false },
+    { id: 'c2_blind_013', category: 'single_subsystem', subcategory: 'audio_cleanup', prompt: 'Eliminate the 60Hz ground loop hum on the soundboard track', expected_route: 'audio_cleanup', requires_multistep: false },
+    { id: 'c2_blind_014', category: 'single_subsystem', subcategory: 'audio_cleanup', prompt: 'Apply automated audio ducking to attenuate background music during speech', expected_route: 'audio_cleanup', requires_multistep: false },
+    { id: 'c2_blind_015', category: 'single_subsystem', subcategory: 'audio_cleanup', prompt: 'Clean up the noisy outdoor recording and remove microphone hiss', expected_route: 'audio_cleanup', requires_multistep: false },
+
+    // clip_selection (5)
+    { id: 'c2_blind_016', category: 'single_subsystem', subcategory: 'clip_selection', prompt: 'Isolate the strongest takes from the multicam footage', expected_route: 'clip_selection', requires_multistep: false },
+    { id: 'c2_blind_017', category: 'single_subsystem', subcategory: 'clip_selection', prompt: 'Discover highlights and pick candidate clips for the reel teaser', expected_route: 'clip_selection', requires_multistep: false },
+    { id: 'c2_blind_018', category: 'single_subsystem', subcategory: 'clip_selection', prompt: 'Assemble a rough cut candidate selection of the product unboxing', expected_route: 'clip_selection', requires_multistep: false },
+    { id: 'c2_blind_019', category: 'single_subsystem', subcategory: 'clip_selection', prompt: 'Find highlight moments from the marathon finish line recordings', expected_route: 'clip_selection', requires_multistep: false },
+    { id: 'c2_blind_020', category: 'single_subsystem', subcategory: 'clip_selection', prompt: 'Select the best B roll footage takes showing the cityscape', expected_route: 'clip_selection', requires_multistep: false },
+
+    // motion_graphics (5)
+    { id: 'c2_blind_021', category: 'single_subsystem', subcategory: 'motion_graphics', prompt: 'Insert an animated title card sequence introducing Chapter 3', expected_route: 'motion_graphics', requires_multistep: false },
+    { id: 'c2_blind_022', category: 'single_subsystem', subcategory: 'motion_graphics', prompt: 'Overlay a motion graphic lower third displaying the author name', expected_route: 'motion_graphics', requires_multistep: false },
+    { id: 'c2_blind_023', category: 'single_subsystem', subcategory: 'motion_graphics', prompt: 'Render kinetic typography callouts emphasizing our quarterly revenue', expected_route: 'motion_graphics', requires_multistep: false },
+    { id: 'c2_blind_024', category: 'single_subsystem', subcategory: 'motion_graphics', prompt: 'Add an animated title bar with corporate branding at the start', expected_route: 'motion_graphics', requires_multistep: false },
+    { id: 'c2_blind_025', category: 'single_subsystem', subcategory: 'motion_graphics', prompt: 'Animate a title banner over the opening establishing drone shot', expected_route: 'motion_graphics', requires_multistep: false },
+
+    // color_grading (5)
+    { id: 'c2_blind_026', category: 'single_subsystem', subcategory: 'color_grading', prompt: 'Apply the warm golden 3D LUT look to camera angle A', expected_route: 'color_grading', requires_multistep: false },
+    { id: 'c2_blind_027', category: 'single_subsystem', subcategory: 'color_grading', prompt: 'Grade the footage with high contrast teal and orange color grading', expected_route: 'color_grading', requires_multistep: false },
+    { id: 'c2_blind_028', category: 'single_subsystem', subcategory: 'color_grading', prompt: 'Adjust exposure levels and fix white balance on the interior shot', expected_route: 'color_grading', requires_multistep: false },
+    { id: 'c2_blind_029', category: 'single_subsystem', subcategory: 'color_grading', prompt: 'Color grade all timeline clips with certified bleach bypass styling', expected_route: 'color_grading', requires_multistep: false },
+    { id: 'c2_blind_030', category: 'single_subsystem', subcategory: 'color_grading', prompt: 'Apply cinematic contrast grading to push shadow depth in the studio scene', expected_route: 'color_grading', requires_multistep: false },
+
+    // timeline_manipulation (5)
+    { id: 'c2_blind_031', category: 'single_subsystem', subcategory: 'timeline_manipulation', prompt: 'Ripple trim the tail of clip 5 by thirty frames', expected_route: 'timeline_manipulation', requires_multistep: false },
+    { id: 'c2_blind_032', category: 'single_subsystem', subcategory: 'timeline_manipulation', prompt: 'Split the selected clip right at playhead marker 36000 ticks', expected_route: 'timeline_manipulation', requires_multistep: false },
+    { id: 'c2_blind_033', category: 'single_subsystem', subcategory: 'timeline_manipulation', prompt: 'Cut out silent gaps and tighten pauses on the primary narrative track', expected_route: 'timeline_manipulation', requires_multistep: false },
+    { id: 'c2_blind_034', category: 'single_subsystem', subcategory: 'timeline_manipulation', prompt: 'Slip clip 8 backwards by eight frames to match the beat marker', expected_route: 'timeline_manipulation', requires_multistep: false },
+    { id: 'c2_blind_035', category: 'single_subsystem', subcategory: 'timeline_manipulation', prompt: 'Make the cuts faster by trimming pauses between dialogue sentences', expected_route: 'timeline_manipulation', requires_multistep: false },
+
+    // render_export (5)
+    { id: 'c2_blind_036', category: 'single_subsystem', subcategory: 'render_export', prompt: 'Encode the sequence to an H264 MP4 deliverable at 1080p', expected_route: 'render_export', requires_multistep: false },
+    { id: 'c2_blind_037', category: 'single_subsystem', subcategory: 'render_export', prompt: 'Export the completed sequence as a baseline 1080p MP4 file', expected_route: 'render_export', requires_multistep: false },
+    { id: 'c2_blind_038', category: 'single_subsystem', subcategory: 'render_export', prompt: 'Prepare the project for export and render the final deliverable', expected_route: 'render_export', requires_multistep: false },
+    { id: 'c2_blind_039', category: 'single_subsystem', subcategory: 'render_export', prompt: 'Render the final video master for immediate client handover', expected_route: 'render_export', requires_multistep: false },
+    { id: 'c2_blind_040', category: 'single_subsystem', subcategory: 'render_export', prompt: 'Export the project deliverable to the designated distribution folder', expected_route: 'render_export', requires_multistep: false },
+
+    // media_qa (5)
+    { id: 'c2_blind_041', category: 'single_subsystem', subcategory: 'media_qa', prompt: 'Perform an audio sync check across all synchronized sound stems', expected_route: 'media_qa', requires_multistep: false },
+    { id: 'c2_blind_042', category: 'single_subsystem', subcategory: 'media_qa', prompt: 'Run a blank frame check across each edit point in the program', expected_route: 'media_qa', requires_multistep: false },
+    { id: 'c2_blind_043', category: 'single_subsystem', subcategory: 'media_qa', prompt: 'Perform a media QA audit checking for clipping or frame corruption', expected_route: 'media_qa', requires_multistep: false },
+    { id: 'c2_blind_044', category: 'single_subsystem', subcategory: 'media_qa', prompt: 'Verify cut continuity and scene transition consistency', expected_route: 'media_qa', requires_multistep: false },
+    { id: 'c2_blind_045', category: 'single_subsystem', subcategory: 'media_qa', prompt: 'Inspect the rendered master video file for container encoding anomalies', expected_route: 'media_qa', requires_multistep: false },
+
+    // --- 2. COMPOUND REQUESTS (12 items) ---
+    { id: 'c2_blind_046', category: 'compound_system2', prompt: 'First transcribe the speaker speech, clean vocal hum, and then export to MP4', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_047', category: 'compound_system2', prompt: 'Trim the pauses, apply warm golden color grade, then add an animated title card', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_048', category: 'compound_system2', prompt: 'Step 1: select candidate takes; Step 2: balance audio; Step 3: render final video', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_049', category: 'compound_system2', prompt: 'Isolate highlights, generate word level captions, and export the deliverable', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_050', category: 'compound_system2', prompt: 'Cut out silent gaps, grade with teal and orange, and export the video', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_051', category: 'compound_system2', prompt: 'Transcribe dialogue, overlay a kinetic lower third, and then render to MP4', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_052', category: 'compound_system2', prompt: 'Equalize vocal loudness, perform cut continuity check, and prepare deliverable for export', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_053', category: 'compound_system2', prompt: 'Find the best B roll clips, insert animated titles, and export the social reel', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_054', category: 'compound_system2', prompt: 'First tighten the speech pauses, then apply bleach bypass look, and then export', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_055', category: 'compound_system2', prompt: 'Transcribe the interview, format styled captions, and review cut continuity', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_056', category: 'compound_system2', prompt: 'Denoise the audio hum, grade with true tone look, and render final master', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_057', category: 'compound_system2', prompt: 'Select top takes, ripple trim silent pauses, and create on screen subtitles', expected_route: 'needs_planning', requires_multistep: true },
+
+    // --- 3. AMBIGUOUS & UNDERSPECIFIED (6 items) ---
+    { id: 'c2_blind_058', category: 'ambiguous_underspecified', prompt: 'Make this raw sequence look stunning and captivating', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_059', category: 'ambiguous_underspecified', prompt: 'Do whatever post production is required to get this ready', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_060', category: 'ambiguous_underspecified', prompt: 'Take these files and craft an amazing narrative experience', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_061', category: 'ambiguous_underspecified', prompt: 'Spruce up this timeline for YouTube upload', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_062', category: 'ambiguous_underspecified', prompt: 'Clean and improve the overall flow of this episode', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_063', category: 'ambiguous_underspecified', prompt: 'Give this timeline a fresh modern vibe', expected_route: 'needs_planning', requires_multistep: true },
+
+    // --- 4. COLOR MOOD (14 items: 8 supported + 6 unsupported) ---
+    // Supported (8)
+    { id: 'c2_blind_064', category: 'color_mood', subcategory: 'warm_golden', prompt: 'Golden sunset aesthetic with amber warmth and natural radiant skin tones', expected_choice: 'warm_golden', supported: true },
+    { id: 'c2_blind_065', category: 'color_mood', subcategory: 'warm_golden', prompt: 'Soft warm golden tones across the landscape with amber highlighted skies', expected_choice: 'warm_golden', supported: true },
+    { id: 'c2_blind_066', category: 'color_mood', subcategory: 'teal_orange', prompt: 'Blockbuster style grade featuring cyan shadow tones and warm orange facial tones', expected_choice: 'teal_orange', supported: true },
+    { id: 'c2_blind_067', category: 'color_mood', subcategory: 'teal_orange', prompt: 'Cyberpunk teal and orange color contrast for night city streets', expected_choice: 'teal_orange', supported: true },
+    { id: 'c2_blind_068', category: 'color_mood', subcategory: 'bleach_bypass', prompt: 'Desaturated gritty combat look with harsh silver contrast', expected_choice: 'bleach_bypass', supported: true },
+    { id: 'c2_blind_069', category: 'color_mood', subcategory: 'bleach_bypass', prompt: 'Moody bleachy aesthetic with washed out chroma and punchy shadows', expected_choice: 'bleach_bypass', supported: true },
+    { id: 'c2_blind_070', category: 'color_mood', subcategory: 'true_tone', prompt: 'Neutral commercial grade with skin tones accurate and faithful white balance', expected_choice: 'true_tone', supported: true },
+    { id: 'c2_blind_071', category: 'color_mood', subcategory: 'cinematic_contrast', prompt: 'Deep rich blacks and dramatic cinematic contrast for film noir tone', expected_choice: 'cinematic_contrast', supported: true },
+
+    // Unsupported (6) -> Sentinel needs_review, 0 LUT leak
+    { id: 'c2_blind_072', category: 'color_mood_unsupported', prompt: 'Heavy 8mm film grain with visible gate weave and optical halation', expected_choice: 'needs_review', supported: false },
+    { id: 'c2_blind_073', category: 'color_mood_unsupported', prompt: 'Magenta neon glow with animated flicker and chromatic lens fringing', expected_choice: 'needs_review', supported: false },
+    { id: 'c2_blind_074', category: 'color_mood_unsupported', prompt: 'Retro arcade monitor phosphor burn with RGB split lines', expected_choice: 'needs_review', supported: false },
+    { id: 'c2_blind_075', category: 'color_mood_unsupported', prompt: 'Glitch art pixel displacement with laser bloom lighting', expected_choice: 'needs_review', supported: false },
+    { id: 'c2_blind_076', category: 'color_mood_unsupported', prompt: 'Kodak 500T film stock emulation with analog dust specks and chemical grain', expected_choice: 'needs_review', supported: false },
+    { id: 'c2_blind_077', category: 'color_mood_unsupported', prompt: 'Make it look cinematic', expected_choice: 'needs_review', supported: false },
+
+    // --- 5. NEGATION AND EXPLICIT PROHIBITIONS (10 items) ---
+    { id: 'c2_blind_078', category: 'negation_constraints', prompt: 'Transcribe speech audio accurately, but do not export the project', expected_route: 'transcription', forbidden_actions: ['render_export'], constraints: [] },
+    { id: 'c2_blind_079', category: 'negation_constraints', prompt: 'Add an animated title sequence, but never reorder clips on track 1', expected_route: 'motion_graphics', forbidden_actions: ['reorder_clips'], constraints: ['preserve_clip_order'] },
+    { id: 'c2_blind_080', category: 'negation_constraints', prompt: 'Apply warm golden color grade without altering exposure', expected_route: 'color_grading', forbidden_actions: [], constraints: ['lock_exposure'] },
+    { id: 'c2_blind_081', category: 'negation_constraints', prompt: 'Remove microphone hum from track 1, but leave the picture unchanged', expected_route: 'audio_cleanup', forbidden_actions: [], constraints: ['preserve_picture'] },
+    { id: 'c2_blind_082', category: 'negation_constraints', prompt: 'Ripple trim pauses from interview take, but do not touch audio track 2', expected_route: 'timeline_manipulation', forbidden_actions: [], constraints: ['preserve_audio'] },
+    { id: 'c2_blind_083', category: 'negation_constraints', prompt: 'Run media QA blank frame check, but do not export deliverable', expected_route: 'media_qa', forbidden_actions: ['render_export'], constraints: [] },
+    { id: 'c2_blind_084', category: 'negation_constraints', prompt: 'Split clip 3 at marker 12000, but do not normalize voices', expected_route: 'timeline_manipulation', forbidden_actions: ['normalize_voices'], constraints: [] },
+    { id: 'c2_blind_085', category: 'negation_constraints', prompt: 'Generate synchronized subtitles, but do not touch music levels', expected_route: 'subtitle_generation', forbidden_actions: ['touch_music'], constraints: [] },
+    { id: 'c2_blind_086', category: 'negation_constraints', prompt: 'Select highlight moments from B roll, but preserve clip order on main track', expected_route: 'clip_selection', forbidden_actions: [], constraints: ['preserve_clip_order'] },
+    { id: 'c2_blind_087', category: 'negation_constraints', prompt: 'Perform verbatim speech transcription and do not paraphrase dialogue', expected_route: 'transcription', forbidden_actions: [], constraints: ['verbatim_transcript'] },
+
+    // --- 6. CONFLICTING CONSTRAINTS & MISSING PREREQUISITES (6 items) ---
+    { id: 'c2_blind_088', category: 'conflicting_constraints', prompt: 'Do not insert any title card graphics, yet overlay an animated title banner', expected_route: 'needs_planning', requires_multistep: true, is_contradictory: true },
+    { id: 'c2_blind_089', category: 'conflicting_constraints', prompt: 'Grade footage to be completely desaturated yet hyper vivid and saturated', expected_route: 'needs_planning', requires_multistep: true, is_contradictory: true },
+    { id: 'c2_blind_090', category: 'missing_prerequisites', prompt: 'Encode to MP4 deliverable master now', expected_route: 'render_export', project_context: { audio_sync_passed: false, timeline_editable: true }, should_block_prerequisite: true },
+    { id: 'c2_blind_091', category: 'missing_prerequisites', prompt: 'Render final video master to disk', expected_route: 'render_export', project_context: { media_integrity_passed: false, timeline_editable: true }, should_block_prerequisite: true },
+    { id: 'c2_blind_092', category: 'missing_prerequisites', prompt: 'Color grade all timeline clips with teal and orange', expected_route: 'color_grading', project_context: { source_media_available: false, timeline_editable: true }, should_block_prerequisite: true },
+    { id: 'c2_blind_093', category: 'missing_prerequisites', prompt: 'Ripple trim pauses from timeline track 1', expected_route: 'timeline_manipulation', project_context: { timeline_editable: false, source_media_available: true }, should_block_prerequisite: true },
+
+    // --- 7. QUOTED DIALOGUE (5 items: Spoken words must NOT trigger execution) ---
+    { id: 'c2_blind_094', category: 'quoted_dialogue', prompt: 'The founder says "We need to export this deliverable immediately" in the recording', expected_route: 'transcription', rationale: 'Spoken dialogue contains export command; router must not execute render_export' },
+    { id: 'c2_blind_095', category: 'quoted_dialogue', prompt: 'Narrator explains "You should cut the track right at this moment" during the lecture', expected_route: 'transcription', rationale: 'Spoken dialogue contains cut command; router must not execute timeline_manipulation' },
+    { id: 'c2_blind_096', category: 'quoted_dialogue', prompt: 'Podcast host says "Slap a 3D LUT onto our video camera" while conversing', expected_route: 'transcription', rationale: 'Spoken dialogue mentions 3D LUT; router must route to speech transcription' },
+    { id: 'c2_blind_097', category: 'quoted_dialogue', prompt: 'Audio clip has subject shouting "Delete the footage and wipe the hard drive"', expected_route: 'transcription', rationale: 'Spoken dialogue quotes deletion; router must not delete files' },
+    { id: 'c2_blind_098', category: 'quoted_dialogue', prompt: 'Speaker remarks "Let us render out the master tonight" in the closing dialogue', expected_route: 'transcription', rationale: 'Speech quotes rendering; router must route to speech transcription' },
+
+    // --- 8. MISSING MEDIA & UNSUPPORTED OPERATIONS (4 items) ---
+    { id: 'c2_blind_099', category: 'unsupported_operations', prompt: 'Perform 3D fluid dynamic particle simulation for opening vortex', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_100', category: 'unsupported_operations', prompt: 'Generate synthetic photorealistic deepfake actor replacement', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_101', category: 'unsupported_operations', prompt: 'Render character rigging skeletal animation sequence', expected_route: 'needs_planning', requires_multistep: true },
+    { id: 'c2_blind_102', category: 'unsupported_operations', prompt: 'Edit missing media track asset_reel_camera_four', expected_route: 'needs_planning', requires_multistep: true },
+
+    // --- 9. COLLOQUIAL WORDING & REALISTIC EDITING BRIEFS (8 items) ---
+    { id: 'c2_blind_103', category: 'colloquial_briefs', prompt: 'Shave off the dead air so the host commentary flows smoothly', expected_route: 'timeline_manipulation', requires_multistep: false },
+    { id: 'c2_blind_104', category: 'colloquial_briefs', prompt: 'Give this clip that blockbuster Michael Bay look with rich teal and orange', expected_route: 'color_grading', requires_multistep: false },
+    { id: 'c2_blind_105', category: 'colloquial_briefs', prompt: 'Kill the steady hum from the air conditioner in the interview audio', expected_route: 'audio_cleanup', requires_multistep: false },
+    { id: 'c2_blind_106', category: 'colloquial_briefs', prompt: 'Pull out candidate soundbites and assemble a snappy 15 second promo', expected_route: 'clip_selection', requires_multistep: false },
+    { id: 'c2_blind_107', category: 'colloquial_briefs', prompt: 'Put a subtle animated lower third with the guest name and credentials', expected_route: 'motion_graphics', requires_multistep: false },
+    { id: 'c2_blind_108', category: 'colloquial_briefs', prompt: 'Burn open captions with word level timing onto the video', expected_route: 'subtitle_generation', requires_multistep: false },
+    { id: 'c2_blind_109', category: 'colloquial_briefs', prompt: 'Encode the finished timeline into an MP4 deliverable for review', expected_route: 'render_export', requires_multistep: false },
+    { id: 'c2_blind_110', category: 'colloquial_briefs', prompt: 'Double check the cut continuity across all camera switches', expected_route: 'media_qa', requires_multistep: false }
+  ];
+
+  // 3. Cryptographic Zero-Leakage Audit
+  let overlapCount = 0;
+  const overlaps = [];
+  for (const item of freshBattery) {
+    if (item.prompt) {
+      const norm = normalizeText(item.prompt);
+      if (allPriorPromptSet.has(norm)) {
+        overlapCount++;
+        overlaps.push({ id: item.id, prompt: item.prompt, norm });
+      }
+    }
+  }
+
+  if (overlapCount > 0) {
+    console.error(`❌ ZERO-LEAKAGE AUDIT FAILED for Candidate 2: ${overlapCount} overlapping prompts!`, overlaps);
+    throw new Error(`Data leakage in Candidate 2 fresh blind battery.`);
+  }
+
+  console.log(`✅ ZERO-LEAKAGE VERIFIED for Candidate 2: 0 of ${freshBattery.length} fresh prompts overlap with ANY prior dataset (checked against ${allPriorPromptSet.size} prompts).`);
+
+  const savePath = path.join(ROOT, 'src/decision-fabric/data/m6-candidate2-fresh-blind-battery.json');
+  fs.writeFileSync(savePath, JSON.stringify(freshBattery, null, 2), 'utf8');
+  console.log(`Saved Candidate 2 fresh blind battery to ${savePath}`);
+
+  return freshBattery;
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  buildCandidate2FreshBlindDataset();
+}

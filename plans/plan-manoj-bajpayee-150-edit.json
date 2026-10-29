@@ -1,0 +1,148 @@
+{
+  "id": "plan_manoj_bajpayee_150_edit",
+  "schemaVersion": "1.0.0",
+  "brief": {
+    "prompt": "Recreate the viral $150 high-end video edit from Instagram reel with Manoj Bajpayee rotoscoped raw footage using EME engine",
+    "creativeGoal": "Deliver motion design kinetic typography, 3D cutout sandwich depth text, split-screen storytelling, pulsating anatomical graphics, and punchy audio riser synchronization",
+    "targetAudience": "Short-form video creators, editors, and social media audiences",
+    "referenceStyle": "Top-tier Instagram motion edit ($150 edit) featuring editorial palettes (#701023 Crimson & #f6f0e2 Cream), Archivo Black / Instrument Serif typography, and cinematic b-roll montage"
+  },
+  "outputProfile": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "fps": 30,
+    "targetDurationTicks": 1986000
+  },
+  "sourceReferences": [
+    {
+      "assetId": "raw_manoj_roto",
+      "path": "raw_videos/Manoj_Bajpayee_Roto.mp4",
+      "type": "video",
+      "analysisSummary": "1080x1920 30fps green-screen rotoscoped studio footage of actor Manoj Bajpayee during interview"
+    },
+    {
+      "assetId": "master_soundtrack",
+      "path": "assets/audio/master_soundtrack.wav",
+      "type": "audio",
+      "analysisSummary": "48kHz stereo master audio track with pristine dialogue, sound design risers, sub whooshes, and subtle background score"
+    },
+    {
+      "assetId": "font_instrument_serif",
+      "path": "assets/fonts/files/InstrumentSerif-Italic.ttf",
+      "type": "font",
+      "analysisSummary": "High-contrast editorial serif italic for expressive kinetic words (will, mistakes)"
+    },
+    {
+      "assetId": "font_archivo_black",
+      "path": "assets/fonts/files/ArchivoBlack-Regular.ttf",
+      "type": "font",
+      "analysisSummary": "Heavy display sans-serif typeface for dominant impact titles (Many, IMPROVE, HUMAN BEIGN)"
+    },
+    {
+      "assetId": "font_inter",
+      "path": "assets/fonts/files/Inter-Variable.ttf",
+      "type": "font",
+      "analysisSummary": "Geometric sans-serif for structured navigation top bar (MISTAKES, HARDWORK, CONSISTENCY) and badge cards"
+    }
+  ],
+  "sequenceStructure": [
+    {
+      "actId": "act_1_mistakes_hook",
+      "name": "Act 1: Mistakes Hook & Kinetic Type",
+      "startTick": 0,
+      "durationTicks": 216000,
+      "narrativeIntent": "Establish deep crimson backdrop, top navigation bar, and kinetic pop-in of 'All off us will make mistakes'"
+    },
+    {
+      "actId": "act_2_cream_grid_expand",
+      "name": "Act 2: Cream Architectural Grid & Expanding Banner",
+      "startTick": 216000,
+      "durationTicks": 240000,
+      "narrativeIntent": "Transition to tactile cream grid, animating maroon horizontal banner 'I have made many' with italic 'mistakes'"
+    },
+    {
+      "actId": "act_3_many_cutout_sandwich",
+      "name": "Act 3: Cutout Sandwich Depth Effect",
+      "startTick": 456000,
+      "durationTicks": 144000,
+      "narrativeIntent": "Sandwich Manoj Bajpayee between 5 stacked background solid 'Many' titles and foreground 4px white outline titles"
+    },
+    {
+      "actId": "act_4_split_screen_broll",
+      "name": "Act 4: 3-Tier Split Screen Cinematic B-Roll",
+      "startTick": 600000,
+      "durationTicks": 348000,
+      "narrativeIntent": "Full canvas three-tier montage (Truman sky wall, vintage cinema projector, and snowy warrior) synchronized to 'KOI DOODH KA DHULA HUA NAHI HAI'"
+    },
+    {
+      "actId": "act_5_improve_chest_banner",
+      "name": "Act 5: Red Sun Circle & Chest IMPROVE Banner",
+      "startTick": 948000,
+      "durationTicks": 300000,
+      "narrativeIntent": "Crimson framing circle behind head, solid crimson chest banner with bold white 'IMPROVE' and Hindi subtitles"
+    },
+    {
+      "actId": "act_6_pulsing_heart_canvas",
+      "name": "Act 6: Anatomical Pulsing Heart & Canvas Texture",
+      "startTick": 1248000,
+      "durationTicks": 192000,
+      "narrativeIntent": "3D illuminated heart pulsating under top spotlight with textured canvas overlay 'THERE'S A LOT OF WORK GOING ON'"
+    },
+    {
+      "actId": "act_7_human_beign_accent",
+      "name": "Act 7: Crimson Climax & HUMAN BEIGN Accent",
+      "startTick": 1440000,
+      "durationTicks": 288000,
+      "narrativeIntent": "Crimson background, red accent bar across chest, and high-impact 'TO BE A GOOD HUMAN BEIGN' typography"
+    },
+    {
+      "actId": "act_8_jaruri_hai_pills",
+      "name": "Act 8: Background Pill Popups & Outro",
+      "startTick": 1728000,
+      "durationTicks": 258000,
+      "narrativeIntent": "Sliding pill cards positioned behind Manoj's head and microphone delivering final Hindi punchlines ('Jaruri hai')"
+    }
+  ],
+  "operations": [
+    {
+      "type": "create_project",
+      "params": {
+        "title": "Manoj Bajpayee $150 Video Recreation",
+        "canvas": { "width": 1080, "height": 1920, "aspectRatio": "9:16", "backgroundColor": "#701023" },
+        "timebase": { "fps": { "numerator": 30, "denominator": 1 }, "ticksPerSecond": 120000, "durationTicks": 1986000, "endpointConvention": "half-open" }
+      },
+      "intent": "Initialize 9:16 vertical 1080x1920 project timebase at 30fps"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "raw_manoj_roto", "type": "video", "src": "raw_videos/Manoj_Bajpayee_Roto.mp4" },
+      "intent": "Load raw green-screen rotoscoped subject video"
+    },
+    {
+      "type": "add_asset",
+      "params": { "id": "master_soundtrack", "type": "audio", "src": "assets/audio/master_soundtrack.wav" },
+      "intent": "Load synchronized master stereo audio stem"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_bg", "name": "Dynamic Canvas Background", "kind": "visual", "zIndex": 0 },
+      "intent": "Add background visual canvas track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_subject", "name": "Chroma-Keyed Manoj Bajpayee", "kind": "visual", "zIndex": 10 },
+      "intent": "Add rotoscoped foreground subject track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_foreground_fx", "name": "Cutout Sandwich & Chest Overlays", "kind": "visual", "zIndex": 20 },
+      "intent": "Add foreground graphic overlay track"
+    },
+    {
+      "type": "add_track",
+      "params": { "id": "track_audio", "name": "Master Audio Soundtrack", "kind": "audio", "zIndex": 0 },
+      "intent": "Add master stereo audio track"
+    }
+  ]
+}

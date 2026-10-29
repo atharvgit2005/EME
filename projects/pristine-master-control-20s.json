@@ -1,0 +1,71 @@
+{
+  "id": "proj_pristine_master_control_20s",
+  "schemaVersion": "1.0.0",
+  "revision": 1,
+  "title": "Pristine Master Reference Control 20s",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "aspectRatio": "9:16",
+    "backgroundColor": "#050508"
+  },
+  "timebase": {
+    "fps": {
+      "numerator": 60,
+      "denominator": 1
+    },
+    "ticksPerSecond": 120000,
+    "durationTicks": 2400000,
+    "endpointConvention": "half-open"
+  },
+  "assets": [
+    {
+      "id": "creator_reel_soundtrack",
+      "type": "audio",
+      "src": "assets/creator_reel_soundtrack_20s.wav",
+      "sha256": "1b8183af7135d64b1ee7d1d15d007fd1516a42bf41a7a64d3e66c5237d59b628"
+    },
+    {
+      "id": "master_video_plate",
+      "type": "image",
+      "src": "assets/shot1_eye.jpg",
+      "sha256": "f427b00952383e25af5810af7cccec8002e272ec8964ca17faedb0efd2aac285"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "track_video_main",
+      "name": "V1 - Pristine Master Video",
+      "kind": "visual",
+      "zIndex": 1,
+      "muted": false,
+      "locked": false
+    },
+    {
+      "id": "track_audio_master",
+      "name": "A1 - Pristine Master Audio",
+      "kind": "audio",
+      "zIndex": 0,
+      "muted": false,
+      "locked": false
+    }
+  ],
+  "clips": [
+    {
+      "id": "clip_video_main",
+      "trackId": "track_video_main",
+      "type": "graphic",
+      "startTick": 0,
+      "durationTicks": 2400000,
+      "assetId": "master_video_plate"
+    },
+    {
+      "id": "clip_audio_master",
+      "trackId": "track_audio_master",
+      "type": "audio",
+      "startTick": 0,
+      "durationTicks": 2400000,
+      "assetId": "creator_reel_soundtrack"
+    }
+  ]
+}
