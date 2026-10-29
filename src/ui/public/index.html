@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EME Control Surface — CapCut-Grade NLE & Color Grading Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css?v=5">
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- Header / Navbar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-wrapper">
+          <span class="logo-badge">EME</span>
+          <span class="logo-sub">STUDIO</span>
+        </div>
+        <div class="project-info-group">
+          <h1 id="project-title" class="project-title">No Project Loaded</h1>
+          <span id="revision-badge" class="revision-badge">Rev 0</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="path-input-group">
+          <span class="path-icon">📁</span>
+          <select id="project-preset-select" class="preset-select" style="background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 4px; padding: 4px 8px; font-size: 11px; margin-right: 6px; cursor: pointer;">
+            <option value="artifacts/himachal-001-eme-project.json" selected>🏔 Himachal 001: Jibhi Travel Reel (Final Cut)</option>
+            <option value="/Users/atharvpaharia100/Desktop/Projects/motion-graphics/himachal-001/himachal-001-eme-project.json">🏔 motion-graphics/himachal-001</option>
+            <option value="artifacts/phase-7/scenario-1-16x9.json">🎬 YouTube Explainer (16:9)</option>
+            <option value="artifacts/phase-7/scenario-2-9x16.json">📱 TikTok Creator Reel (9:16)</option>
+            <option value="artifacts/phase-7/scenario-3-1x1.json">🟧 Instagram Square (1:1)</option>
+          </select>
+          <input type="text" id="project-path-input" class="path-input" value="artifacts/himachal-001-eme-project.json" placeholder="Path to canonical EME project.json">
+        </div>
+        <button id="btn-load" class="btn btn-primary" title="Load Canonical EME Project">Load</button>
+        <button id="btn-save" class="btn btn-secondary" title="Save Project to Disk">Save</button>
+      </div>
+
+      <div class="header-right">
+        <div class="history-actions">
+          <button id="btn-undo" class="btn btn-icon" title="Undo (Cmd+Z)" disabled>↶ Undo</button>
+          <button id="btn-redo" class="btn btn-icon" title="Redo (Cmd+Shift+Z / Cmd+Y)" disabled>↷ Redo</button>
+        </div>
+        <button id="btn-capcut-modal" class="btn btn-capcut" title="Reverse Engineered CapCut Draft Importer">
+          <span class="icon-spark">⚡</span> CapCut Import
+        </button>
+        <button id="btn-qa" class="btn btn-accent" title="Run Automated QA Audit">Audit QA</button>
+        <button id="btn-render" class="btn btn-render" title="Render Headless MP4">Render MP4</button>
+      </div>
+    </header>
+ 
+    <!-- CapCut Signature Creative Navigation Bar -->
+    <nav class="capcut-top-nav">
+      <div class="capcut-tabs">
+        <button class="capcut-nav-tab active" data-nav="media"><span class="nav-icon">📁</span> Media</button>
+        <button class="capcut-nav-tab" data-nav="audio"><span class="nav-icon">🎵</span> Audio</button>
+        <button class="capcut-nav-tab" data-nav="text"><span class="nav-icon">🔤</span> Text</button>
+        <button class="capcut-nav-tab" data-nav="stickers"><span class="nav-icon">⭐</span> Stickers</button>
+        <button class="capcut-nav-tab" data-nav="effects"><span class="nav-icon">✨</span> Effects</button>
+        <button class="capcut-nav-tab" data-nav="transitions"><span class="nav-icon">🔀</span> Transitions</button>
+        <button class="capcut-nav-tab" data-nav="filters"><span class="nav-icon">🎨</span> Filters</button>
+        <button class="capcut-nav-tab" data-nav="adjust"><span class="nav-icon">🎛</span> Adjust</button>
+      </div>
+      <div class="capcut-nav-right">
+        <span class="engine-badge">CapCut Engine Core</span>
+      </div>
+    </nav>
+ 
+    <!-- Main Workspace Grid -->
+    <main class="workspace-grid">
+      <!-- Left Panel: Assets & Project Media -->
+      <aside class="panel assets-panel">
+        <div class="panel-header">
+          <div class="panel-tabs">
+            <button class="panel-tab active" id="tab-assets">Media Assets (<span id="asset-count">0</span>)</button>
+            <button class="panel-tab" id="tab-tracks">Tracks (<span id="track-count">0</span>)</button>
+          </div>
+        </div>
+
+        <div class="panel-content">
+          <div id="assets-view" class="tab-pane active">
+            <div class="asset-actions">
+              <button id="btn-quick-capcut" class="btn btn-sm btn-ghost">+ Import CapCut Draft</button>
+            </div>
+            <ul id="assets-list" class="item-list"></ul>
+          </div>
+
+          <div id="tracks-view" class="tab-pane">
+            <div class="section-title">Timeline Track Stack</div>
+            <ul id="tracks-list" class="item-list"></ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Panel: Video Preview Player -->
+      <section class="panel preview-panel">
+        <div class="panel-header preview-header">
+          <div class="preview-info">
+            <span class="badge badge-dim" id="canvas-dim">1920 × 1080</span>
+            <select id="preview-ratio-select" class="preview-select" title="Aspect Ratio">
+              <option value="16:9">16:9 Landscape</option>
+              <option value="9:16">9:16 Reel / TikTok</option>
+              <option value="1:1">1:1 Square</option>
+              <option value="4:3">4:3 Classic</option>
+            </select>
+            <select id="preview-scale-select" class="preview-select" title="Preview Scaling">
+              <option value="fit" selected>Fit View</option>
+              <option value="1.0">100%</option>
+              <option value="0.75">75%</option>
+              <option value="0.5">50%</option>
+            </select>
+            <button id="btn-toggle-safe-area" class="btn-preview-toggle" title="Toggle Title/Action Safe Margins">⊞ Safe Area</button>
+            <span class="badge badge-fps" id="timebase-fps">60 FPS</span>
+            <span class="badge badge-color-space">Rec.709 OETF</span>
+          </div>
+          <div class="time-display-group">
+            <span id="smpte-timecode" class="smpte-timecode">00:00:00:00</span>
+            <span class="tick-counter"><span id="current-tick">0</span> ticks</span>
+          </div>
+        </div>
+
+        <!-- Phase PF-10 Stage 2: Authoritative Delivery Verification Header -->
+        <div id="delivery-verification-bar" class="delivery-verification-bar" role="region" aria-label="Authoritative Delivery Verification">
+          <div class="delivery-status-row">
+            <div id="delivery-status-badge" class="delivery-status-badge badge-status-none" role="status" aria-live="polite">
+              <span id="delivery-status-icon" class="status-icon">⚪</span>
+              <span id="delivery-status-text" class="status-text">NO ACTIVE DELIVERY</span>
+            </div>
+            <div class="delivery-provenance-meta">
+              <div class="meta-item">
+                <span class="meta-label">Revision:</span>
+                <span id="meta-revision-id" class="meta-value">—</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Manifest:</span>
+                <span id="meta-manifest-id" class="meta-value font-mono">—</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">SHA-256:</span>
+                <span id="meta-sha256-container" class="meta-sha-box" title="Full SHA-256 unavailable">
+                  <code id="meta-sha256-short" class="font-mono">—</code>
+                  <button id="btn-copy-sha256" class="btn-copy-sha" title="Copy full SHA-256 to clipboard" disabled>📋</button>
+                </span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Res:</span>
+                <span id="meta-resolution" class="meta-value">—</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">FPS:</span>
+                <span id="meta-fps" class="meta-value">—</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Duration:</span>
+                <span id="meta-duration" class="meta-value">—</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">QA:</span>
+                <span id="meta-qa-score" class="meta-value qa-score-val">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historical Inspection Banner (visible only in inspection mode) -->
+          <div id="inspection-banner" class="inspection-banner hidden">
+            <div class="inspection-badge">
+              <span class="inspection-icon">🔍</span>
+              <span>HISTORICAL REVISION INSPECTION: <strong id="inspected-rev-id">rev-0</strong> (READ-ONLY)</span>
+            </div>
+            <button id="btn-exit-inspection" class="btn btn-sm btn-secondary" title="Return to Active Delivery">
+              Return to Active Delivery
+            </button>
+          </div>
+
+          <!-- Candidate Preview Banner (visible only during uncommitted candidate preview) -->
+          <div id="candidate-preview-banner" class="candidate-preview-banner hidden">
+            <div class="candidate-preview-badge">
+              <span class="candidate-preview-icon">👁</span>
+              <span>CANDIDATE PREVIEW: <strong id="previewed-cand-id">—</strong> (UNCOMMITTED / NOT ACTIVE)</span>
+            </div>
+            <div class="candidate-preview-actions">
+              <button id="btn-activate-previewed-cand" class="btn btn-sm btn-primary" title="Activate this candidate">
+                ✓ Activate Candidate
+              </button>
+              <button id="btn-exit-cand-preview" class="btn btn-sm btn-secondary" title="Exit Preview and Return to Active Delivery">
+                Exit Preview
+              </button>
+            </div>
+          </div>
+
+          <!-- Delivery Alert / Error Banner -->
+          <div id="delivery-alert" class="delivery-alert hidden" role="alert">
+            <span id="delivery-alert-icon" class="alert-icon">⚠️</span>
+            <span id="delivery-alert-msg" class="alert-msg"></span>
+          </div>
+        </div>
+
+        <div class="preview-stage-wrapper">
+          <div id="preview-stage" class="preview-stage">
+            <!-- Native HTML5 Video Element -->
+            <video id="preview-video" class="preview-video-player" playsinline preload="auto"></video>
+
+            <!-- Color Engine Live Preview Canvas -->
+            <canvas id="color-preview-canvas" class="color-preview-canvas hidden"></canvas>
+
+            <!-- Hold-to-Compare Indicator Overlay -->
+            <div id="compare-indicator-overlay" class="compare-indicator-overlay hidden">ORIGINAL (UNGRADED)</div>
+
+            <!-- Distinct Overlay States -->
+            <div id="preview-overlay-loading" class="preview-overlay overlay-loading hidden">
+              <div class="preview-spinner"></div>
+              <span class="overlay-msg">Loading authoritative delivery media...</span>
+            </div>
+
+            <div id="preview-overlay-unavailable" class="preview-overlay overlay-unavailable hidden">
+              <span class="overlay-icon">⚠️</span>
+              <span class="overlay-title">Delivery Media Unavailable</span>
+              <span class="overlay-desc">No certified delivery media artifact resolved for this revision.</span>
+            </div>
+
+            <div id="preview-overlay-error" class="preview-overlay overlay-error hidden">
+              <span class="overlay-icon">🚫</span>
+              <span class="overlay-title">Media Decode / Playback Error</span>
+              <span id="preview-error-msg" class="overlay-desc">Browser failed to decode media stream.</span>
+            </div>
+
+            <div id="preview-overlay-stale" class="preview-overlay overlay-stale hidden">
+              <span class="overlay-icon">⏳</span>
+              <span class="overlay-title">Verifying Revision In-Flight</span>
+              <span class="overlay-desc">Displaying last verified delivery while revision is being verified.</span>
+            </div>
+
+            <!-- Interactive Overlays & Safe Margins Layer -->
+            <div id="preview-overlays" class="preview-overlays-layer"></div>
+          </div>
+        </div>
+
+        <!-- Video Transport Control Bar -->
+        <div class="transport-bar">
+          <button id="btn-jump-start" class="btn-transport" title="Jump to Start (Home)">⏮</button>
+          <button id="btn-prev-frame" class="btn-transport" title="Previous Frame (Left Arrow)">◀</button>
+          <button id="btn-play-pause" class="btn-transport btn-transport-play" title="Play/Pause (Space)">▶</button>
+          <button id="btn-next-frame" class="btn-transport" title="Next Frame (Right Arrow)">▶</button>
+          <button id="btn-jump-end" class="btn-transport" title="Jump to End (End)">⏭</button>
+          <span class="transport-divider"></span>
+          <span id="transport-sec-label" class="transport-sec">0.000s / 0.000s</span>
+          <span class="transport-divider"></span>
+          <div class="transport-volume-group">
+            <button id="btn-volume-mute" class="btn-transport btn-volume" title="Mute/Unmute (M)">🔊</button>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1" title="Volume">
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Multi-Tab Inspector (Properties, Color Grade, QA) -->
+      <aside class="panel inspector-panel">
+        <div class="panel-header inspector-header">
+          <div class="inspector-tabs">
+            <button class="insp-tab active" data-tab="properties">Properties</button>
+            <button class="insp-tab" data-tab="color">Color Grade</button>
+            <button class="insp-tab" data-tab="qa">QA Audit</button>
+            <button class="insp-tab" data-tab="history">Revisions DAG</button>
+            <button class="insp-tab" data-tab="candidates">Candidates</button>
+            <button class="insp-tab" data-tab="revision">AI Revision</button>
+          </div>
+        </div>
+
+        <div class="panel-content inspector-body">
+          <!-- Properties Tab Pane -->
+          <div id="pane-properties" class="insp-pane active">
+            <div id="inspector-content">
+              <div class="empty-state">Select a clip on the timeline or canvas to inspect and edit its properties.</div>
+            </div>
+          </div>
+
+          <!-- Color Grading Tab Pane -->
+          <div id="pane-color" class="insp-pane">
+            <div class="color-grade-controls">
+              <div class="grade-target-bar">
+                <span class="grade-target-label">Target:</span>
+                <span id="cg-target-name" class="grade-target-value">Project Master</span>
+                <button id="btn-auto-tone" class="btn btn-sm btn-accent" title="Analyze scene luminance & auto white-balance">
+                  ✨ Auto True Tone
+                </button>
+              </div>
+
+              <!-- Draft Status Badge -->
+              <div id="cg-draft-badge" class="cg-draft-badge hidden">
+                <span class="pulse-dot"></span>
+                <span id="cg-draft-badge-text">DRAFT — UNCOMMITTED</span>
+              </div>
+
+              <!-- Hold to Compare Bar -->
+              <div class="cg-compare-bar">
+                <button id="cg-btn-compare" class="btn btn-sm btn-outline btn-compare" title="Press & hold to view original ungraded source (or hold 'C' key)">
+                  👁️ Hold to Compare
+                </button>
+                <button id="cg-toggle-compare" class="btn btn-sm btn-outline btn-toggle-compare" title="Toggle between Original and Graded view">
+                  Bypass: Off
+                </button>
+              </div>
+
+              <!-- Exposure & White Balance -->
+              <div class="cg-section">
+                <div class="cg-section-title">Linear Exposure & White Balance</div>
+                
+                <div class="slider-row">
+                  <div class="slider-header">
+                    <label>Exposure (EV)</label>
+                    <span id="cg-exp-val" class="slider-val">0.00 EV</span>
+                  </div>
+                  <input type="range" id="cg-exposure" class="cg-slider" min="-3.0" max="3.0" step="0.05" value="0.0">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-header">
+                    <label>Temperature (CCT)</label>
+                    <span id="cg-temp-val" class="slider-val">0</span>
+                  </div>
+                  <input type="range" id="cg-temperature" class="cg-slider slider-temp" min="-100" max="100" step="1" value="0">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-header">
+                    <label>Tint (Green / Magenta)</label>
+                    <span id="cg-tint-val" class="slider-val">0</span>
+                  </div>
+                  <input type="range" id="cg-tint" class="cg-slider slider-tint" min="-100" max="100" step="1" value="0">
+                </div>
+              </div>
+
+              <!-- Primary LGGO -->
+              <div class="cg-section">
+                <div class="cg-section-title">Primary Tone (LGGO)</div>
+                <div class="lggo-grid">
+                  <div class="lggo-col">
+                    <label>Lift (Shadows)</label>
+                    <input type="range" id="cg-lift" class="cg-slider" min="-0.5" max="0.5" step="0.02" value="0.0">
+                    <span id="cg-lift-val" class="slider-val">0.00</span>
+                  </div>
+                  <div class="lggo-col">
+                    <label>Gamma (Midtones)</label>
+                    <input type="range" id="cg-gamma" class="cg-slider" min="0.5" max="2.0" step="0.02" value="1.0">
+                    <span id="cg-gamma-val" class="slider-val">1.00</span>
+                  </div>
+                  <div class="lggo-col">
+                    <label>Gain (Highlights)</label>
+                    <input type="range" id="cg-gain" class="cg-slider" min="0.5" max="2.0" step="0.02" value="1.0">
+                    <span id="cg-gain-val" class="slider-val">1.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3D LUT Creative Try-On Matrix -->
+              <div class="cg-section">
+                <div class="cg-section-title">3D LUT Try-On Engine</div>
+                <div class="form-group">
+                  <label for="cg-lut-select">Creative LUT Preset (Certified)</label>
+                  <select id="cg-lut-select" class="form-control select-lut">
+                    <option value="">None / Native Rec.709</option>
+                    <option value="bleach_bypass">Bleach Bypass Contrast (33³)</option>
+                    <option value="warm_golden">Warm Golden Hour (33³)</option>
+                    <option value="teal_orange">Cinematic Teal & Orange (33³)</option>
+                    <option value="cinematic_contrast">Cinematic Contrast (33³)</option>
+                    <option value="true_tone">True Tone Natural Enhance (33³)</option>
+                  </select>
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-header">
+                    <label>LUT Intensity Blend</label>
+                    <span id="cg-lut-intensity-val" class="slider-val">100%</span>
+                  </div>
+                  <input type="range" id="cg-lut-intensity" class="cg-slider" min="0.0" max="1.0" step="0.05" value="1.0">
+                </div>
+              </div>
+
+              <!-- Skin Tone Vectorscope Protection -->
+              <div class="cg-section">
+                <div class="cg-section-title skin-header">
+                  <span>Skin Tone Vectorscope Protection</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="cg-skin-protect-toggle" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="skin-status-box">
+                  <div class="skin-badge"><span class="dot-green"></span> I-Line Reference: 123°</div>
+                  <div id="cg-skin-metric" class="skin-metric">Status: Active (0.6° deviation)</div>
+                </div>
+                <div class="slider-row">
+                  <div class="slider-header">
+                    <label>Protection Weight</label>
+                    <span id="cg-skin-weight-val" class="slider-val">0.85</span>
+                  </div>
+                  <input type="range" id="cg-skin-weight" class="cg-slider" min="0.0" max="1.0" step="0.05" value="0.85">
+                </div>
+              </div>
+
+              <!-- Secondary HSL Channels (Collapsible) -->
+              <details class="cg-section cg-advanced-section">
+                <summary class="cg-section-title" style="cursor: pointer;">Secondary HSL (8-Channel)</summary>
+                <div class="cg-advanced-content" style="margin-top: 0.5rem;">
+                  <div class="slider-row">
+                    <div class="slider-header">
+                      <label>Red Saturation</label>
+                      <span id="cg-hsl-red-val" class="slider-val">0%</span>
+                    </div>
+                    <input type="range" id="cg-hsl-red" class="cg-slider" min="-1.0" max="1.0" step="0.05" value="0.0">
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-header">
+                      <label>Yellow Saturation</label>
+                      <span id="cg-hsl-yellow-val" class="slider-val">0%</span>
+                    </div>
+                    <input type="range" id="cg-hsl-yellow" class="cg-slider" min="-1.0" max="1.0" step="0.05" value="0.0">
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-header">
+                      <label>Green Saturation</label>
+                      <span id="cg-hsl-green-val" class="slider-val">0%</span>
+                    </div>
+                    <input type="range" id="cg-hsl-green" class="cg-slider" min="-1.0" max="1.0" step="0.05" value="0.0">
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-header">
+                      <label>Cyan Saturation</label>
+                      <span id="cg-hsl-cyan-val" class="slider-val">0%</span>
+                    </div>
+                    <input type="range" id="cg-hsl-cyan" class="cg-slider" min="-1.0" max="1.0" step="0.05" value="0.0">
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-header">
+                      <label>Blue Saturation</label>
+                      <span id="cg-hsl-blue-val" class="slider-val">0%</span>
+                    </div>
+                    <input type="range" id="cg-hsl-blue" class="cg-slider" min="-1.0" max="1.0" step="0.05" value="0.0">
+                  </div>
+                </div>
+              </details>
+
+              <div class="cg-actions" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                <button id="btn-apply-color" class="btn btn-primary" style="flex: 1;">Apply Grade (Commit)</button>
+                <button id="btn-cancel-color" class="btn btn-secondary" style="flex: 1;">Discard Draft</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- QA Tab Pane -->
+          <div id="pane-qa" class="insp-pane">
+            <div class="qa-header-card">
+              <span class="qa-card-title">Quality Assurance Score</span>
+              <span id="qa-score-badge" class="qa-score-badge">100/100</span>
+            </div>
+            <div id="qa-details" class="qa-details">
+              <div class="empty-state">Click "Audit QA" in the top bar to run automated compliance checks.</div>
+            </div>
+          </div>
+
+          <!-- History DAG & Diff Tab Pane -->
+          <div id="pane-history" class="insp-pane">
+            <div class="stage3-section-header">
+              <div class="stage3-header-title">
+                <span class="stage3-icon">🌿</span>
+                <h3>Revision History DAG & Branches</h3>
+              </div>
+              <div class="stage3-header-actions">
+                <button id="btn-refresh-history" class="btn btn-sm btn-ghost" title="Refresh Session History">🔄 Refresh</button>
+              </div>
+            </div>
+
+            <!-- History DAG Nodes List -->
+            <div id="history-dag-container" class="history-dag-container">
+              <div id="history-loading" class="stage3-state-card stage3-loading hidden">
+                <div class="stage3-spinner"></div>
+                <span>Loading authoritative history DAG...</span>
+              </div>
+              <div id="history-empty" class="stage3-state-card stage3-empty hidden">
+                <span class="stage3-empty-icon">📁</span>
+                <span>No revision history recorded in session.</span>
+              </div>
+              <div id="history-error" class="stage3-state-card stage3-error hidden">
+                <span class="stage3-error-icon">⚠️</span>
+                <span id="history-error-msg">Failed to load history DAG.</span>
+              </div>
+              <div id="history-nodes-list" class="history-nodes-list"></div>
+            </div>
+
+            <!-- Authoritative Snapshot Diff Viewer -->
+            <div class="stage3-diff-panel">
+              <div class="stage3-section-title">
+                <span>Snapshot Revision Diff</span>
+                <span id="diff-status-indicator" class="diff-status-tag">Ready</span>
+              </div>
+
+              <div class="diff-selector-row">
+                <div class="diff-select-group">
+                  <label for="diff-from-select">Base (From):</label>
+                  <select id="diff-from-select" class="form-control select-rev"></select>
+                </div>
+                <span class="diff-arrow">→</span>
+                <div class="diff-select-group">
+                  <label for="diff-to-select">Target (To):</label>
+                  <select id="diff-to-select" class="form-control select-rev"></select>
+                </div>
+                <button id="btn-compute-diff" class="btn btn-sm btn-accent">Compare Diffs</button>
+              </div>
+
+              <div id="diff-unavailable-msg" class="stage3-alert stage3-alert-warning hidden">
+                <span class="alert-icon">⚠️</span>
+                <span id="diff-unavailable-text">DIFF UNAVAILABLE: Project snapshot not found for requested revision comparison.</span>
+              </div>
+
+              <div id="diff-details-card" class="diff-details-card hidden">
+                <div class="diff-chips-row">
+                  <div class="meta-chip"><span class="chip-label">Plan:</span> <code id="diff-plan-hash" class="font-mono">—</code></div>
+                  <div class="meta-chip"><span class="chip-label">QA:</span> <strong id="diff-qa-score" class="qa-score-val">—</strong></div>
+                  <div class="meta-chip"><span class="chip-label">Ops:</span> <span id="diff-ops-count">—</span></div>
+                  <div class="meta-chip"><span class="chip-label">Duration Δ:</span> <span id="diff-duration-delta">—</span></div>
+                </div>
+
+                <div class="diff-section-block">
+                  <div class="diff-block-title text-emerald">Added Clips (<span id="diff-added-count">0</span>)</div>
+                  <ul id="diff-added-list" class="diff-list"></ul>
+                </div>
+
+                <div class="diff-section-block">
+                  <div class="diff-block-title text-rose">Removed Clips (<span id="diff-removed-count">0</span>)</div>
+                  <ul id="diff-removed-list" class="diff-list"></ul>
+                </div>
+
+                <div class="diff-section-block">
+                  <div class="diff-block-title text-amber">Modified Clips (<span id="diff-modified-count">0</span>)</div>
+                  <ul id="diff-modified-list" class="diff-list"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Candidates Tab Pane -->
+          <div id="pane-candidates" class="insp-pane">
+            <div class="stage3-section-header">
+              <div class="stage3-header-title">
+                <span class="stage3-icon">🎭</span>
+                <h3>Candidate Comparison Matrix</h3>
+              </div>
+              <div class="stage3-header-actions">
+                <button id="btn-refresh-candidates" class="btn btn-sm btn-ghost" title="Refresh Candidates">🔄 Refresh</button>
+              </div>
+            </div>
+
+            <div id="candidate-set-summary" class="candidate-summary-bar">
+              <div class="summary-item"><span class="summary-label">Set ID:</span> <span id="cand-set-id" class="summary-value font-mono">—</span></div>
+              <div class="summary-item"><span class="summary-label">Selected:</span> <span id="cand-selected-id" class="summary-value font-mono">—</span></div>
+              <div class="summary-item"><span class="summary-label">Count:</span> <span id="cand-count-badge" class="badge">0</span></div>
+            </div>
+
+            <div id="candidates-loading" class="stage3-state-card stage3-loading hidden">
+              <div class="stage3-spinner"></div>
+              <span>Loading candidate set...</span>
+            </div>
+            <div id="candidates-empty" class="stage3-state-card stage3-empty hidden">
+              <span class="stage3-empty-icon">📁</span>
+              <span>No active candidate set loaded for this session.</span>
+            </div>
+            <div id="candidates-error" class="stage3-state-card stage3-error hidden">
+              <span class="stage3-error-icon">⚠️</span>
+              <span id="candidates-error-msg">Failed to load candidates.</span>
+            </div>
+
+            <div id="candidates-grid" class="candidates-grid"></div>
+          </div>
+
+          <!-- Conversational Revision Tab Pane -->
+          <div id="pane-revision" class="insp-pane">
+            <div class="stage3-section-header">
+              <div class="stage3-header-title">
+                <span class="stage3-icon">💬</span>
+                <h3>Conversational Revision Engine</h3>
+              </div>
+            </div>
+
+            <!-- Concurrency & Session Context Readout -->
+            <div class="session-concurrency-card">
+              <div class="concurrency-row">
+                <span class="concurrency-label">Session ID:</span>
+                <span id="rev-session-id" class="concurrency-val font-mono">—</span>
+              </div>
+              <div class="concurrency-row">
+                <span class="concurrency-label">Active Revision:</span>
+                <span id="rev-active-revision" class="concurrency-val font-mono">—</span>
+              </div>
+              <div class="concurrency-row">
+                <span class="concurrency-label">Concurrency Version:</span>
+                <span id="rev-concurrency-version" class="concurrency-badge">0</span>
+              </div>
+              <div class="concurrency-row">
+                <span class="concurrency-label">State:</span>
+                <span id="rev-session-state" class="state-chip">ready</span>
+              </div>
+            </div>
+
+            <!-- Preserved Hard Constraints -->
+            <div class="hard-constraints-card">
+              <div class="hard-constraints-title">
+                <span>🛡 Preserved Hard Constraints</span>
+                <span class="hard-constraints-sub">Engine-enforced boundaries</span>
+              </div>
+              <ul id="rev-hard-constraints-list" class="hard-constraints-list">
+                <li class="constraint-item">No session hard constraints active.</li>
+              </ul>
+            </div>
+
+            <!-- Revision Prompt Input -->
+            <div class="revision-prompt-card">
+              <label for="rev-prompt-input" class="rev-prompt-label">Describe desired changes in natural language:</label>
+              <textarea id="rev-prompt-input" class="rev-prompt-textarea" rows="4" placeholder="e.g. Speed up cutting tempo during the chorus, trim the intro by 1.5 seconds, preserve all beat drop alignments..."></textarea>
+              
+              <div class="rev-prompt-actions">
+                <button id="btn-clear-revision" class="btn btn-sm btn-ghost">Clear</button>
+                <button id="btn-submit-revision" class="btn btn-sm btn-primary" title="Submit Revision to Engine">
+                  ⚡ Submit Revision
+                </button>
+              </div>
+
+              <!-- In-Flight Progress Box -->
+              <div id="rev-in-flight" class="rev-in-flight-box hidden">
+                <div class="stage3-spinner"></div>
+                <div class="in-flight-text">
+                  <strong>Compiling & Verifying Revision...</strong>
+                  <span>Applying intent, checking hard constraints, rendering deliverable, and running QA audit gates.</span>
+                </div>
+              </div>
+
+              <!-- Error & Conflict Callout -->
+              <div id="rev-error-callout" class="rev-error-callout hidden" role="alert">
+                <div class="error-callout-header">
+                  <span class="error-callout-icon">✕</span>
+                  <strong id="rev-error-title">Revision Verification Failed</strong>
+                </div>
+                <p id="rev-error-msg" class="error-callout-body"></p>
+                <div class="error-callout-footer">
+                  <span>Prior verified delivery remains intact and active.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Authoritative Session History Controls -->
+            <div class="session-history-controls-card">
+              <div class="session-controls-title">Session Revision Stack (PF-09 Engine Authority)</div>
+              <div class="session-controls-row">
+                <button id="btn-session-undo" class="btn btn-sm btn-secondary" title="Authoritative Session Undo" disabled>
+                  ↶ Session Undo
+                </button>
+                <button id="btn-session-redo" class="btn btn-sm btn-secondary" title="Authoritative Session Redo" disabled>
+                  ↷ Session Redo
+                </button>
+                <button id="btn-session-recover" class="btn btn-sm btn-ghost" title="Recover Session from Persisted State">
+                  🔄 Recover
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Bottom Timeline Workspace (CapCut-grade Multitrack NLE) -->
+    <footer class="timeline-container">
+      <!-- Timeline Action Toolbar (CapCut Desktop Grade) -->
+      <div class="timeline-toolbar">
+        <div class="toolbar-left-cluster">
+          <!-- Selection & Blade Tools -->
+          <div class="tool-btn-group">
+            <button id="tool-select" class="btn-tool active" title="Selection Tool (V)">
+              <span class="tool-icon">↖</span> Select <span class="hotkey-badge">V</span>
+            </button>
+            <button id="tool-blade" class="btn-tool" title="Razor Blade Split Tool (B) - Click clip in lane to split">
+              <span class="tool-icon">✂</span> Blade <span class="hotkey-badge">B</span>
+            </button>
+          </div>
+
+          <span class="toolbar-divider"></span>
+
+          <!-- Trimming & Edit Operations -->
+          <div class="tool-btn-group">
+            <button id="tool-split" class="btn-tool" title="Split Clip at Playhead (Cmd+B)">
+              <span class="tool-icon">⎸✂</span> Split <span class="hotkey-badge">⌘B</span>
+            </button>
+            <button id="tool-delete-left" class="btn-tool" title="Delete Left - Ripple trim in-point to playhead (Q)">
+              <span class="tool-icon">⇤</span> Del Left <span class="hotkey-badge">Q</span>
+            </button>
+            <button id="tool-delete-right" class="btn-tool" title="Delete Right - Ripple trim playhead to out-point (W)">
+              <span class="tool-icon">⇥</span> Del Right <span class="hotkey-badge">W</span>
+            </button>
+            <button id="tool-delete" class="btn-tool btn-tool-danger" title="Delete / Ripple Delete Selected Clip (Del / Backspace)">
+              <span class="tool-icon">🗑</span> Delete <span class="hotkey-badge">Del</span>
+            </button>
+          </div>
+
+          <span class="toolbar-divider"></span>
+
+          <!-- Clip Transform Tools -->
+          <div class="tool-btn-group">
+            <button id="tool-freeze" class="btn-tool" title="Freeze Frame (Alt+F)">
+              <span class="tool-icon">❄</span> Freeze <span class="hotkey-badge">⌥F</span>
+            </button>
+            <button id="tool-reverse" class="btn-tool" title="Reverse Clip (Cmd+R)">
+              <span class="tool-icon">⇄</span> Reverse <span class="hotkey-badge">⌘R</span>
+            </button>
+            <button id="tool-crop" class="btn-tool" title="Crop & Framing (C)">
+              <span class="tool-icon">◱</span> Crop <span class="hotkey-badge">C</span>
+            </button>
+            <button id="tool-record" class="btn-tool" title="Record Voiceover">
+              <span class="tool-icon">🎙</span> Record
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-center-cluster">
+          <!-- CapCut Timeline Behavior Toggles -->
+          <div class="tool-btn-group toggles-group">
+            <button id="toggle-magnet" class="btn-tool active" title="Main Track Magnetism (P) - Keeps primary track gapless">
+              <span class="tool-icon">🧲</span> Magnet <span class="hotkey-badge">P</span>
+            </button>
+            <button id="toggle-linkage" class="btn-tool active" title="Auto-Ripple Linkage (R) - Synchronize trailing edits">
+              <span class="tool-icon">🔗</span> Linkage <span class="hotkey-badge">R</span>
+            </button>
+            <button id="toggle-snapping" class="btn-tool active" title="Snapping (N) - Snap to boundaries & playhead">
+              <span class="tool-icon">⇥⇤</span> Snapping <span class="hotkey-badge">N</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-right-cluster">
+          <!-- Timeline Zoom & Fit Controls -->
+          <div class="timeline-zoom-controls">
+            <button id="btn-zoom-out" class="btn-zoom" title="Zoom Out (−)">−</button>
+            <input type="range" id="timeline-zoom" min="0.05" max="8.0" step="0.05" value="1.0" title="Continuous Logarithmic Zoom">
+            <button id="btn-zoom-in" class="btn-zoom" title="Zoom In (+)">+</button>
+            <button id="btn-zoom-fit" class="btn-zoom-fit" title="Zoom to Fit Project (Shift+Z)">
+              <span class="zoom-fit-icon">⊡</span> Fit <span class="hotkey-badge">⇧Z</span>
+            </button>
+            <span id="zoom-level-label" class="zoom-level">1.0x</span>
+          </div>
+
+          <span class="toolbar-divider"></span>
+
+          <div class="playhead-readout">
+            <span class="readout-label">Time:</span>
+            <span id="playhead-sec" class="readout-val">0.00s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Multitrack Canvas Layout -->
+      <div class="timeline-body-wrapper">
+        <!-- Track Headers Column -->
+        <div id="timeline-track-headers" class="timeline-track-headers">
+          <div class="timeline-header-spacer">Tracks</div>
+          <div id="track-header-list" class="track-header-list">
+            <!-- Rendered track headers with mute, solo, lock -->
+          </div>
+        </div>
+
+        <!-- Scrollable Lanes & Ruler Area -->
+        <div id="timeline-tracks-area" class="timeline-tracks-area">
+          <div id="timeline-ruler" class="timeline-ruler">
+            <!-- SMPTE timecode ticks and markers -->
+          </div>
+          <div id="timeline-playhead" class="timeline-playhead"></div>
+          <div id="timeline-snap-guide" class="timeline-snap-guide hidden"></div>
+          <div id="timeline-track-lanes" class="timeline-track-lanes">
+            <!-- Multitrack clip blocks with drag-trim handles and audio waveforms -->
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- CapCut Draft Import Modal -->
+  <div id="modal-capcut" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="capcut-icon-tag">⚡</span>
+          <h3>Import CapCut Desktop Draft</h3>
+        </div>
+        <button id="btn-close-capcut-modal" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Paste the JSON content of your macOS CapCut <code>draft_info.json</code> or <code>draft_content.json</code>
+          (located in <code>~/Movies/CapCut/User Data/Projects/com.lveditor.draft/</code>).
+          The engine will convert microsecond timings into canonical 120,000 ticks/sec with exact rational parity.
+        </p>
+
+        <div class="modal-quick-actions">
+          <button id="btn-load-sample-capcut" class="btn btn-sm btn-secondary">Load Sample CapCut Project</button>
+        </div>
+
+        <textarea id="capcut-json-input" class="modal-textarea" rows="12" placeholder='Paste CapCut draft_info.json or draft_content.json here...'></textarea>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-cancel-capcut" class="btn btn-secondary">Cancel</button>
+        <button id="btn-import-capcut-submit" class="btn btn-primary">Import to EME Timeline</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=4"></script>
+</body>
+</html>
