@@ -1,0 +1,72 @@
+{
+  "verified_on": "2026-10-29",
+  "scope": "Source import verification; does not establish live agent inference, partner integration, or product completeness",
+  "command": "node scripts/verify-remediation.cjs",
+  "node_version": "v26.8.1",
+  "runtime": {
+    "ffmpeg": "9.0.2",
+    "python": "3.15.0",
+    "pillow": "12.3.0"
+  },
+  "checks": {
+    "contract_hashes": {
+      "schemas": 26,
+      "fixtures": 22,
+      "passed": true
+    },
+    "portable_asset_directories": {
+      "count": 5,
+      "passed": true
+    }
+  },
+  "test_groups": [
+    {
+      "name": "approval-and-focused",
+      "tests": 75,
+      "passed": 75,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "locks-fencing-delivery",
+      "tests": 39,
+      "passed": 39,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "native-render-audio-mcp",
+      "tests": 51,
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "total": {
+    "tests": 165,
+    "passed": 165,
+    "failed": 0,
+    "skipped": 0
+  },
+  "import_parity": {
+    "files_checked": 1280,
+    "production_source_files": 215,
+    "intentional_changes": [
+      ".gitignore",
+      "README.md"
+    ],
+    "production_source_unchanged": true
+  },
+  "package_dry_run": {
+    "command": "npm pack --dry-run --ignore-scripts --json",
+    "files": 248,
+    "schemas": 26,
+    "entry_points": [
+      "eme",
+      "eme-mcp",
+      "eme-confirm"
+    ],
+    "passed": true
+  },
+  "credential_review": "Pattern matches inspected; only intentional dummy credentials in security tests. No live credentials or runtime approval stores included."
+}

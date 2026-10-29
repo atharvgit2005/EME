@@ -1,0 +1,46 @@
+{
+  "name": "editing-mechanics-engine",
+  "version": "0.1.0-rc1",
+  "description": "Deterministic editing, native rendering and verified delivery engine for Antigravity IDE over local stdio MCP",
+  "main": "src/creative/index.js",
+  "bin": {
+    "eme": "bin/eme.js",
+    "eme-mcp": "bin/eme-mcp.js",
+    "eme-confirm": "bin/eme-confirm.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "schema/",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "engines": {
+    "node": ">=20.20.1"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js tests/**/*.test.js",
+    "doctor": "node bin/eme.js doctor",
+    "capabilities": "node bin/eme.js capabilities",
+    "validate:schema": "node tools/validate-schema.js",
+    "package": "node scripts/package-release.js",
+    "release": "node scripts/release.js",
+    "serve": "node bin/eme.js editor",
+    "test:approval": "node scripts/verify-approval-phase1.cjs",
+    "test:native": "node scripts/verify-native-delivery.cjs",
+    "test:contracts": "node scripts/verify-contract-baseline.cjs",
+    "test:remediation": "node scripts/verify-remediation.cjs",
+    "test:portable": "node scripts/verify-portable-inputs.cjs"
+  },
+  "keywords": [
+    "video-editing",
+    "motion-graphics",
+    "rea",
+    "antigravity",
+    "ai-agent",
+    "mcp-server"
+  ],
+  "author": "Atharv Paharia",
+  "license": "MIT"
+}
