@@ -1,0 +1,118 @@
+{
+  "manifest_version": "2.0.0",
+  "milestone": "M6 Independent Blind Certification — Candidate 2",
+  "created_at": "2026-10-20T08:18:02.388Z",
+  "evaluation_candidate": {
+    "candidate_id": "candidate2",
+    "git_commit": "9ad6109b6695e3596b687dc6ea7a99d32f3723b2",
+    "build_identifier": "eme-v0.1.0-rc1-candidate2",
+    "package_version": "0.1.0-rc1",
+    "previous_candidate_id": "candidate1",
+    "previous_candidate_manifest": "src/decision-fabric/artifacts/m6-frozen-candidate-manifest.json"
+  },
+  "backend_provenance_and_model_claims": {
+    "claimed_fine_tuning": false,
+    "has_local_binary_checkpoint": false,
+    "checkpoint_sha256": null,
+    "checkpoint_path": null,
+    "architecture": "convaiinnovations/laya (ModernBERT-large, 421M params)",
+    "actual_runtime_backend": "In-process LayaDecisionAdapter with hardened DeterministicRouter heuristics and EMEPolicyGate",
+    "disclosure": "Per ChatGPT Control 3: The fixes in Candidate 2 are strictly deterministic routing and policy enforcement improvements. No changed neural model checkpoint exists; no fine-tuning or learned-weights improvement is claimed."
+  },
+  "remediation_delta_from_candidate1": {
+    "deterministic_router": [
+      "Added missing natural language keyword patterns across canonical single routes",
+      "Implemented explicit route precedence for SRT/caption export vs generic render_export",
+      "Preserved System 2 escalation on genuine multi-stage briefs"
+    ],
+    "eme_policy_gate": [
+      "Hardened prerequisite gates to enforce source_media_available: false, media_integrity_passed: false, and timeline_editable: false",
+      "Preserved non-executable needs_review sentinel isolation",
+      "Added explicit typed rejection reasons for invariant violations"
+    ],
+    "test_contracts": [
+      "Reconciled candidateLutId and candidateLook in evaluation harness",
+      "Aligned reject action contract verification"
+    ]
+  },
+  "cryptographic_hashes": {
+    "src/decision-fabric/adapter/laya-decision-adapter.js": {
+      "path": "src/decision-fabric/adapter/laya-decision-adapter.js",
+      "exists": true,
+      "sha256": "fe2d8b0f8f1a93e0e875c7c2f88f5700eca396884692d1d53360ba20b716eae0",
+      "sizeBytes": 7787
+    },
+    "src/decision-fabric/adapter/eme-policy-gate.js": {
+      "path": "src/decision-fabric/adapter/eme-policy-gate.js",
+      "exists": true,
+      "sha256": "e3c6804bad8677771f3c216f9a1bbb75d49a786cb89945d7cd5cf86ebb2c07c5",
+      "sizeBytes": 10628
+    },
+    "src/decision-fabric/baseline/deterministic-router.js": {
+      "path": "src/decision-fabric/baseline/deterministic-router.js",
+      "exists": true,
+      "sha256": "22cf6a2109ea753dcb55be7987e3265d472acb7d391270542020ceaafd00f056",
+      "sizeBytes": 12866
+    },
+    "src/decision-fabric/policy/routing-policy.json": {
+      "path": "src/decision-fabric/policy/routing-policy.json",
+      "exists": true,
+      "sha256": "e516cc4e4c144ec56f6ed875b5b4d56bea95b28a3fd1196911c7d61574416858",
+      "sizeBytes": 1223
+    },
+    "src/decision-fabric/schemas/eme-router/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-router/questions.json",
+      "exists": true,
+      "sha256": "5d446d8995bd3bd365aa79c5e5f26971803d49acb8f1118304ce4268b7dc9b40",
+      "sizeBytes": 1970
+    },
+    "src/decision-fabric/schemas/eme-color-mood/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-color-mood/questions.json",
+      "exists": true,
+      "sha256": "9948cae22a0c3eb926490116bb2062f34f0edf581448613203fef0d8a9278016",
+      "sizeBytes": 1030
+    },
+    "src/decision-fabric/schemas/eme-timeline-arbiter/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-timeline-arbiter/questions.json",
+      "exists": true,
+      "sha256": "9fc302c82a37038e1053f3d9346ed746800a590a12c3c11c8799135f02c92eb9",
+      "sizeBytes": 2102
+    },
+    "src/decision-fabric/data/m6-candidate1-regression-suite.json": {
+      "path": "src/decision-fabric/data/m6-candidate1-regression-suite.json",
+      "exists": true,
+      "sha256": "2d08948b72a46f7c256706f60e034bbf9ade6c99ae6322ab0c9ab948551a5439",
+      "sizeBytes": 35791
+    },
+    "src/decision-fabric/data/m6-candidate2-fresh-blind-battery.json": {
+      "path": "src/decision-fabric/data/m6-candidate2-fresh-blind-battery.json",
+      "exists": true,
+      "sha256": "8ff961bb32b2f7037cee668478110f98ce144a643ae6bb566c86032e4a0c9910",
+      "sizeBytes": 27942
+    },
+    "src/decision-fabric/data/complex_planning_holdout.jsonl": {
+      "path": "src/decision-fabric/data/complex_planning_holdout.jsonl",
+      "exists": true,
+      "sha256": "d50819d7fe4873ca188bd8733a7da1d888b9017fea87803f41148c5fa2e7b7f0",
+      "sizeBytes": 20097
+    },
+    "src/decision-fabric/artifacts/m6-frozen-candidate-manifest.json": {
+      "path": "src/decision-fabric/artifacts/m6-frozen-candidate-manifest.json",
+      "exists": true,
+      "sha256": "ebf0ece66c7c5bb01069185a171b97275c1f37ceae6b3bfbb68639a3e03488cd",
+      "sizeBytes": 8209
+    },
+    "src/decision-fabric/reports/m6-candidate1-diagnostic-report.json": {
+      "path": "src/decision-fabric/reports/m6-candidate1-diagnostic-report.json",
+      "exists": true,
+      "sha256": "0e622b9ceca2f6dba1285ffdd26c47b7ea8a6429669635804a2d90bba1b0f776",
+      "sizeBytes": 17476
+    }
+  },
+  "feature_flags": {
+    "CANARY_ADVISORY_MODE": false,
+    "AUTHORITATIVE_ROUTER": "deterministic",
+    "SHADOW_MODE_ENABLED": true,
+    "ALLOW_DIRECT_MUTATIONS": false
+  }
+}

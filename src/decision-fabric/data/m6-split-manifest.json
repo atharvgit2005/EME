@@ -1,0 +1,33 @@
+{
+  "manifest_version": "1.0.0",
+  "milestone": "M6 Blind Certification",
+  "timestamp": "2026-10-20T08:04:39.175Z",
+  "dataset_file": "src/decision-fabric/data/m6-blind-evaluation-battery.json",
+  "sha256": "2d08948b72a46f7c256706f60e034bbf9ade6c99ae6322ab0c9ab948551a5439",
+  "total_records": 146,
+  "holdout_benchmark_records": 64,
+  "categories": {
+    "single_subsystem_intent": 54,
+    "compound_system2": 16,
+    "ambiguous_underspecified": 8,
+    "color_mood_supported": 10,
+    "color_mood_unsupported": 8,
+    "negation_constraints": 12,
+    "conflicting_and_prerequisites": 8,
+    "quoted_dialogue": 6,
+    "unsupported_operations": 6,
+    "runtime_failures": 6,
+    "colloquial_briefs": 12
+  },
+  "zero_overlap_audit": {
+    "total_existing_prompts_checked": 591,
+    "train_overlap": 0,
+    "val_overlap": 0,
+    "test_overlap": 0,
+    "holdout_overlap": 0,
+    "cp1_overlap": 0,
+    "cp2_overlap": 0,
+    "cp3_overlap": 0,
+    "status": "AUDIT_PASSED_ZERO_LEAKAGE"
+  }
+}

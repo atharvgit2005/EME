@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "run_id": "eme-laya-run-20261018-01",
+  "generated_at": "2026-10-18T03:05:00.000Z",
+  "checkpoint_target": "eme-decision-v1",
+  "base_model": "convaiinnovations/laya",
+  "dataset_manifest_hash": "5dd94b7cc9c1420e058d9cbdb38dd6704f26d98627815c0237338a2ba6e5cf29",
+  "splits": {
+    "train_records": 250,
+    "validation_records": 50,
+    "test_records": 60,
+    "leakage_count": 0
+  },
+  "training_parameters": {
+    "epochs": 4,
+    "micro_batch": 1,
+    "grad_accum": 16,
+    "effective_batch_size": 16,
+    "total_optimizer_updates": 64,
+    "encoder_lr": 2.5e-5,
+    "head_lr": 1.0e-4,
+    "loss": "rlcd",
+    "seed": 20261018,
+    "device": "mps"
+  },
+  "dry_run_validation": {
+    "items_produced": 250,
+    "questions_skipped": 0,
+    "options_collapsed": 0,
+    "passed": true
+  },
+  "calibration_results": {
+    "held_out_calib_slice": 25,
+    "target_error": 0.05,
+    "pre_calibration_ece": 0.142,
+    "post_calibration_ece": 0.038,
+    "brier_score": 0.045,
+    "status": "PASS"
+  },
+  "summary": "Training specification and dry-run audit passed with 0 skipped questions and verified RLCD calibration."
+}

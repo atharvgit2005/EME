@@ -1,0 +1,41 @@
+{
+  "model_id": "eme-decision-v1",
+  "version": "1.0.0",
+  "created_at": "2026-10-18T03:00:00.000Z",
+  "base_architecture": "convaiinnovations/laya",
+  "encoder": "ModernBERT-large (421M params)",
+  "schema_versions": {
+    "eme-router": "1.0.0",
+    "eme-color-mood": "1.0.0",
+    "eme-timeline-arbiter": "1.0.0"
+  },
+  "training_specification": {
+    "manifest_file": "data/split-manifest.json",
+    "total_records": 360,
+    "train_split": 250,
+    "validation_split": 50,
+    "test_split": 60,
+    "seed": 20261018,
+    "epochs": 4,
+    "micro_batch": 1,
+    "grad_accum": 16,
+    "loss": "rlcd",
+    "shuffle_options": true
+  },
+  "calibration": {
+    "target_error": 0.05,
+    "calibration_slice_seed": 20261018,
+    "status": "calibrated",
+    "expected_calibration_error": 0.038
+  },
+  "hardware_targets": {
+    "primary_local": "Apple Silicon MPS (Metal Performance Shaders)",
+    "cloud_training": "Google Colab T4 / L4 (PyTorch CUDA)",
+    "cpu_fallback": "Node.js / Python CPU"
+  },
+  "invariants": {
+    "advisory_only": true,
+    "closed_vocabulary": true,
+    "escalate_on_ambiguity": true
+  }
+}

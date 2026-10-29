@@ -1,0 +1,26 @@
+{
+  "intent": {
+    "type": "choice",
+    "instructions": "Using the user's request and supplied EME project state, select exactly one canonical subsystem for the next action. Choose needs_planning when the request requires multiple dependent stages, cross-subsystem coordination, unresolved prerequisites, conflicting requirements, or clarification. Choose the narrowest appropriate route only when its scope is clear. Do not infer that any operation has already succeeded.",
+    "criteria": {
+      "transcription": "Speech recognition, transcript creation, or speaker identification.",
+      "subtitle_generation": "Caption generation, subtitle styling, or word-level subtitle timing.",
+      "audio_cleanup": "Noise reduction, equalization, loudness normalization, or audio ducking.",
+      "clip_selection": "Highlight discovery, B-roll selection, or rough-cut candidate selection.",
+      "motion_graphics": "Animated titles, lower thirds, callouts, or motion-graphic generation.",
+      "color_grading": "Selection or adjustment of color grade and approved LUT looks.",
+      "timeline_manipulation": "Explicit timeline operations such as split, trim, slip, slide, or ripple edit.",
+      "render_export": "Final render, export, or format conversion when required upstream work is resolved.",
+      "media_qa": "Inspection of supplied media-QA results or a request to validate media integrity.",
+      "needs_planning": "Ambiguous, unsupported, conflicting, or multi-stage work requiring deliberate planning."
+    }
+  },
+  "requires_multistep_plan": {
+    "type": "noul",
+    "instructions": "Does this request, given the supplied EME project state, require two or more dependent editing stages, unresolved prerequisites, or coordination across subsystems before a safe execution plan can be formed?",
+    "labels": {
+      "false": "No; the next action is sufficiently well-defined.",
+      "true": "Yes; deliberate multi-step planning is required."
+    }
+  }
+}

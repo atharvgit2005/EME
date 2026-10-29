@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "policy_name": "EME System 1 Decision Fabric Policy",
+  "invariants": {
+    "advisory_only": true,
+    "closed_vocabulary_strict": true,
+    "fallback_route": "needs_planning",
+    "allow_direct_mutations": false
+  },
+  "allowed_routes": [
+    "transcription",
+    "subtitle_generation",
+    "audio_cleanup",
+    "clip_selection",
+    "motion_graphics",
+    "color_grading",
+    "timeline_manipulation",
+    "render_export",
+    "media_qa",
+    "needs_planning"
+  ],
+  "certified_lut_ids": [
+    "bleach_bypass",
+    "warm_golden",
+    "teal_orange",
+    "cinematic_contrast",
+    "true_tone"
+  ],
+  "allowed_snapping_modes": [
+    "keep_current",
+    "frame",
+    "beat",
+    "clip_edge",
+    "none"
+  ],
+  "policy_sentinels": {
+    "needs_review": {
+      "action": "escalate_to_creative_review",
+      "disallowed_in_engines": ["lut_engine", "timeline_engine"]
+    },
+    "needs_planning": {
+      "action": "escalate_to_system_2_planning"
+    },
+    "keep_current": {
+      "action": "preserve_existing_state"
+    }
+  },
+  "thresholds": {
+    "min_confidence_route": 0.75,
+    "multistep_escalation_p_true": 0.50,
+    "gap_risk_review_p_true": 0.60,
+    "max_acceptable_latency_ms": 100
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "manifest_version": "1.0.0",
+  "milestone": "M6 Independent Blind Certification",
+  "created_at": "2026-10-20T08:02:47.944Z",
+  "evaluation_candidate": {
+    "git_commit": "9ad6109b6695e3596b687dc6ea7a99d32f3723b2",
+    "git_branch": "main",
+    "git_status_clean": false,
+    "build_identifier": "eme-v0.1.0-rc1-candidate",
+    "package_version": "0.1.0-rc1"
+  },
+  "model_checkpoint_identity": {
+    "claimed_fine_tuning": false,
+    "has_local_binary_checkpoint": false,
+    "checkpoint_sha256": null,
+    "checkpoint_path": null,
+    "architecture": "convaiinnovations/laya (ModernBERT-large, 421M params)",
+    "runtime_mode": "In-process LayaDecisionAdapter with authoritative DeterministicRouter heuristics and EMEPolicyGate",
+    "note": "Per Phase A requirements: Changes to adapter, policy, schemas, or vocabulary are strictly distinguished from model weights. No changed weight checkpoint exists locally; fine-tuning claim is false."
+  },
+  "cryptographic_hashes": {
+    "src/decision-fabric/adapter/laya-decision-adapter.js": {
+      "path": "src/decision-fabric/adapter/laya-decision-adapter.js",
+      "exists": true,
+      "sha256": "fe2d8b0f8f1a93e0e875c7c2f88f5700eca396884692d1d53360ba20b716eae0",
+      "sizeBytes": 7787
+    },
+    "src/decision-fabric/adapter/eme-policy-gate.js": {
+      "path": "src/decision-fabric/adapter/eme-policy-gate.js",
+      "exists": true,
+      "sha256": "d36241d66ead4ebc4dccbaff0b07d66a3c303e77f11cbc75848747ab880cd552",
+      "sizeBytes": 8595
+    },
+    "src/decision-fabric/policy/routing-policy.json": {
+      "path": "src/decision-fabric/policy/routing-policy.json",
+      "exists": true,
+      "sha256": "e516cc4e4c144ec56f6ed875b5b4d56bea95b28a3fd1196911c7d61574416858",
+      "sizeBytes": 1223
+    },
+    "src/decision-fabric/schemas/eme-router/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-router/questions.json",
+      "exists": true,
+      "sha256": "5d446d8995bd3bd365aa79c5e5f26971803d49acb8f1118304ce4268b7dc9b40",
+      "sizeBytes": 1970
+    },
+    "src/decision-fabric/schemas/eme-color-mood/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-color-mood/questions.json",
+      "exists": true,
+      "sha256": "9948cae22a0c3eb926490116bb2062f34f0edf581448613203fef0d8a9278016",
+      "sizeBytes": 1030
+    },
+    "src/decision-fabric/schemas/eme-timeline-arbiter/questions.json": {
+      "path": "src/decision-fabric/schemas/eme-timeline-arbiter/questions.json",
+      "exists": true,
+      "sha256": "9fc302c82a37038e1053f3d9346ed746800a590a12c3c11c8799135f02c92eb9",
+      "sizeBytes": 2102
+    },
+    "src/decision-fabric/baseline/deterministic-router.js": {
+      "path": "src/decision-fabric/baseline/deterministic-router.js",
+      "exists": true,
+      "sha256": "966d8224d1d14c768f49c1a8f37de0c1f4bedce1b5b6ea88e0ffaec49b16891e",
+      "sizeBytes": 11299
+    },
+    "src/decision-fabric/data/train.jsonl": {
+      "path": "src/decision-fabric/data/train.jsonl",
+      "exists": true,
+      "sha256": "64d1ab1989efccbc5062223d9129f7e8183f32ce72cda4baf04620ea3882b2aa",
+      "sizeBytes": 91393
+    },
+    "src/decision-fabric/data/validation.jsonl": {
+      "path": "src/decision-fabric/data/validation.jsonl",
+      "exists": true,
+      "sha256": "a86cfc1efa8cae32daeff35c740c5f37a70492c5f9e0fee497232d6786849940",
+      "sizeBytes": 19459
+    },
+    "src/decision-fabric/data/test.jsonl": {
+      "path": "src/decision-fabric/data/test.jsonl",
+      "exists": true,
+      "sha256": "ff9e99f9f03f82cda8c4c4573945f33cc849db51d9469427706eaa1230a6c393",
+      "sizeBytes": 22202
+    },
+    "src/decision-fabric/data/complex_planning_holdout.jsonl": {
+      "path": "src/decision-fabric/data/complex_planning_holdout.jsonl",
+      "exists": true,
+      "sha256": "d50819d7fe4873ca188bd8733a7da1d888b9017fea87803f41148c5fa2e7b7f0",
+      "sizeBytes": 20097
+    },
+    "src/decision-fabric/data/split-manifest.json": {
+      "path": "src/decision-fabric/data/split-manifest.json",
+      "exists": true,
+      "sha256": "a05bedac646d5b4bb73982a1629c697bb9308ac32da52a59bb11bc22054619dc",
+      "sizeBytes": 1651
+    },
+    "src/decision-fabric/validation/checkpoint-1-prompts.json": {
+      "path": "src/decision-fabric/validation/checkpoint-1-prompts.json",
+      "exists": true,
+      "sha256": "dfc14905888558a910d30b14fde5dc3d5d958a310badc072a345fe1bed889537",
+      "sizeBytes": 6817
+    },
+    "src/decision-fabric/validation/checkpoint-2-prompts.json": {
+      "path": "src/decision-fabric/validation/checkpoint-2-prompts.json",
+      "exists": true,
+      "sha256": "bda51f3640e19a60546582e90683d2b69fead14e72d88d63330efda82f20f83c",
+      "sizeBytes": 2557
+    },
+    "src/decision-fabric/validation/checkpoint-3-prompts.json": {
+      "path": "src/decision-fabric/validation/checkpoint-3-prompts.json",
+      "exists": true,
+      "sha256": "5c4043ce478af08ac404911a51c89c157393f62deff5303e8151554e735ecd7e",
+      "sizeBytes": 4489
+    },
+    "src/decision-fabric/validation/checkpoint-runner.js": {
+      "path": "src/decision-fabric/validation/checkpoint-runner.js",
+      "exists": true,
+      "sha256": "e290d420190b1fceb9af4c3c8248e97b3179538fa62c72bb75a3fc2f30ef2ac3",
+      "sizeBytes": 8891
+    },
+    "src/mcp/server.js": {
+      "path": "src/mcp/server.js",
+      "exists": true,
+      "sha256": "39ec3960dad1c3027cecd31427e78a4d0fd489d5c4ec01235fd0fbf4f8cfb5d5",
+      "sizeBytes": 12704
+    },
+    "src/cli/index.js": {
+      "path": "src/cli/index.js",
+      "exists": true,
+      "sha256": "4bed5fd2664dfab4242666408f246f871c7098606b8260f3e2297029964b49cd",
+      "sizeBytes": 51844
+    },
+    "package.json": {
+      "path": "package.json",
+      "exists": true,
+      "sha256": "428ce99f6bd797d3a3aa482b47f71bdb4e8af0b07f4ca6b67e4ac46aa299bfba",
+      "sizeBytes": 988
+    }
+  },
+  "model_and_runtime_environment": {
+    "node_version": "v20.20.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "v8_version": "11.3.244.8-node.34",
+    "feature_flags": {
+      "CANARY_ADVISORY_MODE": false,
+      "AUTHORITATIVE_ROUTER": "deterministic",
+      "SHADOW_MODE_ENABLED": true,
+      "ALLOW_DIRECT_MUTATIONS": false
+    }
+  },
+  "deterministic_baseline_configuration": {
+    "version": "1.0.0",
+    "allowed_routes": [
+      "transcription",
+      "subtitle_generation",
+      "audio_cleanup",
+      "clip_selection",
+      "motion_graphics",
+      "color_grading",
+      "timeline_manipulation",
+      "render_export",
+      "media_qa",
+      "needs_planning"
+    ],
+    "certified_luts": [
+      "bleach_bypass",
+      "warm_golden",
+      "teal_orange",
+      "cinematic_contrast",
+      "true_tone"
+    ],
+    "allowed_snapping_modes": [
+      "keep_current",
+      "frame",
+      "beat",
+      "clip_edge",
+      "none"
+    ],
+    "policy_sentinels": {
+      "needs_review": {
+        "action": "escalate_to_creative_review",
+        "disallowed_in_engines": [
+          "lut_engine",
+          "timeline_engine"
+        ]
+      },
+      "needs_planning": {
+        "action": "escalate_to_system_2_planning"
+      },
+      "keep_current": {
+        "action": "preserve_existing_state"
+      }
+    },
+    "thresholds": {
+      "min_confidence_route": 0.75,
+      "multistep_escalation_p_true": 0.5,
+      "gap_risk_review_p_true": 0.6,
+      "max_acceptable_latency_ms": 100
+    }
+  },
+  "exact_test_commands_and_existing_results": [
+    {
+      "command": "node --test tests/decision-fabric-contract.test.js tests/laya-decision-fabric.test.js tests/laya-eme-integration.test.js tests/laya-shadow-and-safety.test.js tests/laya-validation-checkpoints.test.js",
+      "tests_passed": 26,
+      "tests_failed": 0,
+      "status": "ALL_PASS"
+    },
+    {
+      "command": "node tests/laya-shadow-and-safety.test.js",
+      "description": "Planning holdout statistical safety (N=64 complex requests)",
+      "result": "64/64 escalated (100.0%, Clopper-Pearson 95% one-sided lower bound: 95.43%)",
+      "status": "PASS"
+    },
+    {
+      "command": "node src/decision-fabric/validation/checkpoint-runner.js",
+      "description": "Validation Checkpoints 1-4 Suite",
+      "result": "CP1 25/25, CP2 10/10, CP3 12/12, CP4 Clean",
+      "status": "CERTIFIED_PASSED"
+    }
+  ]
+}

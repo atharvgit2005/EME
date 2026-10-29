@@ -1,0 +1,494 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2026-10-18T04:21:16.028Z",
+  "mode": "shadow_diagnostic",
+  "inputFile": "/Users/atharvpaharia100/Desktop/Projects/editing-mechanics-engine/src/decision-fabric/data/test.jsonl",
+  "totalCases": 60,
+  "consensusRate": 1,
+  "agreementCount": 60,
+  "disagreementCount": 0,
+  "totalDurationMs": 5.59,
+  "averageLatencyMs": 0.093,
+  "comparisons": [
+    {
+      "requestSnippet": "Trigger render job for project revision 4 with deterministic timebase",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 3.307
+    },
+    {
+      "requestSnippet": "Render final project to 1080p MP4 with AAC stereo audio",
+      "baselineRoute": "render_export",
+      "layaRoute": "render_export",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.08
+    },
+    {
+      "requestSnippet": "EME assistant, urgently export deliverable video to prores 422 hq master format",
+      "baselineRoute": "render_export",
+      "layaRoute": "render_export",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.028
+    },
+    {
+      "requestSnippet": "EME assistant, urgently run final render pipeline and generate immutable output ",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.95
+    },
+    {
+      "requestSnippet": "Please encode timeline composition into web-optimized h.264 stream",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.022
+    },
+    {
+      "requestSnippet": "EME assistant, urgently produce final 9:16 vertical reel export with verified re",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.021
+    },
+    {
+      "requestSnippet": "Color grade the interior scene with warm tungsten mood and amber highlights",
+      "baselineRoute": "color_grading",
+      "layaRoute": "color_grading",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.023
+    },
+    {
+      "requestSnippet": "Apply warm golden 3D LUT look to the outdoor summer sequence",
+      "baselineRoute": "color_grading",
+      "layaRoute": "color_grading",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.017
+    },
+    {
+      "requestSnippet": "Please color grade the interior scene with warm tungsten mood and amber highligh",
+      "baselineRoute": "color_grading",
+      "layaRoute": "color_grading",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.085
+    },
+    {
+      "requestSnippet": "EME assistant, urgently match color grade of camera b to the primary reference s",
+      "baselineRoute": "color_grading",
+      "layaRoute": "color_grading",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.035
+    },
+    {
+      "requestSnippet": "Apply cinematic contrast curve with rich shadows and protected highlights",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.019
+    },
+    {
+      "requestSnippet": "EME assistant, urgently apply bleach bypass 3d lut preset to the urban street se",
+      "baselineRoute": "color_grading",
+      "layaRoute": "color_grading",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.019
+    },
+    {
+      "requestSnippet": "Please slide clip 2 between neighboring cuts to adjust edit pacing",
+      "baselineRoute": "timeline_manipulation",
+      "layaRoute": "timeline_manipulation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.018
+    },
+    {
+      "requestSnippet": "Please perform ripple delete on unwanted gap between clip 3 and clip 4",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.018
+    },
+    {
+      "requestSnippet": "Please slip clip 3 source range by 12 frames without shifting timeline boundary",
+      "baselineRoute": "timeline_manipulation",
+      "layaRoute": "timeline_manipulation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.016
+    },
+    {
+      "requestSnippet": "EME assistant, urgently slip clip 3 source range by 12 frames without shifting t",
+      "baselineRoute": "timeline_manipulation",
+      "layaRoute": "timeline_manipulation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.016
+    },
+    {
+      "requestSnippet": "Slip audio clip 4 forward by half a second to synchronize lip movement",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.071
+    },
+    {
+      "requestSnippet": "Please perform magnetic snap alignment of clip 5 to the nearest cut edge",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.023
+    },
+    {
+      "requestSnippet": "Create dynamic lower-third banner displaying speaker handle and role",
+      "baselineRoute": "motion_graphics",
+      "layaRoute": "motion_graphics",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.018
+    },
+    {
+      "requestSnippet": "Please add animated metric counter graphic displaying plus forty percent",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "EME assistant, urgently add animated metric counter graphic displaying plus fort",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "Please overlay glowing animated boundary graphic around the highlighted subject",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.067
+    },
+    {
+      "requestSnippet": "Insert chapter title motion card with clean fade-and-slide motion",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.021
+    },
+    {
+      "requestSnippet": "Please generate kinetic title sequence with bounce entrance animation",
+      "baselineRoute": "motion_graphics",
+      "layaRoute": "motion_graphics",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.017
+    },
+    {
+      "requestSnippet": "Produce synchronized subtitle blocks adhering to 32 chars per line",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.016
+    },
+    {
+      "requestSnippet": "Generate karaoke-style subtitle text for the vocal intro",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "EME assistant, urgently generate srt subtitles synchronized with the vocal track",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "Please add animated subtitle overlays with bold word-by-word reveal",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.012
+    },
+    {
+      "requestSnippet": "Please create timed captions for reel take 4 with safe margin bounds",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Format timed captions for a 9:16 vertical social video",
+      "baselineRoute": "subtitle_generation",
+      "layaRoute": "subtitle_generation",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.012
+    },
+    {
+      "requestSnippet": "Apply voice cleaner preset to remove outdoor wind noise",
+      "baselineRoute": "audio_cleanup",
+      "layaRoute": "audio_cleanup",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "EME assistant, urgently remove mouth clicks and sibilance from voice take 5",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Filter out microphone plosives and low-frequency rumble on track 8",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.012
+    },
+    {
+      "requestSnippet": "Please apply audio noise reduction and dialogue isolation to broll_drone.mov",
+      "baselineRoute": "audio_cleanup",
+      "layaRoute": "audio_cleanup",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.084
+    },
+    {
+      "requestSnippet": "Please eliminate electrical ground loop buzz from the live audio feed",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "Please smooth out uneven vocal levels with gentle transparent compression",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Please review raw takes, choose the best segments, add subtitles, balance loudne",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.018
+    },
+    {
+      "requestSnippet": "EME assistant, urgently take raw files, select highlights, remove pauses, apply ",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.017
+    },
+    {
+      "requestSnippet": "EME assistant, urgently transcribe the dialogue, clean the background noise, add",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Please create an end-to-end promotional reel from scratch using the raw camera f",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Please find the strongest clips, generate captions, apply teal and orange grade,",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "Make this video look professional and ready for broadcast with full audio and vi",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.015
+    },
+    {
+      "requestSnippet": "Please select candidate b-roll clips featuring product close-ups",
+      "baselineRoute": "clip_selection",
+      "layaRoute": "clip_selection",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Please find the strongest 15-second soundbites from the source footage",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "EME assistant, urgently select best visual takes where the speaker maintains eye",
+      "baselineRoute": "clip_selection",
+      "layaRoute": "clip_selection",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.016
+    },
+    {
+      "requestSnippet": "Please identify key reaction shots and b-roll inserts for the montage",
+      "baselineRoute": "clip_selection",
+      "layaRoute": "clip_selection",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Extract candidate action sequences from raw footage archive take_04.mov",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Select best visual takes where the speaker maintains eye contact",
+      "baselineRoute": "clip_selection",
+      "layaRoute": "clip_selection",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Verify audio-to-video synchronization across all cut transitions",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "EME assistant, urgently check inter-clip cut continuity and detect black frame f",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Check timeline for unintended cut gaps or dropped frame anomalies",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.012
+    },
+    {
+      "requestSnippet": "Audit loudness compliance to ensure true-peak does not exceed -1 dBTP",
+      "baselineRoute": "audio_cleanup",
+      "layaRoute": "audio_cleanup",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Run closed-loop QA audit to ensure zero missing assets or broken paths",
+      "baselineRoute": "media_qa",
+      "layaRoute": "media_qa",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "EME assistant, urgently perform automated qa check across all 10 deterministic c",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Please run speech recognition on broll_drone.mov and extract speaker labels",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "EME assistant, urgently transcribe interview dialogue and output speaker turns",
+      "baselineRoute": "transcription",
+      "layaRoute": "transcription",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "Please transcribe interview dialogue and output speaker turns",
+      "baselineRoute": "transcription",
+      "layaRoute": "transcription",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.014
+    },
+    {
+      "requestSnippet": "EME assistant, urgently transcribe audio track from the keynote presentation",
+      "baselineRoute": "transcription",
+      "layaRoute": "transcription",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.013
+    },
+    {
+      "requestSnippet": "Speech to text transcription for raw camera audio feed 4",
+      "baselineRoute": "transcription",
+      "layaRoute": "transcription",
+      "consensus": true,
+      "layaAction": "route_to_subsystem",
+      "latencyMs": 0.012
+    },
+    {
+      "requestSnippet": "Perform speaker diarization and transcription for the panel discussion",
+      "baselineRoute": "needs_planning",
+      "layaRoute": "needs_planning",
+      "consensus": true,
+      "layaAction": "escalate_to_system_2",
+      "latencyMs": 0.012
+    }
+  ]
+}

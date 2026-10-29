@@ -1,0 +1,202 @@
+[
+  {
+    "id": "cp1_01",
+    "prompt": "Clean this video up.",
+    "expected_route": "needs_planning",
+    "category": "ambiguous_underspecified",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Underspecified cleanup intent; audio vs visual vs pacing ambiguous"
+  },
+  {
+    "id": "cp1_02",
+    "prompt": "Remove the steady hum and hiss; leave the picture unchanged.",
+    "expected_route": "audio_cleanup",
+    "category": "single_with_constraint",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Audio cleanup with negative constraint on visual changes"
+  },
+  {
+    "id": "cp1_03",
+    "prompt": "Make the cuts snappier by trimming pauses; preserve clip order.",
+    "expected_route": "timeline_manipulation",
+    "category": "single_with_constraint",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Pacing trimming with clip ordering invariant"
+  },
+  {
+    "id": "cp1_04",
+    "prompt": "Find the five strongest takes from these 30 recordings.",
+    "expected_route": "clip_selection",
+    "category": "single",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Candidate selection / highlight takes extraction"
+  },
+  {
+    "id": "cp1_05",
+    "prompt": "Put the exact spoken dialogue into synchronized on-screen captions.",
+    "expected_route": "subtitle_generation",
+    "category": "single",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Dialogue speech to timed on-screen captions"
+  },
+  {
+    "id": "cp1_06",
+    "prompt": "Animate the words ‘DROP 01’ in kinetic typography; no dialogue captions.",
+    "expected_route": "motion_graphics",
+    "category": "single_with_constraint",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Kinetic title typography, explicitly not speech subtitles"
+  },
+  {
+    "id": "cp1_07",
+    "prompt": "Generate a verbatim transcript only, with no on-screen text.",
+    "expected_route": "transcription",
+    "category": "single_with_constraint",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Pure transcript generation with negative constraint on subtitles/titles"
+  },
+  {
+    "id": "cp1_08",
+    "prompt": "Adjust white balance and contrast; do not touch audio.",
+    "expected_route": "color_grading",
+    "category": "single_with_constraint",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Color correction with explicit audio exclusion"
+  },
+  {
+    "id": "cp1_09",
+    "prompt": "Create captions, animate an intro, and export a vertical version.",
+    "expected_route": "needs_planning",
+    "category": "compound_multistep",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Compound multi-subsystem request (subtitles + motion graphics + render export)"
+  },
+  {
+    "id": "cp1_10",
+    "prompt": "Make it more premium, engaging, and cinematic.",
+    "expected_route": "needs_planning",
+    "category": "ambiguous_underspecified",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Subjective multi-faceted request requiring human clarification / decomposition"
+  },
+  {
+    "id": "cp1_11",
+    "prompt": "Remove pauses",
+    "expected_route": "timeline_manipulation",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair A: timeline pacing cleanup"
+  },
+  {
+    "id": "cp1_12",
+    "prompt": "Select the strongest takes",
+    "expected_route": "clip_selection",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair B: clip candidate curation"
+  },
+  {
+    "id": "cp1_13",
+    "prompt": "Transcribe the speech",
+    "expected_route": "transcription",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair C: speech to text only"
+  },
+  {
+    "id": "cp1_14",
+    "prompt": "Show synchronized subtitles",
+    "expected_route": "subtitle_generation",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair D: timed on-screen text"
+  },
+  {
+    "id": "cp1_15",
+    "prompt": "Add a title",
+    "expected_route": "motion_graphics",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair E: title graphic"
+  },
+  {
+    "id": "cp1_16",
+    "prompt": "Animate a title",
+    "expected_route": "motion_graphics",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair F: animated motion graphic title"
+  },
+  {
+    "id": "cp1_17",
+    "prompt": "Fix the audio",
+    "expected_route": "audio_cleanup",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair G: audio cleaning intent"
+  },
+  {
+    "id": "cp1_18",
+    "prompt": "Fix the picture",
+    "expected_route": "color_grading",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair H: image/picture color fix"
+  },
+  {
+    "id": "cp1_19",
+    "prompt": "Make the cuts faster",
+    "expected_route": "timeline_manipulation",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair I: trim pacing and edit duration"
+  },
+  {
+    "id": "cp1_20",
+    "prompt": "Make the clip playback faster",
+    "expected_route": "timeline_manipulation",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair J: clip speed retiming on timeline"
+  },
+  {
+    "id": "cp1_21",
+    "prompt": "Export the final video",
+    "expected_route": "render_export",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair K: direct render/export job"
+  },
+  {
+    "id": "cp1_22",
+    "prompt": "Prepare the project for export",
+    "expected_route": "render_export",
+    "category": "contrast_pair",
+    "is_compound_or_ambiguous": false,
+    "rationale": "Contrast pair L: export preparation"
+  },
+  {
+    "id": "cp1_23",
+    "prompt": "Transcribe the audio, clean the background hum, and add lower thirds.",
+    "expected_route": "needs_planning",
+    "category": "compound_multistep",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Multi-stage compound task requiring execution plan"
+  },
+  {
+    "id": "cp1_24",
+    "prompt": "Cut out silent gaps, grade with teal and orange, then render to MP4.",
+    "expected_route": "needs_planning",
+    "category": "compound_multistep",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Multi-stage compound task requiring execution plan"
+  },
+  {
+    "id": "cp1_25",
+    "prompt": "Select the best clips from camera A, sync audio with lav mic, and build trailer.",
+    "expected_route": "needs_planning",
+    "category": "compound_multistep",
+    "is_compound_or_ambiguous": true,
+    "rationale": "Multi-stage compound task requiring execution plan"
+  }
+]

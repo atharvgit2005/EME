@@ -1,0 +1,584 @@
+{
+  "milestone": "EME × Laya — M6 Independent Blind Certification",
+  "certification_timestamp": "2026-10-20T08:06:12.143Z",
+  "evaluation_candidate": {
+    "git_commit": "9ad6109b6695e3596b687dc6ea7a99d32f3723b2",
+    "build_identifier": "eme-v0.1.0-rc1-candidate",
+    "manifest_file": "src/decision-fabric/artifacts/m6-frozen-candidate-manifest.json"
+  },
+  "recommendation": {
+    "decision": "FAIL",
+    "status": "CERTIFICATION_BLOCKED",
+    "summary": "One or more acceptance gates failed. Check remediation table."
+  },
+  "gates": {
+    "gate1_semantic_routing": {
+      "description": "Semantic routing: >= 90% accuracy and >= 0.90 macro-F1 on single-subsystem intents",
+      "metrics": {
+        "accuracy": 0.7222,
+        "macroF1": 0.829
+      },
+      "target": "Accuracy >= 0.90, Macro-F1 >= 0.90",
+      "passed": false
+    },
+    "gate2_planning_escalation": {
+      "description": "Planning escalation: Preserve 64-case holdout (lower bound >= 95%) and achieve >= 95% recall on new positive set",
+      "metrics": {
+        "newPositiveSetRecall": 0.9706,
+        "holdout64Recall": 1,
+        "holdout64OneSidedLowerBound": 0.9543
+      },
+      "target": "New positive recall >= 0.95, Holdout lower bound >= 0.95",
+      "passed": true
+    },
+    "gate3_color_mapping": {
+      "description": "Color mapping: >= 90% exact mapping on supported examples",
+      "metrics": {
+        "supportedAccuracy": 0
+      },
+      "target": ">= 0.90",
+      "passed": false
+    },
+    "gate4_unsupported_effects": {
+      "description": "Unsupported visual effects: 100% review recall; needs_review sentinel NEVER leaks into executable LUT ID",
+      "metrics": {
+        "unsupportedReviewRecall": 0,
+        "sentinelLeaks": 0
+      },
+      "target": "Review recall == 1.0, Sentinel leaks == 0",
+      "passed": false
+    },
+    "gate5_constraints_and_prerequisites": {
+      "description": "Constraints and prerequisites: 0 forbidden actions, 0 constraint leaks, 0 prerequisite bypasses",
+      "metrics": {
+        "forbiddenActionLeaks": 0,
+        "constraintLeaks": 0,
+        "prerequisiteBypasses": 2
+      },
+      "target": "All 0 (Hard Safety Invariant)",
+      "passed": false
+    },
+    "gate6_runtime_failures": {
+      "description": "Runtime failures: Timeouts, malformed predictions, unknown labels, missing artifacts fail closed or use safe fallback",
+      "metrics": {
+        "safeFallbackRate": 0.5
+      },
+      "target": "1.000 (100%)",
+      "passed": false
+    },
+    "gate7_shadow_consistency": {
+      "description": "Shadow consistency: Laya cannot alter project state, timeline state, LUT state, or rendered output",
+      "metrics": {
+        "projectStateUnmutated": true,
+        "fixtureBeforeSha256": "e8c55be7b5e90020b72e3835bc8c04cb2f9bdd7503411dd4707c4d4a8d4ae4a3",
+        "fixtureAfterSha256": "e8c55be7b5e90020b72e3835bc8c04cb2f9bdd7503411dd4707c4d4a8d4ae4a3"
+      },
+      "target": "Bit-for-bit identical project state before and after",
+      "passed": true
+    }
+  },
+  "perClassMetrics": {
+    "transcription": {
+      "support": 6,
+      "tp": 4,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.6667,
+      "f1": 0.8
+    },
+    "subtitle_generation": {
+      "support": 6,
+      "tp": 4,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.6667,
+      "f1": 0.8
+    },
+    "audio_cleanup": {
+      "support": 6,
+      "tp": 5,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.8333,
+      "f1": 0.9091
+    },
+    "clip_selection": {
+      "support": 6,
+      "tp": 4,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.6667,
+      "f1": 0.8
+    },
+    "motion_graphics": {
+      "support": 6,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    "color_grading": {
+      "support": 6,
+      "tp": 5,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.8333,
+      "f1": 0.9091
+    },
+    "timeline_manipulation": {
+      "support": 6,
+      "tp": 5,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.8333,
+      "f1": 0.9091
+    },
+    "render_export": {
+      "support": 6,
+      "tp": 3,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6667
+    },
+    "media_qa": {
+      "support": 6,
+      "tp": 3,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6667
+    }
+  },
+  "latencyBreakdown": {
+    "modelInferenceAvgMs": 0.065,
+    "modelInferenceP95Ms": 0.08,
+    "adapterOverheadAvgMs": 0.059,
+    "adapterOverheadP95Ms": 0.038,
+    "mcpTransportAvgMs": 0.126,
+    "mcpTransportP95Ms": 0.233,
+    "totalEndToEndP95Ms": 0.352
+  },
+  "summaryCounts": {
+    "blindBatteryTotal": 146,
+    "planningHoldoutTotal": 64,
+    "grandTotalEvaluated": 210,
+    "singleSubsystemAccuracy": "72.22%",
+    "macroF1": 0.829,
+    "colloquialAccuracy": "66.67%",
+    "positivePlanningRecall": "97.06%",
+    "planningHoldoutLowerBound": "95.43%"
+  },
+  "detailedEvaluations": [
+    {
+      "id": "blind_001",
+      "category": "single_subsystem",
+      "prompt": "Extract the dialogue from speaker track 1 into a timestamped script",
+      "expected": "transcription",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_002",
+      "category": "single_subsystem",
+      "prompt": "Run automated speech to text recognition on the host audio",
+      "expected": "transcription",
+      "predicted": "transcription",
+      "pass": true
+    },
+    {
+      "id": "blind_003",
+      "category": "single_subsystem",
+      "prompt": "Identify speaker turns and transcribe the conversation",
+      "expected": "transcription",
+      "predicted": "transcription",
+      "pass": true
+    },
+    {
+      "id": "blind_004",
+      "category": "single_subsystem",
+      "prompt": "Generate a verbatim transcript of the entire interview track",
+      "expected": "transcription",
+      "predicted": "transcription",
+      "pass": true
+    },
+    {
+      "id": "blind_005",
+      "category": "single_subsystem",
+      "prompt": "Convert the dialogue audio into written text format",
+      "expected": "transcription",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_006",
+      "category": "single_subsystem",
+      "prompt": "Transcribe the spoken narration in this audio file",
+      "expected": "transcription",
+      "predicted": "transcription",
+      "pass": true
+    },
+    {
+      "id": "blind_007",
+      "category": "single_subsystem",
+      "prompt": "Generate synchronized open captions timed to the voice track",
+      "expected": "subtitle_generation",
+      "predicted": "subtitle_generation",
+      "pass": true
+    },
+    {
+      "id": "blind_008",
+      "category": "single_subsystem",
+      "prompt": "Export an SRT subtitle file with word level timing",
+      "expected": "subtitle_generation",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_009",
+      "category": "single_subsystem",
+      "prompt": "Add on screen captions burned into the video",
+      "expected": "subtitle_generation",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_010",
+      "category": "single_subsystem",
+      "prompt": "Create styled subtitle cards along the bottom third of the frame",
+      "expected": "subtitle_generation",
+      "predicted": "subtitle_generation",
+      "pass": true
+    },
+    {
+      "id": "blind_011",
+      "category": "single_subsystem",
+      "prompt": "Generate word level captions aligned with speech cadence",
+      "expected": "subtitle_generation",
+      "predicted": "subtitle_generation",
+      "pass": true
+    },
+    {
+      "id": "blind_012",
+      "category": "single_subsystem",
+      "prompt": "Produce synchronized subtitles for this vertical social post",
+      "expected": "subtitle_generation",
+      "predicted": "subtitle_generation",
+      "pass": true
+    },
+    {
+      "id": "blind_013",
+      "category": "single_subsystem",
+      "prompt": "Filter out the electrical buzz and steady microphone hum",
+      "expected": "audio_cleanup",
+      "predicted": "audio_cleanup",
+      "pass": true
+    },
+    {
+      "id": "blind_014",
+      "category": "single_subsystem",
+      "prompt": "Equalize the vocals and apply loudness normalization across the timeline",
+      "expected": "audio_cleanup",
+      "predicted": "audio_cleanup",
+      "pass": true
+    },
+    {
+      "id": "blind_015",
+      "category": "single_subsystem",
+      "prompt": "Denoise the background traffic rumble on the vocal track",
+      "expected": "audio_cleanup",
+      "predicted": "audio_cleanup",
+      "pass": true
+    },
+    {
+      "id": "blind_016",
+      "category": "single_subsystem",
+      "prompt": "Apply audio ducking so music drops when the narrator speaks",
+      "expected": "audio_cleanup",
+      "predicted": "audio_cleanup",
+      "pass": true
+    },
+    {
+      "id": "blind_017",
+      "category": "single_subsystem",
+      "prompt": "Remove the high frequency hiss from this condenser mic take",
+      "expected": "audio_cleanup",
+      "predicted": "audio_cleanup",
+      "pass": true
+    },
+    {
+      "id": "blind_018",
+      "category": "single_subsystem",
+      "prompt": "Clean up the noisy outdoor recording and level the speech volume",
+      "expected": "audio_cleanup",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_019",
+      "category": "single_subsystem",
+      "prompt": "Select the top three candidate takes from yesterday shoot",
+      "expected": "clip_selection",
+      "predicted": "clip_selection",
+      "pass": true
+    },
+    {
+      "id": "blind_020",
+      "category": "single_subsystem",
+      "prompt": "Discover highlights and pull the most energetic soundbites",
+      "expected": "clip_selection",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_021",
+      "category": "single_subsystem",
+      "prompt": "Pick the best candidate clips for our B roll sequence",
+      "expected": "clip_selection",
+      "predicted": "clip_selection",
+      "pass": true
+    },
+    {
+      "id": "blind_022",
+      "category": "single_subsystem",
+      "prompt": "Find highlight moments where the presenter demonstrates the product",
+      "expected": "clip_selection",
+      "predicted": "clip_selection",
+      "pass": true
+    },
+    {
+      "id": "blind_023",
+      "category": "single_subsystem",
+      "prompt": "Assemble a rough cut candidate selection from the raw footage",
+      "expected": "clip_selection",
+      "predicted": "clip_selection",
+      "pass": true
+    },
+    {
+      "id": "blind_024",
+      "category": "single_subsystem",
+      "prompt": "Scan through the footage to isolate the best candidate soundbites",
+      "expected": "clip_selection",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_025",
+      "category": "single_subsystem",
+      "prompt": "Animate a minimalist lower third graphic displaying the speaker name",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_026",
+      "category": "single_subsystem",
+      "prompt": "Insert an animated title card sequence at the start of the video",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_027",
+      "category": "single_subsystem",
+      "prompt": "Render a kinetic typography callout highlighting key statistics",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_028",
+      "category": "single_subsystem",
+      "prompt": "Add a graphic lower third bar with our brand logo and tagline",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_029",
+      "category": "single_subsystem",
+      "prompt": "Build an animated intro title sequence using our typography kit",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_030",
+      "category": "single_subsystem",
+      "prompt": "Overlay an animated callout badge pointing to the user interface button",
+      "expected": "motion_graphics",
+      "predicted": "motion_graphics",
+      "pass": true
+    },
+    {
+      "id": "blind_031",
+      "category": "single_subsystem",
+      "prompt": "Apply a teal and orange grade across all primary camera clips",
+      "expected": "color_grading",
+      "predicted": "color_grading",
+      "pass": true
+    },
+    {
+      "id": "blind_032",
+      "category": "single_subsystem",
+      "prompt": "Correct the exposure and adjust the white balance on the sunset shot",
+      "expected": "color_grading",
+      "predicted": "color_grading",
+      "pass": true
+    },
+    {
+      "id": "blind_033",
+      "category": "single_subsystem",
+      "prompt": "Load the warm golden 3D LUT onto track 1",
+      "expected": "color_grading",
+      "predicted": "color_grading",
+      "pass": true
+    },
+    {
+      "id": "blind_034",
+      "category": "single_subsystem",
+      "prompt": "Grade the footage with our certified bleach bypass look",
+      "expected": "color_grading",
+      "predicted": "color_grading",
+      "pass": true
+    },
+    {
+      "id": "blind_035",
+      "category": "single_subsystem",
+      "prompt": "Balance the contrast curve and neutral true tone calibration",
+      "expected": "color_grading",
+      "predicted": "color_grading",
+      "pass": true
+    },
+    {
+      "id": "blind_036",
+      "category": "single_subsystem",
+      "prompt": "Apply cinematic contrast grading to deepen shadow levels",
+      "expected": "color_grading",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_037",
+      "category": "single_subsystem",
+      "prompt": "Ripple trim the first four seconds from clip 12",
+      "expected": "timeline_manipulation",
+      "predicted": "timeline_manipulation",
+      "pass": true
+    },
+    {
+      "id": "blind_038",
+      "category": "single_subsystem",
+      "prompt": "Split the selected clip right at playhead tick 48000",
+      "expected": "timeline_manipulation",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_039",
+      "category": "single_subsystem",
+      "prompt": "Tighten the pauses between sentences across track 1",
+      "expected": "timeline_manipulation",
+      "predicted": "timeline_manipulation",
+      "pass": true
+    },
+    {
+      "id": "blind_040",
+      "category": "single_subsystem",
+      "prompt": "Slip clip 4 by twelve frames to align the visual action",
+      "expected": "timeline_manipulation",
+      "predicted": "timeline_manipulation",
+      "pass": true
+    },
+    {
+      "id": "blind_041",
+      "category": "single_subsystem",
+      "prompt": "Make the cuts faster by trimming pauses throughout the sequence",
+      "expected": "timeline_manipulation",
+      "predicted": "timeline_manipulation",
+      "pass": true
+    },
+    {
+      "id": "blind_042",
+      "category": "single_subsystem",
+      "prompt": "Cut out silent gaps between speaker turns on the main timeline",
+      "expected": "timeline_manipulation",
+      "predicted": "timeline_manipulation",
+      "pass": true
+    },
+    {
+      "id": "blind_043",
+      "category": "single_subsystem",
+      "prompt": "Encode the current sequence to a final 1080p MP4 file",
+      "expected": "render_export",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_044",
+      "category": "single_subsystem",
+      "prompt": "Export the project deliverable with AAC audio packaging",
+      "expected": "render_export",
+      "predicted": "render_export",
+      "pass": true
+    },
+    {
+      "id": "blind_045",
+      "category": "single_subsystem",
+      "prompt": "Prepare and render the final video master for delivery",
+      "expected": "render_export",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_046",
+      "category": "single_subsystem",
+      "prompt": "Render the timeline into our standard H264 MP4 format",
+      "expected": "render_export",
+      "predicted": "needs_planning",
+      "pass": false
+    },
+    {
+      "id": "blind_047",
+      "category": "single_subsystem",
+      "prompt": "Export the deliverable package to disk storage",
+      "expected": "render_export",
+      "predicted": "render_export",
+      "pass": true
+    },
+    {
+      "id": "blind_048",
+      "category": "single_subsystem",
+      "prompt": "Trigger the final export run of this finished timeline",
+      "expected": "render_export",
+      "predicted": "render_export",
+      "pass": true
+    },
+    {
+      "id": "blind_049",
+      "category": "single_subsystem",
+      "prompt": "Execute an automated blank frame check across all transition boundaries",
+      "expected": "media_qa",
+      "predicted": "media_qa",
+      "pass": true
+    },
+    {
+      "id": "blind_050",
+      "category": "single_subsystem",
+      "prompt": "Run an audio sync check between the external wav and scratch video",
+      "expected": "media_qa",
+      "predicted": "media_qa",
+      "pass": true
+    }
+  ]
+}

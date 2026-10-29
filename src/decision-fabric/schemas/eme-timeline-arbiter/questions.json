@@ -1,0 +1,33 @@
+{
+  "gap_review_risk": {
+    "type": "noul",
+    "instructions": "Using the supplied deterministic timeline-audit findings, edit intent, and project context, judge whether a detected gap warrants review because it may violate intended continuity. Do not calculate frame boundaries yourself. A gap explicitly permitted by the user is not automatically a defect. If the audit evidence or intended continuity is unclear, return a conservative risk estimate and let the EME policy gate require review.",
+    "labels": {
+      "false": "The evidence does not indicate a likely unintended continuity break.",
+      "true": "The supplied evidence suggests a potential unintended continuity break."
+    }
+  },
+  "pacing_energy": {
+    "type": "score",
+    "instructions": "Estimate the intended editing energy from the user's creative brief and supplied context. Score the requested target style, not whether the current timeline has achieved it. Higher levels mean faster, more energetic pacing.",
+    "criteria": [
+      "Very calm, spacious, and deliberately slow",
+      "Calm, restrained, with room to breathe",
+      "Balanced pacing with varied shot lengths",
+      "Energetic pacing with frequent purposeful changes",
+      "Very rapid, intense, or frenetic pacing"
+    ]
+  },
+  "snapping_mode": {
+    "type": "choice",
+    "instructions": "Choose a supported timeline snapping policy only when justified by the user's request and current project settings. If the user has not requested a change, preserve the current configuration. Use needs_review for conflicting or unclear intent. These labels must match the actual Phase 18 policy adapter.",
+    "criteria": {
+      "keep_current": "Preserve the current snapping configuration.",
+      "frame": "Align edits to valid frame boundaries.",
+      "beat": "Align suitable edits to verified musical beat markers.",
+      "clip_edge": "Snap to compatible clip boundaries.",
+      "none": "Disable snapping where the engine permits it.",
+      "needs_review": "The intended snapping behavior is unclear or conflicts with project constraints."
+    }
+  }
+}

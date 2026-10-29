@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-10-18T04:53:17.024Z",
+  "checkpoint1": {
+    "total": 25,
+    "correct": 10,
+    "accuracy": 0.4,
+    "macroF1": 0.33888888888888885,
+    "compoundEscalationRecall": 0.8333333333333334,
+    "compoundTargetPassed": false,
+    "clearOverEscalationRate": 0.6842105263157895,
+    "clearTargetPassed": false,
+    "perClass": {
+      "needs_planning": {
+        "precision": 0.2777777777777778,
+        "recall": 0.8333333333333334,
+        "f1": 0.4166666666666667,
+        "support": 6
+      },
+      "audio_cleanup": {
+        "precision": 1,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 2
+      },
+      "timeline_manipulation": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 4
+      },
+      "clip_selection": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 2
+      },
+      "subtitle_generation": {
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "f1": 0.8,
+        "support": 2
+      },
+      "motion_graphics": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 3
+      },
+      "transcription": {
+        "precision": 1,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 2
+      },
+      "color_grading": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "support": 2
+      },
+      "render_export": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 2
+      }
+    },
+    "confusion": {
+      "needs_planning": {
+        "needs_planning": 5,
+        "color_grading": 1
+      },
+      "audio_cleanup": {
+        "audio_cleanup": 1,
+        "needs_planning": 1
+      },
+      "timeline_manipulation": {
+        "needs_planning": 4
+      },
+      "clip_selection": {
+        "needs_planning": 2
+      },
+      "subtitle_generation": {
+        "subtitle_generation": 2
+      },
+      "motion_graphics": {
+        "subtitle_generation": 1,
+        "needs_planning": 2
+      },
+      "transcription": {
+        "needs_planning": 1,
+        "transcription": 1
+      },
+      "color_grading": {
+        "color_grading": 1,
+        "needs_planning": 1
+      },
+      "render_export": {
+        "needs_planning": 2
+      }
+    }
+  },
+  "checkpoint2": {
+    "total": 10,
+    "supportedAccuracy": 0.6666666666666666,
+    "supportedTargetPassed": false,
+    "reviewRecall": 0.75,
+    "sentinelViolations": 0,
+    "sentinelTargetPassed": true
+  },
+  "checkpoint3": {
+    "total": 12,
+    "passed": 10,
+    "forbiddenActionLeaks": 0,
+    "constraintLeaks": 2,
+    "prerequisiteBypasses": 0,
+    "hardSafetyGatePassed": false
+  }
+}

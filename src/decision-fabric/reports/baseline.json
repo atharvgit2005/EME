@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "model": "deterministic_baseline_v1",
+  "evaluated_at": "2026-10-18T02:57:07.036Z",
+  "dataset": "validation.jsonl",
+  "total_samples": 50,
+  "accuracy": 0.58,
+  "macro_f1": 0.6299,
+  "needs_planning_safety_recall": 1,
+  "latency_ms": {
+    "p50": 0.006,
+    "p95": 0.318,
+    "mean": 0.057
+  },
+  "per_class": {
+    "render_export": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.6,
+      "f1": 0.75
+    },
+    "color_grading": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.8889
+    },
+    "timeline_manipulation": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.8889
+    },
+    "motion_graphics": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.2,
+      "f1": 0.3333
+    },
+    "subtitle_generation": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.8,
+      "f1": 0.8889
+    },
+    "audio_cleanup": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.6,
+      "f1": 0.75
+    },
+    "needs_planning": {
+      "count": 5,
+      "precision": 0.1923,
+      "recall": 1,
+      "f1": 0.3226
+    },
+    "clip_selection": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.4,
+      "f1": 0.5714
+    },
+    "media_qa": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.2,
+      "f1": 0.3333
+    },
+    "transcription": {
+      "count": 5,
+      "precision": 1,
+      "recall": 0.4,
+      "f1": 0.5714
+    }
+  }
+}

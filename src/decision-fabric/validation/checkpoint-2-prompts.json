@@ -1,0 +1,72 @@
+[
+  {
+    "id": "cp2_01",
+    "prompt": "Warm golden-hour warmth, natural skin, and amber highlights; no specific film emulation.",
+    "expected_choice": "warm_golden",
+    "supported": true,
+    "rationale": "Directly maps to warm_golden LUT"
+  },
+  {
+    "id": "cp2_02",
+    "prompt": "Cyan shadows, warm orange highlights, punchy action-film contrast.",
+    "expected_choice": "teal_orange",
+    "supported": true,
+    "rationale": "Directly maps to teal_orange LUT"
+  },
+  {
+    "id": "cp2_03",
+    "prompt": "Desaturated, gritty street footage with a bleachy, high-contrast feel.",
+    "expected_choice": "bleach_bypass",
+    "supported": true,
+    "rationale": "Directly maps to bleach_bypass LUT"
+  },
+  {
+    "id": "cp2_04",
+    "prompt": "Neutral commercial product footage; keep whites and skin tones accurate.",
+    "expected_choice": "true_tone",
+    "supported": true,
+    "rationale": "Directly maps to true_tone LUT"
+  },
+  {
+    "id": "cp2_05",
+    "prompt": "Deep blacks and crisp cinematic contrast, without a strong color cast.",
+    "expected_choice": "cinematic_contrast",
+    "supported": true,
+    "rationale": "Directly maps to cinematic_contrast LUT"
+  },
+  {
+    "id": "cp2_06",
+    "prompt": "A warm 70s Kodak film-stock look with grain, halation, and gate weave.",
+    "expected_choice": "needs_review",
+    "supported": false,
+    "rationale": "Requires physical film effects (grain, halation, gate weave) outside 5 certified LUTs"
+  },
+  {
+    "id": "cp2_07",
+    "prompt": "Cyberpunk grade with teal shadows and orange highlights, but no glow or animated effects.",
+    "expected_choice": "teal_orange",
+    "supported": true,
+    "rationale": "Teal shadows / orange highlights color grade with animated effects explicitly excluded"
+  },
+  {
+    "id": "cp2_08",
+    "prompt": "Cyberpunk magenta neon, RGB split, bloom, and animated flicker.",
+    "expected_choice": "needs_review",
+    "supported": false,
+    "rationale": "Requires unsupported VFX (magenta neon, RGB split, bloom, flicker) outside certified LUTs"
+  },
+  {
+    "id": "cp2_09",
+    "prompt": "Make it more cinematic.",
+    "expected_choice": "needs_review",
+    "supported": false,
+    "rationale": "Underspecified aesthetic brief; cannot defensibly select specific LUT without clarification"
+  },
+  {
+    "id": "cp2_10",
+    "prompt": "Make the shadows desaturated but keep all colors vivid and saturated.",
+    "expected_choice": "needs_review",
+    "supported": false,
+    "rationale": "Aesthetically contradictory request requiring creative review"
+  }
+]

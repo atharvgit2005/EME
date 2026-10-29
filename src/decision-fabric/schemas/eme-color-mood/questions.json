@@ -1,0 +1,14 @@
+{
+  "color_mood": {
+    "type": "choice",
+    "instructions": "Interpret the explicit color-grading intent in the creative brief and supplied project context. Select one approved LUT candidate only when the intended look is sufficiently clear. Use needs_review for ambiguous, conflicting, or underspecified creative intent. Never infer that a LUT has already been applied, and do not use the visual subject alone as proof of the requested mood.",
+    "criteria": {
+      "bleach_bypass": "A desaturated, high-contrast, bleach-bypass-inspired look.",
+      "warm_golden": "A warm, golden, sunlit appearance with amber highlights.",
+      "teal_orange": "A stylized teal-and-orange cinematic color separation.",
+      "cinematic_contrast": "A controlled cinematic contrast look without a stronger specified color cast.",
+      "true_tone": "A natural, restrained, faithful color appearance with realistic tones.",
+      "needs_review": "The requested look is unclear, contradictory, or requires creative clarification."
+    }
+  }
+}
