@@ -486,3 +486,20 @@ test("Unavailable tracking prerequisites produce a failed job rather than manufa
   assert.equal(f.server.state.sceneAnalyses.length, 0);
   assert.equal(digest(f.server.project()), before);
 });
+
+
+test("Temporal contracts reject unsafe tick conversion and expose duration-weighted gaps", () => {
+  for (const args of [["1", "1/0", "0"], ["1", "-1/30", "0"], ["9007199254740991000", "1/1", "0"]])
+    assert.throws(() => rationalTick(...args), /ERR_SCENE_TIME/);
+  const d = document();
+  const q = queryScene(d);
+  assert.equal(q.coverage.observedRatio, 0.5);
+  assert.equal(q.coverage.longestGapTicks, 4000);
+  const unsafe = structuredClone(d);
+  delete unsafe.analysisId;
+  unsafe.source.endTick = Number.MAX_SAFE_INTEGER + 1;
+  assert.throws(() => sealScene(unsafe), /ERR_SCENE_(CONTRACT|TIME_OVERFLOW)/);
+  const { analysisId, ...bad } = d;
+  bad.frames[1].shotId = "shot-2";
+  assert.throws(() => sealScene(bad), /ERR_SCENE_SHOT_BOUNDARY/);
+});

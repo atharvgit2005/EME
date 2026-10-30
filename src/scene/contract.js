@@ -3,10 +3,15 @@ const { digest, jsonValue } = require("../creative/execution-record.js");
 const schema = require("../../schema/eme-scene.v1.schema.json");
 const TICKS = 120000;
 function rationalTick(value, timeBase, origin) {
+  if (typeof timeBase !== "string" || !/^[1-9][0-9]*\/[1-9][0-9]*$/.test(timeBase) ||
+      ![value, origin].every(v => ((typeof v === "string" && /^-?[0-9]+$/.test(v)) || (typeof v === "number" && Number.isSafeInteger(v)))))
+    throw Error("ERR_SCENE_TIMEBASE");
   const [n, d] = timeBase.split("/").map(BigInt);
   const raw = (BigInt(value) - BigInt(origin)) * n * BigInt(TICKS);
   if (raw < 0n) throw Error("ERR_SCENE_NEGATIVE_PTS");
-  return Number((raw + d / 2n) / d);
+  const tick = (raw + d / 2n) / d;
+  if (tick > BigInt(Number.MAX_SAFE_INTEGER)) throw Error("ERR_SCENE_TIME_OVERFLOW");
+  return Number(tick);
 }
 
 function assertScene(
@@ -33,6 +38,8 @@ function assertScene(
   if (doc.producer.origin === "synthetic_fixture" && !allowFixture)
     throw Error("ERR_SCENE_FIXTURE_NOT_PRODUCTION");
   const { width, height, startTick, endTick } = doc.source;
+  if (![startTick, endTick].every(Number.isSafeInteger) || endTick <= startTick)
+    throw Error("ERR_SCENE_TIME_OVERFLOW");
   const bounds = (b) => {
     if (b && (b.x + b.width > width + 0.01 || b.y + b.height > height + 0.01))
       throw Error("ERR_SCENE_BOUNDS");
@@ -53,9 +60,10 @@ function assertScene(
     artifacts.set(a.id, a);
   }
   let next = startTick,
-    previousIndex = -1;
+    previousIndex = -1, previousPts = null, previousShot = null;
   for (const f of doc.frames) {
     if (
+      !Number.isSafeInteger(f.endTick) ||
       f.tick !== next ||
       f.endTick <= f.tick ||
       f.endTick > endTick ||
@@ -64,6 +72,13 @@ function assertScene(
         rationalTick(f.sourcePts, doc.source.timeBase, doc.source.ptsOrigin)
     )
       throw Error("ERR_SCENE_COVERAGE");
+    if (previousPts !== null && BigInt(f.sourcePts) <= previousPts)
+      throw Error("ERR_SCENE_NONMONOTONIC_PTS");
+    if (previousShot !== null && f.shotId !== previousShot && f.visibility !== "cut")
+      throw Error("ERR_SCENE_SHOT_BOUNDARY");
+    if (f.visibility === "cut" && f.predictedBounds !== null)
+      throw Error("ERR_SCENE_PREDICTION_ACROSS_CUT");
+    previousPts = BigInt(f.sourcePts); previousShot = f.shotId;
     next = f.endTick;
     previousIndex = f.frameIndex;
     bounds(f.predictedBounds);
@@ -139,8 +154,19 @@ function queryScene(
     status:
       requireVisible && missing.length ? "insufficient_evidence" : "available",
     completeVisibleCoverage: missing.length === 0,
+    coverage: temporalCoverage(frames, startTick, endTick),
     missing,
     frames,
   };
+}
+function temporalCoverage(frames, startTick, endTick) {
+  let observedTicks = 0, gap = 0, longestGapTicks = 0;
+  for (const f of frames) {
+    const duration = Math.min(endTick, f.endTick) - Math.max(startTick, f.tick);
+    if (f.observed) { observedTicks += duration; gap = 0; }
+    else { gap += duration; longestGapTicks = Math.max(longestGapTicks, gap); }
+  }
+  return { observedTicks, totalTicks: endTick - startTick,
+    observedRatio: observedTicks / (endTick - startTick), longestGapTicks };
 }
 module.exports = { assertScene, sealScene, queryScene, TICKS, rationalTick };

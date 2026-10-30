@@ -4,7 +4,7 @@
  */
 
 const {
-  SAMPLE_RATE,
+  SAMPLE_RATE, validateSynthParams, finishSynth,
   createPrng,
   equalPowerPan,
   BiquadFilter,
@@ -21,16 +21,17 @@ const {
  * @returns {Buffer} 48 kHz 16-bit Stereo PCM WAV
  */
 function synthesizeRiser(params = {}) {
-  const duration = params.durationSeconds || 2.0;
+  const duration = validateSynthParams(params, 2.0);
   const startFreq = params.startFreqHz || 120;
   const endFreq = params.endFreqHz || 2400;
   const numSamples = Math.round(duration * SAMPLE_RATE);
-  const prng = createPrng(params.seed || 202);
+  const prng = createPrng(params.seed ?? 202);
 
   const left = new Float32Array(numSamples);
   const right = new Float32Array(numSamples);
   const filter = new BiquadFilter('bandpass', startFreq, 2.0, SAMPLE_RATE);
 
+  const filterR = new BiquadFilter('bandpass', startFreq, 2.0, SAMPLE_RATE);
   let phase1 = 0.0;
   let phase2 = 0.0;
 
@@ -48,8 +49,9 @@ function synthesizeRiser(params = {}) {
     const noise = (prng() * 2.0 - 1.0) * 0.2;
 
     filter.setParams(freq * 1.2, 1.8);
+    filterR.setParams(freq * 1.2, 1.8);
     const filteredL = filter.process(tone1 + noise);
-    const filteredR = filter.process(tone2 + noise);
+    const filteredR = filterR.process(tone2 + noise);
 
     // Rising exponential amplitude envelope
     const amp = Math.pow(t, 1.5) * 0.9;
@@ -58,7 +60,7 @@ function synthesizeRiser(params = {}) {
     right[i] = filteredR * amp;
   }
 
-  return encodeStereoWav(left, right, SAMPLE_RATE);
+  return finishSynth(left, right);
 }
 
 module.exports = {

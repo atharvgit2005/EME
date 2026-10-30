@@ -154,3 +154,15 @@ motion-graphics work. No Rust/Skia runtime or simulated camera was added to the
 perception adapter. TigerGraph, Socket, AIGI, and Wispr Flow remain a subsequent
 hackathon integration phase, after this prototype's contract and evidence are
 stable; no new live partner integration is claimed here.
+
+## Temporal reliability checks
+
+Source timestamps must be monotonic and convert into safe integer ticks.
+Cross-shot predictions are rejected. Interval queries include duration-weighted
+observed coverage and the longest missing interval, so VFR gaps cannot be hidden
+by frame-count percentages. Sparse flow rejects absent/nonfinite LK output,
+out-of-frame points and incoherent displacement groups before propagating masks.
+These checks abstain rather than fabricate observations. Existing cuts and lost
+tracks still require a new user anchor; automatic identity reacquisition is not
+claimed. Run `npm run verify:scene:m3` for actual MobileSAM/MPS validation on
+controlled motion, occlusion, cuts and variable-rate footage.

@@ -3,6 +3,8 @@
  * Unified orchestration layer coordinating Beat Understander, Beat Actor, and SFX Engine.
  */
 
+const { listSfxTemplates, renderSfxTemplate, planSfxTemplates } = require('./sfx/templates.js');
+
 const { analyzeBeat } = require('./beat/index.js');
 const { planBeatEdits, POLICY_REGISTRY } = require('./actor/index.js');
 const {
@@ -17,6 +19,9 @@ const {
 } = require('./sfx/index.js');
 
 class AudioIntelligenceFacade {
+  static listSfxTemplates() { return listSfxTemplates(); }
+  static renderSfxTemplate(id, options) { return renderSfxTemplate(id, options); }
+  static planSfxTemplates(events, options) { return planSfxTemplates(events, options); }
   /**
    * Analyzes an audio track deterministically for tempo, beats, downbeats, onsets, and sections.
    * @param {Buffer|string|object} audioInput WAV buffer, file path, or Float32Array PCM object
@@ -63,6 +68,7 @@ class AudioIntelligenceFacade {
    * @returns {Buffer} 48 kHz 16-bit Stereo PCM WAV
    */
   static generateSfx(type, params = {}) {
+    if (params.templateId) return renderSfxTemplate(params.templateId, params).wav;
     switch (type) {
       case 'whoosh':
         return synthesizeWhoosh(params);

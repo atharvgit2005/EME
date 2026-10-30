@@ -4,7 +4,7 @@
  */
 
 const {
-  SAMPLE_RATE,
+  SAMPLE_RATE, validateSynthParams, finishSynth,
   createPrng,
   equalPowerPan,
   BiquadFilter,
@@ -21,9 +21,9 @@ const {
  */
 function synthesizeGlitch(params = {}) {
   const type = params.type || 'click';
-  const duration = params.durationSeconds || (type === 'click' ? 0.04 : 0.08);
+  const duration = validateSynthParams(params, (type === 'click' ? 0.04 : 0.08));
   const numSamples = Math.round(duration * SAMPLE_RATE);
-  const prng = createPrng(params.seed || 303);
+  const prng = createPrng(params.seed ?? 303);
 
   const left = new Float32Array(numSamples);
   const right = new Float32Array(numSamples);
@@ -53,7 +53,7 @@ function synthesizeGlitch(params = {}) {
     right[i] = signal * panR;
   }
 
-  return encodeStereoWav(left, right, SAMPLE_RATE);
+  return finishSynth(left, right);
 }
 
 module.exports = {

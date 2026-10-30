@@ -10,7 +10,7 @@ const {
   synthesizeImpact,
   synthesizeRiser,
   synthesizeGlitch,
-  defaultCatalog,
+  defaultCatalog, SfxCatalog,
   applyDialogueDucking,
   mixAudioLayers,
   validateSfxCue
@@ -41,21 +41,21 @@ test('A4.1 Procedural Synthesis & Determinism: Same seed yields 100% bit-exact W
   assert.equal(glitchDecoded.sampleRate, 48000);
 });
 
-test('A4.2 Sound Pack Catalog: Indexes assets/sjc_sfx_pack/ and categorizes assets', () => {
-  defaultCatalog.buildIndex();
-  assert.ok(defaultCatalog.isIndexed, 'Catalog should be indexed');
-
-  const whooshes = defaultCatalog.getByCategory('whoosh');
-  const impacts = defaultCatalog.getByCategory('impact');
-  const clicks = defaultCatalog.getByCategory('click');
-
-  assert.ok(whooshes.length > 0, 'Should find whoosh assets in SJC SFX pack');
-  assert.ok(impacts.length > 0, 'Should find impact assets in SJC SFX pack');
-  assert.ok(clicks.length > 0, 'Should find click assets in SJC SFX pack');
-
-  const firstWhoosh = whooshes[0];
-  assert.ok(firstWhoosh.path.includes('.wav'), 'Asset path must reference valid WAV');
-  assert.ok(firstWhoosh.durationTicks > 0, 'Asset must have valid tick duration');
+test('A4.2 Sound Pack Catalog: indexes supplied WAVs without requiring a licensed pack', (t) => {
+  const fs = require('node:fs'), os = require('node:os'), path = require('node:path');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'eme-sfx-catalog-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(root, 'whoosh.wav'), synthesizeWhoosh({ durationSeconds: .1 }));
+  fs.writeFileSync(path.join(root, 'impact.wav'), synthesizeImpact({ durationSeconds: .1 }));
+  fs.writeFileSync(path.join(root, 'click.wav'), synthesizeGlitch({ type: 'click' }));
+  fs.writeFileSync(path.join(root, 'broken.wav'), 'invalid');
+  const catalog = new SfxCatalog(root);
+  for (const category of ['whoosh', 'impact', 'click']) {
+    const assets = catalog.getByCategory(category);
+    assert.equal(assets.length, 1);
+    assert.ok(assets[0].durationTicks > 0);
+  }
+  assert.equal(new SfxCatalog(path.join(root, 'missing')).getByCategory('whoosh').length, 0);
 });
 
 test('A4.3 Dialogue Ducking: Reduces background music gain during speech bursts', () => {

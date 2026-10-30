@@ -39,6 +39,7 @@ function validateSfxCue(cue) {
 }
 
 module.exports = {
+  ...require('./templates.js'),
   // Synthesis
   synthesizeWhoosh,
   synthesizeImpact,

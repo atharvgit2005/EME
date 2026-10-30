@@ -144,6 +144,7 @@ class DesignMemory {
       this.state = {
         ...this.state,
         state: "syncing",
+        reason: null,
         desiredRevision: view.revision,
         message: "Syncing local design facts.",
       };
@@ -184,6 +185,7 @@ class DesignMemory {
       this.state = {
         ...this.state,
         state: "error",
+        reason: e.reason || "sync_failed",
         message:
           e.code === "ERR_TIGERGRAPH"
             ? e.message

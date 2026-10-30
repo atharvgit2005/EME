@@ -12,7 +12,19 @@ const parameterSchema = {
   },
 };
 const profileIds = Object.keys(require("../design/catalog.js").PROFILES);
+const sfxTemplates = require('../audio/sfx/templates.js');
 const definitions = [
+  { name: "eme_studio_list_sfx_templates", description: "List original procedural sound recipes, designed alignment anchors and material cooldowns. No project mutation.",
+    inputSchema: { type: "object", additionalProperties: false, properties: {} } },
+  { name: "eme_studio_plan_sfx", description: "Plan contextual SFX from explicit editorial events. Preserves silence, dialogue and handles; returns deterministic seeds and skipped reasons. Proposal only. Render selected cues with eme-sfx render, import the WAVs into Studio, then submit an edit for human review.",
+    inputSchema: { type: "object", additionalProperties: false, required: ["events", "options"], properties: {
+      events: { type: "array", maxItems: 10000, items: { type: "object", additionalProperties: false, required: ["id", "kind", "tick"], properties: {
+        id: { type: "string", minLength: 1 }, kind: { enum: ["title", "reveal", "cut", "transition", "accent"] }, tick: { type: "integer", minimum: 0 }, salience: { type: "number", minimum: 0, maximum: 1 }
+      } } }, options: { type: "object", additionalProperties: false, required: ["durationTicks"], properties: {
+        profile: { enum: ["editorial", "kinetic", "product", "cinematic", "interface"] }, durationTicks: { type: "integer", minimum: 1 }, seed: { type: "integer" }, maxCuesPerSecond: { type: "number", minimum: .1, maximum: 8 },
+        dialogueIntervals: { type: "array", items: { type: "object", additionalProperties: false, required: ["startTick", "endTick"], properties: { startTick: { type: "integer", minimum: 0 }, endTick: { type: "integer", minimum: 1 } } } }
+      } }
+    } } },
   {
     name: "eme_studio_get_design_memory",
     description:
@@ -270,6 +282,8 @@ class StudioMcpServer extends EmeMcpServer {
     const root =
       process.env.EME_STUDIO_ROOT ||
       path.resolve(__dirname, "../../.eme/studio");
+    if (name === "eme_studio_list_sfx_templates") return sfxTemplates.listSfxTemplates();
+    if (name === "eme_studio_plan_sfx") return sfxTemplates.planSfxTemplates(args.events, args.options);
     let connection;
     try {
       connection = JSON.parse(

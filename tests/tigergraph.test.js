@@ -869,3 +869,45 @@ test("Concurrent sync requests coalesce and changes arriving during upload are r
   assert.equal(recalled.source, "tigergraph");
   assert.ok(recalled.examples.some((e) => e.feedback.length));
 });
+
+
+test("Transient overload retries atomic upserts; authentication and invalid counts fail closed", async () => {
+  let calls = 0;
+  const body = { vertices: { EMEWorkspace: { test: { state: { value: "syncing" } } } } };
+  const config = configuration({ EME_TIGERGRAPH_URL: "http://localhost:9000" });
+  const client = new TigerGraphClient(config, async (url, options) => {
+    calls++;
+    assert.equal(options.headers["gsql-atomic-level"], "atomic");
+    assert.equal(url.searchParams.has("atomic_post"), false);
+    return calls < 3 ? new Response("busy", { status: 503 }) :
+      Response.json({ error: false, results: [{ accepted_vertices: 1, accepted_edges: 0 }] });
+  });
+  await client.upsert(body);
+  assert.equal(calls, 3);
+  for (const response of [
+    () => new Response("secret", { status: 401 }),
+    () => Response.json({ error: false, results: [{ accepted_vertices: "Infinity" }] }),
+    () => Response.json({ error: false, results: [{ accepted_vertices: -1 }] }),
+    () => Response.json({ error: false, results: [] }),
+  ]) {
+    let attempts = 0;
+    const c = new TigerGraphClient(config, async () => { attempts++; return response(); });
+    await assert.rejects(c.upsert(body), /ERR_TIGERGRAPH/);
+    assert.equal(attempts, 1);
+  }
+});
+
+
+test("Stopped cloud workspace gives actionable redacted diagnostics and retains pending local facts", async (t) => {
+  const f = local(t);
+  const m = memory(t, f, { EME_TIGERGRAPH_URL: "https://workspace.invalid/restpp", EME_TIGERGRAPH_TOKEN: "secret" });
+  let calls = 0;
+  m.client.fetch = async () => { calls++; return new Response("<html>Auto start is not enabled for this workspace secret</html>", { status: 500 }); };
+  const state = await m.sync();
+  assert.equal(state.reason, "workspace_stopped");
+  assert.equal(state.pending, true);
+  assert.equal(calls, 1);
+  assert.match(state.message, /Resume it in TigerGraph Cloud/);
+  assert.doesNotMatch(state.message, /secret|<html>/);
+  await m.close();
+});

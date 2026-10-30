@@ -229,3 +229,19 @@ and was denied for the existing sample graph. Availability and compatibility on
 other deployments require their own live check.
 
 See [recorded acceptance results](TIGERGRAPH_ACCEPTANCE.md).
+
+## Cloud lifecycle and transient failures
+
+A stopped Savanna workspace with auto-start disabled returns HTTP 500 before
+REST++ handles the request. EME reports `reason: workspace_stopped` with a
+resume instruction; local feedback remains durable and pending. Sign in to
+TigerGraph Cloud and resume the existing workspace, then run
+`node --env-file=.env.local bin/eme-tigergraph.js sync` followed by `verify`.
+Database credentials cannot start the cloud workspace or sign into its console.
+
+The client retries HTTP 408/429/502/503/504 up to twice, with 100/200 ms delays.
+Each attempt retains the configured timeout and body-size bound. Authentication,
+malformed responses, partial acknowledgements and schema failures fail closed.
+Batch atomicity uses the supported `gsql-atomic-level: atomic` header; the older
+`atomic_post` query parameter is deprecated. Counts must be nonnegative safe
+integers before a local checkpoint can be acknowledged.

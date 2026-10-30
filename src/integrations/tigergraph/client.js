@@ -70,7 +70,18 @@ class TigerGraphClient {
   get target() {
     return digest({ url: this.config.baseUrl, graph: this.config.graph });
   }
-  async request(parts, { method = "GET", query = {}, body } = {}) {
+  async request(parts, options = {}) {
+    // Only reads and idempotent atomic upserts are retried. Never retry authentication,
+    // schema errors or malformed responses; those need operator attention.
+    for (let attempt = 0; ; attempt++) {
+      try { return await this.requestOnce(parts, options); }
+      catch (e) {
+        if (!e.retryable || attempt >= 2) throw e;
+        await new Promise(resolve => setTimeout(resolve, 100 * 2 ** attempt));
+      }
+    }
+  }
+  async requestOnce(parts, { method = "GET", query = {}, body } = {}) {
     const url = new URL(
       parts.map(encodeURIComponent).join("/"),
       this.config.baseUrl,
@@ -100,10 +111,24 @@ class TigerGraphClient {
         body: body ? JSON.stringify(body) : undefined,
       });
       if (!response.ok) {
-        await response.body?.cancel();
-        throw failure(
+        // Inspect only a bounded error prefix for a known cloud lifecycle response.
+        // Never propagate raw HTML or server messages that may reflect credentials.
+        const reader = response.body?.getReader();
+        let prefix = "";
+        if (reader) {
+          try {
+            while (prefix.length < 4096) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              prefix += Buffer.from(value).toString().slice(0, 4096 - prefix.length);
+            }
+          } finally { await reader.cancel(); }
+        }
+        if (/Auto start is not enabled for this workspace/i.test(prefix))
+          throw Object.assign(failure("TigerGraph workspace is stopped and auto-start is disabled. Resume it in TigerGraph Cloud, then sync again. Local feedback remains saved."), { reason: "workspace_stopped" });
+        throw Object.assign(failure(
           `Request failed (HTTP ${response.status}). Check the endpoint, schema and graph privileges.`,
-        );
+        ), { retryable: [408, 429, 502, 503, 504].includes(response.status) });
       }
       const chunks = [];
       let bytes = 0;
@@ -132,6 +157,10 @@ class TigerGraphClient {
       query: { ack: "all" },
       body,
     });
+    if (!rows.length || rows.some(r => !r || typeof r !== "object" ||
+      ["accepted_vertices", "accepted_edges", "skipped_vertices", "skipped_edges"]
+        .some(k => r[k] !== undefined && (!Number.isSafeInteger(r[k]) || r[k] < 0))))
+      throw failure("Invalid upsert acknowledgement counts.");
     if (
       rows.some(
         (r) => Number(r.skipped_vertices || 0) || Number(r.skipped_edges || 0),

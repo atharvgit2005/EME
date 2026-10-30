@@ -10,7 +10,8 @@
     "eme-studio": "bin/eme-studio.js",
     "eme-studio-mcp": "bin/eme-studio-mcp.js",
     "eme-tigergraph": "bin/eme-tigergraph.js",
-    "eme-scene": "bin/eme-scene.js"
+    "eme-scene": "bin/eme-scene.js",
+    "eme-sfx": "bin/eme-sfx.js"
   },
   "files": [
     "bin/",
@@ -33,7 +34,7 @@
     "node": ">=20.20.1"
   },
   "scripts": {
-    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement && npm run test:editor && npm run test:design && npm run test:tigergraph",
+    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement && npm run test:editor && npm run test:design && npm run test:tigergraph && npm run test:sfx",
     "doctor": "node bin/eme.js doctor",
     "capabilities": "node bin/eme.js capabilities",
     "validate:schema": "node tools/validate-schema.js",
@@ -61,7 +62,9 @@
     "graph:sync": "node bin/eme-tigergraph.js sync",
     "graph:recall": "node bin/eme-tigergraph.js recall",
     "graph:verify": "node bin/eme-tigergraph.js verify",
-    "verify:scene:m3": "node scripts/verify-scene-m3.cjs"
+    "verify:scene:m3": "node scripts/verify-scene-m3.cjs",
+    "test:sfx": "node --test tests/audio-sfx-engine.test.js tests/sfx-templates.test.js",
+    "benchmark:sfx": "node scripts/benchmark-sfx.cjs"
   },
   "keywords": [
     "video-editing",

@@ -4,7 +4,7 @@
  */
 
 const {
-  SAMPLE_RATE,
+  SAMPLE_RATE, validateSynthParams, finishSynth,
   createPrng,
   equalPowerPan,
   BiquadFilter,
@@ -20,10 +20,10 @@ const {
  * @returns {Buffer} 48 kHz 16-bit Stereo PCM WAV
  */
 function synthesizeWhoosh(params = {}) {
-  const duration = params.durationSeconds || 0.6;
+  const duration = validateSynthParams(params, 0.6);
   const panDir = params.panDirection !== undefined ? params.panDirection : 1;
   const numSamples = Math.round(duration * SAMPLE_RATE);
-  const prng = createPrng(params.seed || 42);
+  const prng = createPrng(params.seed ?? 42);
 
   const left = new Float32Array(numSamples);
   const right = new Float32Array(numSamples);
@@ -64,7 +64,7 @@ function synthesizeWhoosh(params = {}) {
     right[i] = filtered * amp * panR;
   }
 
-  return encodeStereoWav(left, right, SAMPLE_RATE);
+  return finishSynth(left, right);
 }
 
 module.exports = {

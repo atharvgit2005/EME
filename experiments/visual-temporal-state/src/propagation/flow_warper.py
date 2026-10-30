@@ -2,16 +2,16 @@
 VTSM-03 Optical Flow Mask Warper
 
 Provides two independent propagation strategies:
-1. Sparse Lucas-Kanade + Delaunay Simplex Warping:
+1. Sparse Lucas-Kanade + robust affine warping:
    - Samples interior and boundary anchor points along the mask contour normal.
    - Tracks points with cv2.calcOpticalFlowPyrLK.
-   - Warps triangular patches using affine mapping.
-   - Rejects inverted triangles (det(J) <= 0) and extreme aspect-ratio stretch (> 3.0x).
+   - Validates forward/backward tracks and fits an affine map to coherent motion.
+   - Rejects nonfinite, out-of-frame, incoherent and extreme scale estimates.
 2. Dense Farneback + Backward Map Warping:
    - Crops a dilated ROI around the target entity.
    - Computes dense optical flow field (cv2.calcOpticalFlowFarneback).
    - Generates a destination-to-source backward map for cv2.remap (INTER_NEAREST/INTER_LINEAR).
-   - Computes forward-backward consistency error to flag unreliable flow.
+   - Experimental backward-map path; not the validated production scene worker.
 """
 
 import cv2
@@ -107,12 +107,18 @@ class SparseLkMaskWarper:
             prev_gray, curr_gray, pts_prev, None, **self.lk_params
         )
 
+        if pts_curr is None or status_fwd is None or not np.isfinite(pts_curr).all():
+            return prev_mask.copy(), prev_bbox, {"valid": False, "reason": "missing_forward_flow", "tracked_fraction": 0.0}
+
         # Backward tracking for forward-backward consistency check
         pts_back, status_bwd, _ = cv2.calcOpticalFlowPyrLK(
             curr_gray, prev_gray, pts_curr, None, **self.lk_params
         )
 
-        valid_idx = (status_fwd.ravel() == 1) & (status_bwd.ravel() == 1)
+        if pts_back is None or status_bwd is None or not np.isfinite(pts_back).all():
+            return prev_mask.copy(), prev_bbox, {"valid": False, "reason": "missing_backward_flow", "tracked_fraction": 0.0}
+        in_frame = (pts_curr[:, 0] >= 0) & (pts_curr[:, 0] < w) & (pts_curr[:, 1] >= 0) & (pts_curr[:, 1] < h)
+        valid_idx = (status_fwd.ravel() == 1) & (status_bwd.ravel() == 1) & in_frame
         fb_dist = np.linalg.norm(pts_prev - pts_back, axis=1)
         consistent_idx = valid_idx & (fb_dist < 3.0)
 
@@ -155,8 +161,11 @@ class SparseLkMaskWarper:
 
         inlier_mask = np.linalg.norm(disp - mode_disp, axis=1) < 3.5
 
-        filt_prev = good_prev[inlier_mask] if np.sum(inlier_mask) >= 4 else good_prev
-        filt_curr = good_curr[inlier_mask] if np.sum(inlier_mask) >= 4 else good_curr
+        consensus = float(np.mean(inlier_mask))
+        if np.sum(inlier_mask) < 4 or consensus < 0.35:
+            return prev_mask.copy(), prev_bbox, {"valid": False, "reason": "incoherent_motion", "tracked_fraction": tracked_fraction}
+        filt_prev = good_prev[inlier_mask]
+        filt_curr = good_curr[inlier_mask]
 
         if len(filt_prev) >= 3:
             M, inliers = cv2.estimateAffinePartial2D(
@@ -173,7 +182,7 @@ class SparseLkMaskWarper:
         det_J = M[0, 0] * M[1, 1] - M[0, 1] * M[1, 0]
         scale = np.sqrt(det_J) if det_J > 0 else 0.0
 
-        if det_J <= 0 or scale > self.max_stretch_ratio or scale < (1.0 / self.max_stretch_ratio):
+        if not np.isfinite(M).all() or det_J <= 0 or scale > self.max_stretch_ratio or scale < (1.0 / self.max_stretch_ratio):
             return prev_mask.copy(), prev_bbox, {
                 "valid": False,
                 "reason": "geometric_distortion",

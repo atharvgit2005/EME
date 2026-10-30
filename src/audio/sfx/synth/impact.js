@@ -4,7 +4,7 @@
  */
 
 const {
-  SAMPLE_RATE,
+  SAMPLE_RATE, validateSynthParams, finishSynth,
   createPrng,
   equalPowerPan,
   BiquadFilter,
@@ -20,10 +20,10 @@ const {
  * @returns {Buffer} 48 kHz 16-bit Stereo PCM WAV
  */
 function synthesizeImpact(params = {}) {
-  const duration = params.durationSeconds || 1.2;
+  const duration = validateSynthParams(params, 1.2);
   const subFreq = params.subFreqHz || 45;
   const numSamples = Math.round(duration * SAMPLE_RATE);
-  const prng = createPrng(params.seed || 101);
+  const prng = createPrng(params.seed ?? 101);
 
   const left = new Float32Array(numSamples);
   const right = new Float32Array(numSamples);
@@ -59,7 +59,7 @@ function synthesizeImpact(params = {}) {
     right[i] = filtered * panR;
   }
 
-  return encodeStereoWav(left, right, SAMPLE_RATE);
+  return finishSynth(left, right);
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 """Checks the existing physics modules used by the scene worker, using real OpenCV."""
 
 import unittest, sys
+from unittest.mock import patch
 from pathlib import Path
 import numpy as np, cv2
 
@@ -46,6 +47,26 @@ class PhysicsTests(unittest.TestCase):
         )
         self.assertTrue(q["valid"])
         self.assertAlmostEqual(bounds[0], 65, delta=2)
+
+    def test_missing_and_nonfinite_flow_abstain(self):
+        image = np.zeros((180, 320), dtype="uint8")
+        mask = image.copy(); mask[45:115, 60:140] = 1
+        for output in [(None, None, None), (np.full((120, 2), np.nan, dtype=np.float32), np.ones((120, 1)), None)]:
+            with patch("cv2.calcOpticalFlowPyrLK", return_value=output):
+                _, _, q = SparseLkMaskWarper().warp_mask(image, image, mask)
+                self.assertFalse(q["valid"])
+
+    def test_translation_sweep(self):
+        for seed in range(6):
+            rng = np.random.default_rng(seed)
+            image = rng.integers(0, 255, (180, 320), dtype="uint8")
+            mask = np.zeros((180, 320), dtype="uint8"); mask[45:115, 60:140] = 1
+            for dx, dy in [(-7, 2), (0, 0), (3, -4), (8, 5)]:
+                moved = cv2.warpAffine(image, np.float32([[1, 0, dx], [0, 1, dy]]), (320, 180))
+                _, b, q = SparseLkMaskWarper().warp_mask(image, moved, mask)
+                self.assertTrue(q["valid"], (seed, dx, dy, q))
+                self.assertAlmostEqual(b[0], 60 + dx, delta=2)
+                self.assertAlmostEqual(b[1], 45 + dy, delta=2)
 
 
 if __name__ == "__main__":

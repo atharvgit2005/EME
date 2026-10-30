@@ -139,11 +139,14 @@ class BiquadFilter {
  * @returns {Buffer} Standard RIFF WAV Buffer
  */
 function encodeStereoWav(left, right, sampleRate = SAMPLE_RATE) {
+  if (left.length !== right.length || !Number.isInteger(sampleRate) || sampleRate < 8000 || sampleRate > 192000)
+    throw Error("ERR_SFX_PCM_FORMAT");
   const numSamples = left.length;
   const header = buildWavHeader(numSamples, sampleRate);
   const data = Buffer.alloc(numSamples * 4); // 2 channels * 2 bytes
 
   for (let i = 0; i < numSamples; i++) {
+    if (!Number.isFinite(left[i]) || !Number.isFinite(right[i])) throw Error("ERR_SFX_NONFINITE_PCM");
     // Soft-clip limiter to guarantee zero digital wrap-around
     const sL = Math.max(-1.0, Math.min(1.0, Math.tanh(left[i])));
     const sR = Math.max(-1.0, Math.min(1.0, Math.tanh(right[i])));
@@ -158,7 +161,29 @@ function encodeStereoWav(left, right, sampleRate = SAMPLE_RATE) {
   return Buffer.concat([header, data]);
 }
 
+function validateSynthParams(params, fallback) {
+  const duration = params.durationSeconds ?? fallback;
+  if (!Number.isFinite(duration) || duration < 0.01 || duration > 10)
+    throw Error("ERR_SFX_DURATION: use 0.01–10 seconds");
+  for (const key of ["subFreqHz", "startFreqHz", "endFreqHz"])
+    if (params[key] !== undefined && (!Number.isFinite(params[key]) || params[key] < 20 || params[key] > 12000))
+      throw Error("ERR_SFX_FREQUENCY");
+  if (params.panDirection !== undefined && (!Number.isFinite(params.panDirection) || Math.abs(params.panDirection) > 1))
+    throw Error("ERR_SFX_PAN");
+  if (params.seed !== undefined && !Number.isSafeInteger(params.seed)) throw Error("ERR_SFX_SEED");
+  return duration;
+}
+function finishSynth(left, right) {
+  // 2 ms attack and 10 ms release prevent edit-boundary discontinuities.
+  const n = left.length, attack = Math.min(96, Math.floor(n / 4)), release = Math.min(480, Math.floor(n / 4));
+  for (let i = 0; i < n; i++) {
+    const gain = Math.min(1, i / attack) * Math.min(1, (n - 1 - i) / release);
+    left[i] *= gain; right[i] *= gain;
+  }
+  return encodeStereoWav(left, right);
+}
 module.exports = {
+  validateSynthParams, finishSynth,
   SAMPLE_RATE,
   createPrng,
   buildWavHeader,
