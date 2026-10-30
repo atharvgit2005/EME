@@ -183,6 +183,7 @@ function importOperations(project, media) {
         type: "audio",
         src: audio.path,
         sha256: audio.sha256,
+        metadata: { duration: audio.duration },
       });
     const audioDuration = Math.min(
       duration,

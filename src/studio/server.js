@@ -5,6 +5,7 @@ const http = require("node:http"),
 const { spawn } = require("node:child_process");
 const { SceneService, fileHash, queryScene } = require("../scene/service.js");
 const { proposeSubjectTitle } = require("../scene/title-placement.js");
+const { directEditOperations } = require("./direct-edits.js");
 const {
   ApprovalAuthority: A,
   durableWrite,
@@ -928,6 +929,32 @@ class StudioServer {
         throw error("Unknown agent route", 404);
       }
       if (req.method === "POST") this.browserAuth(req);
+      if (req.method === "POST" && p === "/api/edit") {
+        const b = await this.body(req);
+        const edit = directEditOperations(this.project(), b);
+        return this.json(
+          res,
+          200,
+          this.pending(edit.operations, {
+            summary: edit.summary,
+            source: "Timeline editor",
+          }),
+        );
+      }
+      if (req.method === "GET" && p.startsWith("/api/waveform/")) {
+        const id = decodeURIComponent(p.slice("/api/waveform/".length));
+        const media = this.state.media.find(
+          (m) => m.id === id || m.audioAsset?.id === id,
+        );
+        if (!media) throw error("Imported audio source not found", 404);
+        const source = media.audioAsset?.id === id ? media.audioAsset : media;
+        const waveform = await require("./waveform.js").getWaveform({
+          mediaPath: source.path,
+          sourceSha256: source.sha256,
+          duration: source.duration,
+        });
+        return this.json(res, 200, waveform);
+      }
       if (req.method === "POST" && p === "/api/scene/title")
         return this.json(
           res,
@@ -986,6 +1013,10 @@ class StudioServer {
 
       if (req.method === "GET" && p === "/api/state")
         return this.json(res, 200, this.view());
+      if (req.method === "GET" && p === "/favicon.ico") {
+        res.writeHead(204);
+        return res.end();
+      }
       if (req.method === "GET" && p === "/api/connection")
         return this.json(res, 200, {
           command: process.execPath,
@@ -1105,7 +1136,14 @@ class StudioServer {
       }
       if (req.method === "GET" && p.startsWith("/api/media/")) {
         const id = p.slice(11),
-          m = this.state.media.find((m) => m.id === id),
+          extracted = this.state.media.find(
+            (m) => m.audioAsset?.id === id,
+          )?.audioAsset,
+          m =
+            this.state.media.find((m) => m.id === id) ||
+            (extracted
+              ? { ...extracted, type: "audio", mime: "audio/wav" }
+              : null),
           o = this.state.outputs.find((o) => o.id === id);
         if (!m && !o) throw error("Media not found", 404);
         const poster = url.searchParams.has("poster");
@@ -1118,13 +1156,21 @@ class StudioServer {
           type: poster
             ? "image/jpeg"
             : m?.type === "audio"
-              ? "audio/mpeg"
+              ? m.mime || "audio/mpeg"
               : "video/mp4",
         });
       }
       if (
         req.method === "GET" &&
-        ["/", "/app.js", "/scene.js", "/style.css"].includes(p)
+        [
+          "/",
+          "/app.js",
+          "/timeline.js",
+          "/inspector.js",
+          "/playback.js",
+          "/scene.js",
+          "/style.css",
+        ].includes(p)
       ) {
         let content = fs.readFileSync(
           path.join(PUBLIC, p === "/" ? "index.html" : p.slice(1)),

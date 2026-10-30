@@ -17,6 +17,11 @@ configuration to submit conversational editing requests. Requests wait for the I
 agent to read the inbox and propose a plan; Studio does not run a background model.
 See [Studio setup, agent workflow, scope, and partner status](docs/studio/README.md).
 
+The [edit workspace](docs/studio/EDITOR_WORKSPACE.md) adds a zoomable timeline,
+playhead and snapping guides, draggable clips and trim edges, linked audio,
+measured waveforms, track controls and a numeric clip inspector. Direct edits use
+the same reviewed operations and undo history as agent proposals.
+
 The optional [scene understanding prototype](docs/studio/SCENE.md) tracks a selected region with MobileSAM on MPS, preserves timestamped masks and uncertainty, and exposes the same evidence in Studio and the IDE.
 
 The [hackathon demo](docs/studio/HACKATHON_DEMO.md) uses those observations to place

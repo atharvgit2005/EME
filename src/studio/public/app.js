@@ -12,7 +12,8 @@ let state = null,
   lastProposal = "",
   lastRender = "",
   lastMedia = "",
-  config = null;
+  config = null,
+  mediaPreview = null;
 const escape = (s) =>
   String(s ?? "").replace(
     /[&<>"']/g,
@@ -45,6 +46,7 @@ async function api(route, body) {
 }
 async function action(fn) {
   if (working) return;
+  window.emePlayback?.pause();
   working = true;
   buttons();
   try {
@@ -66,12 +68,22 @@ function buttons() {
     "send",
     "add-title",
     "export",
+    "sequence-settings",
   ])
     $(id).disabled = !!busy;
-  $("export").disabled = !!busy || !state?.executionId;
+  $("export").disabled = !!busy || !state?.executionId || !!state?.proposal;
+  window.emeTimeline?.updateButtons();
+  window.emeInspector?.render();
   $("undo").disabled = !!busy || !state?.canUndo;
   $("redo").disabled = !!busy || !state?.canRedo;
-  $("play").disabled = !state?.project.clips.some((c) => c.type === "video");
+  $("play").disabled =
+    !state?.project.clips.some((c) => ["video", "audio"].includes(c.type)) &&
+    !mediaPreview;
+  document
+    .querySelectorAll(
+      '#sequence-form button[type="submit"], #sequence-form .primary',
+    )
+    .forEach((b) => (b.disabled = !!busy));
 }
 function operationLabel(op) {
   const p = op.params || {},
@@ -116,12 +128,17 @@ function renderProposal() {
   if (!p) {
     $("proposal").hidden = true;
     lastProposal = "";
+    $("review-empty").hidden = false;
+    $("review-count").hidden = true;
     return;
   }
   const key = p.id;
   if (key === lastProposal) return;
   lastProposal = key;
   $("proposal").hidden = false;
+  $("review-empty").hidden = true;
+  $("review-count").hidden = false;
+  window.emeEditor?.panel("review");
   $("proposal").innerHTML =
     `<h3>Ready for your review <span class="count">${p.operations.length} ${p.operations.length === 1 ? "step" : "steps"}</span></h3><p>${escape(p.summary)}</p><ul class="operation-list">${p.operations.map((op) => "<li>" + escape(operationLabel(op)) + "</li>").join("")}</ul><details><summary>Inspect exact changes</summary><pre>${escape(JSON.stringify(p.operations, null, 2))}</pre></details><div class="proposal-buttons"><button id="dismiss" class="quiet">Dismiss</button><button id="approve" class="primary">Approve & apply <span>↗</span></button></div>`;
   if (p.planning?.previewId) {
@@ -147,19 +164,24 @@ function renderProposal() {
   $("approve").onclick = () =>
     action(async () => {
       await api("approve", { id: p.id, digest: p.digest });
-      toast("Changes applied.");
+      mode = "source";
+      toast("Changes applied. Undo is available.");
     });
   $("dismiss").onclick = () => action(() => api("reject", { id: p.id }));
 }
-function renderMedia() {
-  const key = JSON.stringify(state.media.map((m) => m.id));
-  if (key === lastMedia) return;
+function renderMedia(force = false) {
+  const query = $("media-search").value.toLowerCase();
+  const key = JSON.stringify(state.media.map((m) => m.id)) + query;
+  if (!force && key === lastMedia) return;
   lastMedia = key;
   $("media-count").textContent = state.media.length;
-  $("media-list").innerHTML = state.media
+  const media = state.media.filter((m) => m.name.toLowerCase().includes(query));
+  $("media-empty").hidden = state.media.length > 0;
+  $("media-list").hidden = state.media.length === 0;
+  $("media-list").innerHTML = media
     .map(
       (m) =>
-        `<article class="media-card">${m.type === "video" ? `<img class="media-image" src="/api/media/${m.id}?poster" alt="${escape(m.name)}"><span class="media-duration">${clock(m.duration)}</span>` : '<div class="audio-thumb">♫</div>'}<div class="media-info"><span class="media-name" title="${escape(m.name)}">${escape(m.name)}</span><button class="media-add" data-media="${m.id}" aria-label="Add ${escape(m.name)} to timeline">＋</button></div><button class="scene-open text-button" data-scene="${m.id}" ${m.type === "video" ? "" : "hidden"}>Understand scene ↗</button><div class="media-caption">${m.type === "video" ? m.width + " × " + m.height : "AUDIO"} · ${m.generated ? "GENERATED DEMO" : "LOCAL FILE"}</div></article>`,
+        `<article class="media-card" draggable="true" data-media-drag="${escape(m.id)}"><button class="media-thumb" data-preview="${escape(m.id)}" title="Preview source" aria-label="Preview ${escape(m.name)}">${m.type === "video" ? `<img class="media-image" src="/api/media/${m.id}?poster" alt="${escape(m.name)}">` : '<span class="audio-thumb">♫</span>'}<span class="media-duration">${clock(m.duration)}</span></button><div class="media-info"><span class="media-name" title="${escape(m.name)}">${escape(m.name)}</span><button class="media-add" data-media="${escape(m.id)}" aria-label="Add ${escape(m.name)} to timeline" title="Add to timeline">＋</button></div><div class="media-caption">${m.type === "video" ? m.width + " × " + m.height : "AUDIO"} · ${m.generated ? "GENERATED" : "LOCAL"}</div>${m.type === "video" ? `<button class="scene-open text-button" data-scene="${escape(m.id)}">Understand scene ↗</button>` : ""}</article>`,
     )
     .join("");
   for (const button of document.querySelectorAll("[data-scene]"))
@@ -167,54 +189,16 @@ function renderMedia() {
   for (const button of document.querySelectorAll("[data-media]"))
     button.onclick = () =>
       action(() => api("import", { mediaId: button.dataset.media }));
+  for (const button of document.querySelectorAll("[data-preview]"))
+    button.onclick = () => previewMedia(button.dataset.preview);
+  for (const card of document.querySelectorAll("[data-media-drag]"))
+    card.ondragstart = (e) => {
+      e.dataTransfer.setData("application/x-eme-media", card.dataset.mediaDrag);
+      e.dataTransfer.effectAllowed = "copy";
+    };
 }
 function renderTimeline() {
-  const p = state.project;
-  $("revision").textContent = "Revision " + p.revision;
-  $("ruler").innerHTML = Array.from(
-    { length: 7 },
-    (_, i) =>
-      "<span>" + clock((seconds(p.timebase.durationTicks) * i) / 6) + "</span>",
-  ).join("");
-  if (!p.clips.length) {
-    $("tracks").innerHTML =
-      '<div class="empty-track">Your story starts here. Add a clip from your media.</div>';
-    return;
-  }
-  $("tracks").innerHTML = p.tracks
-    .filter(
-      (t) =>
-        !t.id.startsWith("subject-title-") ||
-        p.clips.some((c) => c.trackId === t.id),
-    )
-    .map(
-      (t) =>
-        `<div class="track-row"><span class="track-label">${escape(t.name || t.id)}</span><div class="track-lane" data-track="${escape(t.id)}">${p.clips
-          .filter((c) => c.trackId === t.id)
-          .map((c) => {
-            const asset = p.assets.find((a) => a.id === c.source?.assetId),
-              m = state.media.find((m) => m.id === asset?.id);
-            return `<button class="clip ${c.type} ${selection === c.id ? "selected" : ""}" data-clip="${escape(c.id)}" style="left:${(c.startTick / p.timebase.durationTicks) * 100}%;width:${(c.durationTicks / p.timebase.durationTicks) * 100}%" title="${escape(c.typography?.text || m?.name || c.id)}">${escape(c.typography?.text || m?.name || c.type)} <small>${seconds(c.durationTicks).toFixed(1)}s</small></button>`;
-          })
-          .join("")}</div></div>`,
-    )
-    .join("");
-  for (const button of document.querySelectorAll("[data-clip]"))
-    button.onclick = (e) => {
-      e.stopPropagation();
-      selection = button.dataset.clip;
-      const c = p.clips.find((c) => c.id === selection);
-      $("selection-label").textContent =
-        "Selected: " + (c.typography?.text || c.id);
-      if (mode === "source") seek(seconds(c.startTick));
-      renderTimeline();
-    };
-  for (const lane of document.querySelectorAll("[data-track]"))
-    lane.onclick = (e) =>
-      seek(
-        ((e.clientX - lane.getBoundingClientRect().left) / lane.clientWidth) *
-          seconds(p.timebase.durationTicks),
-      );
+  window.emeTimeline?.render();
 }
 function renderMessages() {
   const key = JSON.stringify(state.messages.map((m) => m.id));
@@ -230,111 +214,218 @@ function renderMessages() {
     .join("");
   $("chat").scrollTop = $("chat").scrollHeight;
 }
+function fitViewer() {
+  const wrap = document.querySelector(".canvas-wrap");
+  if (!wrap || !state) return;
+  const source = mode === "media" ? mediaPreview : null;
+  const width = source?.width || state.project.canvas.width,
+    height = source?.height || state.project.canvas.height;
+  const style = getComputedStyle(wrap),
+    availableW =
+      wrap.clientWidth -
+      parseFloat(style.paddingLeft) -
+      parseFloat(style.paddingRight),
+    availableH =
+      wrap.clientHeight -
+      parseFloat(style.paddingTop) -
+      parseFloat(style.paddingBottom);
+  const scale = Math.min(availableW / width, availableH / height);
+  $("canvas").style.width = Math.max(1, width * scale) + "px";
+  $("canvas").style.height = Math.max(1, height * scale) + "px";
+}
 function updateOverlay() {
-  const video = state?.project;
-  if (!video) return;
-  const canvas = $("canvas"),
-    ratio = canvas.clientWidth / video.canvas.width;
+  const p = state?.project;
+  if (!p) return;
+  const ratio = $("canvas").clientWidth / p.canvas.width;
   $("text-overlays").innerHTML =
     mode === "source"
-      ? video.clips
+      ? p.clips
           .filter(
             (c) =>
               c.type === "text" &&
+              !p.tracks.find((t) => t.id === c.trackId)?.muted &&
               seconds(c.startTick) <= cursor &&
               cursor < seconds(c.startTick + c.durationTicks),
+          )
+          .sort(
+            (a, b) =>
+              p.tracks.find((t) => t.id === a.trackId).zIndex -
+              p.tracks.find((t) => t.id === b.trackId).zIndex,
           )
           .map((c) =>
             c.properties?.subject_safe?.previewId
               ? `<img class="subject-title-overlay" alt="${escape(c.typography?.text || "")}" src="/api/title-glyph/${encodeURIComponent(c.properties.subject_safe.previewId)}" style="transform:translate(${(c.transform?.x || 0) * ratio}px,${(c.transform?.y || 0) * ratio}px)">`
-              : `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / video.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / video.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1}">${escape(c.typography?.text || "")}</div>`,
+              : `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / p.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / p.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1};text-align:${["left", "right", "center"].includes(c.typography?.textAlign) ? c.typography.textAlign : "center"};background:${c.properties?.text_backing ? "#151515" : "transparent"}">${escape(c.typography?.text || "")}</div>`,
           )
           .join("")
       : "";
-  $("timecode").innerHTML =
-    clock(cursor) +
-    " <span>/ " +
-    clock(seconds(video.timebase.durationTicks)) +
-    "</span>";
+  const time = mode === "media" ? $("player").currentTime : cursor;
+  $("timecode").textContent = window.emeEditor?.timecode(time) || clock(time);
+  const duration =
+    mode === "media"
+      ? mediaPreview?.duration || 0
+      : mode === "export"
+        ? state.outputs.at(-1)?.qa?.duration_seconds ||
+          seconds(p.timebase.durationTicks)
+        : seconds(p.timebase.durationTicks);
+  $("duration-timecode").textContent =
+    window.emeEditor?.timecode(duration) || clock(duration);
+  if (mode !== "media") window.emeTimeline?.updatePlayhead(true);
+}
+function previewMedia(id) {
+  mediaPreview = state.media.find((m) => m.id === id);
+  if (!mediaPreview) return;
+  window.emePlayback?.pause();
+  $("player").pause();
+  mode = "media";
+  $("view-media").disabled = false;
+  renderPreview();
+}
+function applyVideoStyle(clip, media) {
+  const player = $("player"),
+    view = $("video-viewport"),
+    t = clip?.transform || {},
+    crop = clip?.properties?.reframing?.crop_rect;
+  if (crop && media) {
+    player.style.width = (media.width / crop.width) * 100 + "%";
+    player.style.height = (media.height / crop.height) * 100 + "%";
+    player.style.left = (-crop.x / crop.width) * 100 + "%";
+    player.style.top = (-crop.y / crop.height) * 100 + "%";
+    player.style.objectFit = "fill";
+  } else {
+    player.style.width = "100%";
+    player.style.height = "100%";
+    player.style.left = "0";
+    player.style.top = "0";
+    player.style.objectFit = "contain";
+  }
+  view.style.transform = `translate(${((t.x || 0) / state.project.canvas.width) * 100}%,${((t.y || 0) / state.project.canvas.height) * 100}%) scale(${t.scaleX ?? 1},${t.scaleY ?? 1}) rotate(${t.rotation || 0}deg)`;
+  view.style.opacity = t.opacity ?? 1;
+  view.style.visibility = "visible";
+  const effects = clip?.effects || [];
+  view.style.filter = effects
+    .map((e) => {
+      const p = e.parameters || {};
+      return e.type === "brightness"
+        ? `brightness(${p.factor ?? 1})`
+        : e.type === "contrast"
+          ? `contrast(${p.factor ?? 1})`
+          : e.type === "invert"
+            ? "invert(1)"
+            : e.type === "blur"
+              ? `blur(${p.radius || 1}px)`
+              : "";
+    })
+    .join(" ");
 }
 function seek(time) {
   if (!state) return;
+  const player = $("player");
+  if (mode === "media") {
+    player.currentTime = Math.max(
+      0,
+      Math.min(time, mediaPreview?.duration || 0),
+    );
+    updateOverlay();
+    return;
+  }
   cursor = Math.max(
     0,
     Math.min(time, seconds(state.project.timebase.durationTicks)),
   );
-  const player = $("player");
+  window.emePlayback?.seeked();
   if (mode === "export") {
     if (player.src) player.currentTime = cursor;
     updateOverlay();
     return;
   }
-  const clip = state.project.clips.find(
-    (c) =>
-      c.type === "video" &&
-      seconds(c.startTick) <= cursor &&
-      cursor < seconds(c.startTick + c.durationTicks),
-  );
+  const clip = state.project.clips
+    .filter(
+      (c) =>
+        c.type === "video" &&
+        !state.project.tracks.find((t) => t.id === c.trackId)?.muted &&
+        seconds(c.startTick) <= cursor &&
+        cursor < seconds(c.startTick + c.durationTicks),
+    )
+    .sort(
+      (a, b) =>
+        state.project.tracks.find((t) => t.id === b.trackId).zIndex -
+        state.project.tracks.find((t) => t.id === a.trackId).zIndex,
+    )[0];
   if (clip) {
     const media = state.media.find((m) => m.id === clip.source?.assetId);
     if (media) {
-      const target = "/api/media/" + media.id;
-      const desired =
-        seconds(clip.source.trimInTick) + cursor - seconds(clip.startTick);
-      const wasPlaying = !player.paused;
+      const target = "/api/media/" + media.id,
+        desired =
+          seconds(clip.source.trimInTick) + cursor - seconds(clip.startTick),
+        wasPlaying = !player.paused;
       activeClip = clip;
       if (player.getAttribute("src") !== target) {
         player.src = target;
         player.onloadedmetadata = () => {
           player.currentTime = desired;
-          if (wasPlaying) player.play().catch(() => {});
+          if (window.emePlayback?.isRunning() || wasPlaying)
+            player.play().catch(() => {});
         };
-      } else if (Math.abs(player.currentTime - desired) > 0.08)
+      } else if (
+        Math.abs(player.currentTime - desired) >
+        (window.emePlayback?.isRunning() ? 0.15 : 0.001)
+      )
         player.currentTime = desired;
-      const t = clip.transform || {};
-      player.style.transform = `translate(${((t.x || 0) / state.project.canvas.width) * 100}%,${((t.y || 0) / state.project.canvas.height) * 100}%) scale(${t.scaleX || 1},${t.scaleY || 1}) rotate(${t.rotation || 0}deg)`;
-      player.style.opacity = t.opacity ?? 1;
+      applyVideoStyle(clip, media);
     }
   } else {
     activeClip = null;
     player.pause();
+    $("video-viewport").style.visibility = "hidden";
   }
   updateOverlay();
 }
 function renderPreview() {
+  if (!state) return;
   const video = state.project.clips.some((c) => c.type === "video");
-  $("empty-canvas").hidden = video;
+  $("empty-canvas").hidden = video || mode === "media" || mode === "export";
   $("view-source").classList.toggle("selected", mode === "source");
+  $("view-media").classList.toggle("selected", mode === "media");
   $("view-export").classList.toggle("selected", mode === "export");
-  if (mode === "export") {
-    const output = state.outputs.at(-1);
-    if (!output) {
-      mode = "source";
-      toast("Export a revision to preview the rendered result.");
-      return renderPreview();
-    }
-    const player = $("player");
-    const target = "/api/media/" + output.id;
-    player.style.transform = "";
-    player.style.opacity = 1;
+  const output = state.outputs.at(-1);
+  if (mode === "export" && !output) {
+    mode = "source";
+    toast("Export a revision to preview the rendered result.");
+    return renderPreview();
+  }
+  if (mode === "export" || mode === "media") {
+    const source = mode === "media" ? mediaPreview : output;
+    if (!source) return;
+    const target = "/api/media/" + source.id;
     activeClip = null;
-    if (player.getAttribute("src") !== target) {
-      player.src = target;
-      cursor = 0;
+    applyVideoStyle(null, null);
+    if ($("player").getAttribute("src") !== target) {
+      $("player").onloadedmetadata = null;
+      $("player").src = target;
+      if (mode === "export") cursor = 0;
     }
+    $("viewer-name").textContent =
+      mode === "media" ? source.name : "Sequence 01 · export";
     $("preview-status").textContent =
-      output.revision === state.project.revision
-        ? "Verified export · revision " + output.revision
-        : "Previous export · revision " + output.revision;
+      mode === "media"
+        ? "Source preview · original file"
+        : (output.revision === state.project.revision
+            ? "Verified export"
+            : "Previous export") +
+          " · revision " +
+          output.revision;
   } else {
     if (video)
       seek(
-        Math.min(cursor, seconds(state.project.timebase.durationTicks) - 0.01),
+        Math.min(cursor, seconds(state.project.timebase.durationTicks) - 0.001),
       );
     $("preview-status").textContent = video
       ? "Timeline preview · export for final mix"
-      : "Your canvas is ready";
+      : "Timeline preview";
+    $("viewer-name").textContent = "Sequence 01";
   }
+  fitViewer();
   updateOverlay();
 }
 function renderExport() {
@@ -365,7 +456,7 @@ function renderExport() {
       ' · verified MP4 <a href="/api/media/' +
       o.id +
       '?download">Download export ↗</a>';
-    mode = "export";
+    if (o.revision === state.project.revision) mode = "export";
     renderPreview();
   } else
     box.textContent =
@@ -375,6 +466,12 @@ async function refresh() {
   try {
     const next = await api("state");
     state = next;
+    $("project-name").textContent = state.project.title || "Untitled project";
+    const fps = state.project.timebase.fps;
+    $("sequence-spec").textContent =
+      `${state.project.canvas.width} × ${state.project.canvas.height} · ${(fps.numerator / fps.denominator).toFixed(2).replace(/\.00$/, "")} fps`;
+    $("viewer-resolution").textContent =
+      `${state.project.canvas.width} × ${state.project.canvas.height}`;
     window.emeScene?.update(state);
     renderMedia();
     renderMessages();
@@ -386,6 +483,7 @@ async function refresh() {
         selection = null;
       renderTimeline();
       renderPreview();
+      window.emeInspector?.render();
     }
     const queued = state.requests.some((r) => r.status === "QUEUED");
     $("queue-status").hidden = !queued;
@@ -475,10 +573,12 @@ $("title-form").onsubmit = (e) => {
 };
 $("export").onclick = () => action(() => api("render", {}));
 $("view-source").onclick = () => {
+  window.emePlayback?.pause();
   mode = "source";
   renderPreview();
 };
 $("view-export").onclick = () => {
+  window.emePlayback?.pause();
   mode = "export";
   renderPreview();
 };
@@ -494,6 +594,10 @@ $("player").onpause = () => ($("play").textContent = "▶");
 $("player").ontimeupdate = () => {
   if (!state) return;
   const player = $("player");
+  if (mode === "media") {
+    updateOverlay();
+    return;
+  }
   if (mode === "export") cursor = player.currentTime;
   else if (activeClip) {
     cursor =
@@ -578,6 +682,76 @@ for (const dialog of document.querySelectorAll("dialog"))
         dialog.close();
     }
   });
-window.addEventListener("resize", updateOverlay);
-refresh();
-setInterval(refresh, 1200);
+window.addEventListener("resize", () => {
+  fitViewer();
+  updateOverlay();
+});
+window.addEventListener("DOMContentLoaded", () => {
+  window.emeEditor.fitViewer = () => {
+    fitViewer();
+    updateOverlay();
+  };
+  $("view-media").onclick = () => {
+    if (mediaPreview) {
+      window.emePlayback?.pause();
+      mode = "media";
+      renderPreview();
+    }
+  };
+  $("sequence-settings").onclick = () => {
+    $("sequence-duration").value = Number(
+      seconds(state.project.timebase.durationTicks).toFixed(3),
+    );
+    $("sequence-dialog").showModal();
+  };
+  $("sequence-form").onsubmit = async (e) => {
+    e.preventDefault();
+    await window.emeEditor.edit({
+      action: "duration",
+      durationTicks: Math.round(Number($("sequence-duration").value) * 120000),
+    });
+    if (state.proposal) $("sequence-dialog").close();
+  };
+  $("media-search").oninput = () => renderMedia(true);
+  $("bin-list").onclick = () => {
+    $("media-list").classList.add("list-view");
+    $("bin-list").classList.add("selected");
+    $("bin-grid").classList.remove("selected");
+  };
+  $("bin-grid").onclick = () => {
+    $("media-list").classList.remove("list-view");
+    $("bin-grid").classList.add("selected");
+    $("bin-list").classList.remove("selected");
+  };
+  $("fullscreen").onclick = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.querySelector(".viewer").requestFullscreen();
+    } catch {
+      toast("Fullscreen is unavailable in this browser.");
+    }
+  };
+  for (const el of document.querySelectorAll("[data-prompt]"))
+    el.onclick = () => {
+      $("prompt").value = el.dataset.prompt;
+      $("prompt").focus();
+    };
+  const drop = $("timeline-scroll");
+  drop.ondragover = (e) => {
+    if (e.dataTransfer.types.includes("application/x-eme-media")) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+    }
+  };
+  drop.ondrop = (e) => {
+    e.preventDefault();
+    const mediaId = e.dataTransfer.getData("application/x-eme-media");
+    if (mediaId) action(() => api("import", { mediaId }));
+  };
+  new ResizeObserver(() => {
+    fitViewer();
+    updateOverlay();
+  }).observe(document.querySelector(".canvas-wrap"));
+  refresh();
+  setInterval(refresh, 1200);
+});

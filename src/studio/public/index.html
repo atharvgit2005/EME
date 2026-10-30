@@ -4,194 +4,548 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="eme-review" content="__REVIEW_TOKEN__" />
-    <title>EME — Make your next move</title>
+    <title>EME · Edit workspace</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
+    <svg class="icon-defs" aria-hidden="true">
+      <defs>
+        <symbol id="i-film" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="m5 3 14 9-7 1-3 7z" />
+        </symbol>
+        <symbol id="i-cut" viewBox="0 0 24 24">
+          <circle cx="6" cy="6" r="3" />
+          <circle cx="6" cy="18" r="3" />
+          <path d="m8 8 12 12M8 16 20 4" />
+        </symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24">
+          <path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7" />
+        </symbol>
+        <symbol id="i-link" viewBox="0 0 24 24">
+          <path
+            d="m10 13 4-4M8 16l-1 1a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0M16 8l1-1a4 4 0 0 1 6 6l-5 5a4 4 0 0 1-6 0"
+            transform="translate(1 0) scale(.9)"
+          />
+        </symbol>
+        <symbol id="i-magnet" viewBox="0 0 24 24">
+          <path
+            d="M5 3v10a7 7 0 0 0 14 0V3h-5v10a2 2 0 0 1-4 0V3zM5 7h5M14 7h5"
+          />
+        </symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24">
+          <path d="m12 3 2.7 6.3L21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7z" />
+        </symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24">
+          <path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10H3z" />
+        </symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24">
+          <rect x="4" y="4" width="6" height="6" rx="1" />
+          <rect x="14" y="4" width="6" height="6" rx="1" />
+          <rect x="4" y="14" width="6" height="6" rx="1" />
+          <rect x="14" y="14" width="6" height="6" rx="1" />
+        </symbol>
+        <symbol id="i-list" viewBox="0 0 24 24">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 24 24">
+          <path d="m8 5 11 7-11 7z" />
+        </symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24">
+          <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+          <circle cx="12" cy="12" r="3" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+          <rect x="5" y="10" width="14" height="11" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </symbol>
+        <symbol id="i-speaker" viewBox="0 0 24 24">
+          <path
+            d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8M20 5a10 10 0 0 1 0 14"
+          />
+        </symbol>
+        <symbol id="i-export" viewBox="0 0 24 24">
+          <path d="M12 16V3m-5 5 5-5 5 5M4 14v6h16v-6" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10" cy="10" r="6" />
+          <path d="m15 15 6 6" />
+        </symbol>
+      </defs>
+    </svg>
     <header class="topbar">
       <a class="wordmark" href="/" aria-label="Editing Mechanics Engine"
-        >M<span>/</span>E<span class="wordmark-label"
-          >EDITING MECHANICS</span
+        ><span class="brand-box">m<span>e</span></span
+        ><span
+          >editing mechanics<span class="brand-sub"
+            >ENGINE / LOCAL WORKSPACE</span
+          ></span
         ></a
       >
       <div class="project-name">
-        <span class="project-dot"></span><span>Untitled project</span
-        ><span class="local-label">LOCAL</span>
+        <span class="project-dot"></span
+        ><span id="project-name">Untitled project</span
+        ><span class="local-label">Saved locally</span>
       </div>
       <div class="top-actions">
-        <button id="connect" class="quiet">
+        <button id="history-button" class="quiet" title="Revision history">
+          ↶ History</button
+        ><button id="connect" class="quiet">
           <span class="connection-dot"></span
           ><span id="connection-label">Connect IDE</span></button
         ><button id="export" class="primary">
-          Export video <span>↗</span>
+          <svg class="icon"><use href="#i-export" /></svg>Export
         </button>
       </div>
     </header>
+    <div class="workspace-bar">
+      <div class="workspace-label">
+        <span class="workspace-dot"></span> EDIT WORKSPACE
+      </div>
+      <span class="muted" id="sequence-spec">960 × 540 · 30 fps</span
+      ><button id="shortcuts-button" class="text-button">
+        Keyboard shortcuts <kbd>?</kbd>
+      </button>
+    </div>
     <main class="workspace">
-      <aside class="library">
-        <div class="section-title">
-          <h2>Your media</h2>
-          <span id="media-count" class="count">0</span>
-        </div>
-        <button class="upload-button" id="upload-button">
-          <span>＋</span> Import footage</button
-        ><input id="file-input" type="file" accept="video/*,audio/*" hidden />
-        <p class="muted small">Video or audio · up to 250 MB</p>
-        <div id="media-list" class="media-list"></div>
-        <div class="library-bottom">
-          <div class="tiny-label">A LITTLE HEAD START</div>
-          <p>Get a feel for the workflow.</p>
-          <button id="demo" class="text-button">
-            Try the sample project <span>↗</span>
+      <aside class="library panel">
+        <div class="panel-heading">
+          <h2>
+            <svg class="icon"><use href="#i-folder" /></svg>Media pool
+            <span id="media-count" class="count">0</span>
+          </h2>
+          <button
+            id="upload-button"
+            class="icon-button"
+            aria-label="Import media"
+            title="Import video or audio"
+          >
+            <svg class="icon"><use href="#i-plus" /></svg>
           </button>
-          <p class="muted small">Generated footage. Yours to explore.</p>
+        </div>
+        <input id="file-input" type="file" accept="video/*,audio/*" hidden />
+        <div class="bin-tools">
+          <label class="search-field"
+            ><svg class="icon"><use href="#i-search" /></svg
+            ><input
+              id="media-search"
+              placeholder="Search media"
+              aria-label="Search media" /></label
+          ><button
+            id="bin-grid"
+            class="icon-button selected"
+            aria-label="Grid view"
+          >
+            <svg class="icon"><use href="#i-grid" /></svg></button
+          ><button id="bin-list" class="icon-button" aria-label="List view">
+            <svg class="icon"><use href="#i-list" /></svg>
+          </button>
+        </div>
+        <div class="bin-breadcrumb">Project <span>›</span> All media</div>
+        <div id="media-list" class="media-list"></div>
+        <div id="media-empty" class="media-empty">
+          <svg class="icon"><use href="#i-film" /></svg
+          ><strong>Your footage starts here</strong
+          ><span>Import video or audio.<br />Files stay on this device.</span>
+        </div>
+        <div class="library-bottom">
+          <button id="demo" class="quiet">
+            <svg class="icon"><use href="#i-play" /></svg>Load sample footage</button
+          ><span class="muted small">Generated sample · includes audio</span>
         </div>
       </aside>
-      <section class="editing-area">
-        <div class="preview-heading">
-          <div>
-            <span class="tiny-label">THE CANVAS</span>
-            <h1>Make your next move.</h1>
-          </div>
+      <section class="viewer panel">
+        <div class="panel-heading viewer-heading">
           <div class="view-tabs">
             <button id="view-source" class="selected">Timeline</button
-            ><button id="view-export">Latest export</button>
+            ><button id="view-media" disabled>Source</button
+            ><button id="view-export">Export</button>
           </div>
+          <span id="viewer-name" class="small muted">Sequence 01</span
+          ><button
+            id="fullscreen"
+            class="icon-button"
+            aria-label="Expand viewer"
+            title="Expand viewer"
+          >
+            ⛶
+          </button>
         </div>
         <div class="canvas-wrap">
           <div class="canvas" id="canvas">
-            <video id="player" playsinline preload="metadata"></video>
+            <div id="video-viewport">
+              <video id="player" playsinline preload="metadata"></video>
+            </div>
             <div id="text-overlays"></div>
             <div id="empty-canvas">
-              <div class="empty-symbol">M<span>/</span>E</div>
-              <h2>A little footage.<br />A lot of possibility.</h2>
-              <p>
-                Import a video, then tell your editor<br />what you have in
-                mind.
-              </p>
-              <button id="empty-demo" class="light-button">
-                Explore with sample footage <span>↗</span>
+              <div class="empty-symbol">
+                <svg class="icon"><use href="#i-film" /></svg>
+              </div>
+              <h2>Make room for your next edit.</h2>
+              <p>Add footage to the timeline to get started.</p>
+              <button id="empty-demo" class="quiet">
+                Try sample footage ↗
               </button>
             </div>
-            <div class="canvas-corner">EME STUDIO <span>●</span></div>
           </div>
+        </div>
+        <div class="viewer-info">
+          <span id="preview-status">Timeline preview</span
+          ><span id="viewer-resolution">960 × 540</span>
         </div>
         <div class="transport">
-          <div class="transport-left">
-            <button id="play" class="icon-button" aria-label="Play or pause">
+          <span id="timecode">00:00:00:00</span>
+          <div class="playback-buttons">
+            <button
+              id="go-start"
+              class="icon-button"
+              aria-label="Go to start"
+              title="Go to start (Home)"
+            >
+              |◀</button
+            ><button
+              id="step-back"
+              class="icon-button"
+              aria-label="Previous frame"
+              title="Previous frame (←)"
+            >
+              ‹</button
+            ><button
+              id="play"
+              class="icon-button play-button"
+              aria-label="Play or pause"
+              title="Play / pause (Space)"
+            >
               ▶</button
-            ><span id="timecode">00:00.0 <span>/ 00:12.0</span></span>
+            ><button
+              id="step-next"
+              class="icon-button"
+              aria-label="Next frame"
+              title="Next frame (→)"
+            >
+              ›</button
+            ><button
+              id="go-end"
+              class="icon-button"
+              aria-label="Go to end"
+              title="Go to end (End)"
+            >
+              ▶|
+            </button>
           </div>
-          <span id="preview-status" class="muted small"
-            >Your canvas is ready</span
-          ><button id="mute" class="icon-button" aria-label="Mute or unmute">
-            ♪
+          <div class="transport-right">
+            <span id="duration-timecode" class="small muted">00:00:12:00</span
+            ><button
+              id="mute"
+              class="icon-button"
+              aria-label="Mute or unmute"
+              title="Mute preview"
+            >
+              ♪
+            </button>
+          </div>
+        </div>
+      </section>
+      <aside class="properties-panel panel">
+        <div class="side-tabs" role="tablist" aria-label="Editing panels">
+          <button
+            id="tab-inspector"
+            class="selected"
+            role="tab"
+            aria-selected="true"
+          >
+            Inspector</button
+          ><button id="tab-agent" role="tab" aria-selected="false">
+            <svg class="icon"><use href="#i-spark" /></svg>Assistant</button
+          ><button id="tab-review" role="tab" aria-selected="false">
+            Review<span id="review-count" hidden>1</span>
           </button>
         </div>
-        <div class="timeline">
-          <div class="timeline-toolbar">
-            <div>
-              <span class="tiny-label">TIMELINE</span
-              ><span id="revision" class="revision">Revision 0</span>
+        <div id="inspector-panel" class="side-panel">
+          <div id="inspector-empty" class="inspector-empty">
+            <svg class="icon"><use href="#i-arrow" /></svg>
+            <h3>Every detail, in reach.</h3>
+            <p>
+              Select a timeline clip to adjust its timing, transform, text or
+              audio.
+            </p>
+            <div class="shortcut-hint">
+              <kbd>V</kbd> Select <kbd>B</kbd> Blade <kbd>S</kbd> Snap
             </div>
+          </div>
+          <div id="inspector-content" hidden></div>
+        </div>
+        <div id="agent-panel" class="side-panel assistant" hidden>
+          <div class="assistant-heading">
+            <span class="assistant-avatar">✳</span>
             <div>
-              <button id="undo" class="icon-button" aria-label="Undo">↶</button
-              ><button id="redo" class="icon-button" aria-label="Redo">↷</button
-              ><button id="add-title" class="quiet">
-                T <span>Add title</span>
+              <h2>Editing assistant</h2>
+              <span id="agent-status" class="muted small">Local IDE agent</span>
+            </div>
+          </div>
+          <div id="chat" class="chat">
+            <div class="welcome">
+              <h3>A little less mechanics.<br />A little more creating.</h3>
+              <p>
+                Describe an edit. Your connected IDE prepares a plan for review.
+              </p>
+              <button
+                class="example-prompt"
+                data-prompt="Add a title for the first four seconds."
+              >
+                Add an opening title ↗</button
+              ><button
+                class="example-prompt"
+                data-prompt="Place a small title clear of the tracked speaker."
+              >
+                Leave room for the speaker ↗
               </button>
             </div>
           </div>
-          <div id="ruler" class="ruler"></div>
-          <div id="tracks" class="tracks">
-            <div class="empty-track">
-              Your story starts here. Add a clip from your media.
+          <div id="queue-status" class="queue-status" hidden>
+            <span class="spinner"></span>Waiting for your IDE agent
+          </div>
+          <form id="prompt-form" class="composer">
+            <label for="prompt" class="sr-only">Describe your edit</label
+            ><textarea
+              id="prompt"
+              rows="3"
+              placeholder="Describe your edit…"
+            ></textarea>
+            <div class="composer-actions">
+              <button
+                id="dictate"
+                type="button"
+                class="dictation"
+                title="Use your desktop Wispr Flow shortcut"
+              >
+                ◉ Dictate</button
+              ><button
+                id="send"
+                type="submit"
+                class="send-button"
+                aria-label="Send editing request"
+              >
+                ↑
+              </button>
             </div>
-          </div>
-          <div class="timeline-footer">
-            <span id="selection-label"
-              >Select a clip to give your request context</span
-            ><span>120k timebase · 30 fps</span>
+          </form>
+          <div class="assistant-footnote">
+            Local IDE / MCP · no model API key required
           </div>
         </div>
-        <div id="render-banner" class="render-banner" hidden></div>
-        <div class="bottom-note">
-          <span class="save-dot"></span> Saved on this device
-          <span class="bottom-note-right"
-            >You direct. EME handles the mechanics.</span
-          >
-        </div>
-      </section>
-      <aside class="assistant">
-        <div class="assistant-heading">
-          <div class="assistant-avatar">✳</div>
-          <div>
-            <h2>Your editing partner</h2>
-            <span id="agent-status" class="muted small">Local IDE agent</span>
-          </div>
-          <button
-            id="history-button"
-            class="icon-button"
-            aria-label="View revision history"
-          >
-            ◷
-          </button>
-        </div>
-        <div id="chat" class="chat">
-          <div class="welcome">
-            <span class="tiny-label">LET’S MAKE SOMETHING</span>
-            <h2>The edit is<br />in your hands.</h2>
+        <div id="review-panel" class="side-panel" hidden>
+          <div id="review-empty" class="inspector-empty">
+            <svg class="icon"><use href="#i-eye" /></svg>
+            <h3>Ready when you are.</h3>
             <p>
-              Describe the change. Review the plan.<br />Keep what works, refine
-              the rest.
+              Timeline gestures and inspector changes create a precise edit for
+              you to review.
             </p>
-            <div class="example-prompt">
-              “Add a title for the first four seconds.”
-            </div>
-            <div class="example-prompt">
-              “Move the title lower. Keep the rest.”
-            </div>
-            <div class="agent-explainer">
-              Connect your IDE agent to turn requests into edit proposals. Quick
-              actions work locally.
-            </div>
           </div>
-        </div>
-        <div id="proposal" class="proposal" hidden></div>
-        <div id="queue-status" class="queue-status" hidden>
-          <span class="spinner"></span> Queued · ask your IDE to process the
-          inbox
-        </div>
-        <form id="prompt-form" class="composer">
-          <label for="prompt" class="sr-only">Describe your edit</label
-          ><textarea
-            id="prompt"
-            rows="3"
-            placeholder="What would you like to change?"
-          ></textarea>
-          <div class="composer-actions">
-            <button
-              id="dictate"
-              type="button"
-              class="dictation"
-              title="Use Wispr Flow dictation in this field"
-            >
-              ◉ <span>Dictate with Flow</span></button
-            ><button
-              id="send"
-              type="submit"
-              class="send-button"
-              aria-label="Send editing request"
-            >
-              ↑
-            </button>
-          </div>
-        </form>
-        <div class="assistant-footnote">
-          Every change starts with your approval.
+          <div id="proposal" class="proposal" hidden></div>
         </div>
       </aside>
+      <section class="timeline panel" aria-label="Timeline editor">
+        <div
+          id="timeline-resize"
+          class="timeline-resize"
+          role="separator"
+          aria-label="Resize timeline"
+          tabindex="0"
+          aria-orientation="horizontal"
+        ></div>
+        <div class="timeline-toolbar">
+          <div class="timeline-tools">
+            <button
+              id="sequence-settings"
+              class="sequence-tab"
+              title="Sequence settings"
+            >
+              <svg class="icon"><use href="#i-film" /></svg>Sequence 01</button
+            ><span class="divider"></span
+            ><button
+              id="undo"
+              class="icon-button"
+              aria-label="Undo"
+              title="Undo (⌘Z)"
+            >
+              ↶</button
+            ><button
+              id="redo"
+              class="icon-button"
+              aria-label="Redo"
+              title="Redo (⇧⌘Z)"
+            >
+              ↷</button
+            ><span class="divider"></span
+            ><button
+              id="tool-select"
+              class="icon-button selected"
+              aria-label="Selection tool"
+              title="Selection tool (V)"
+            >
+              <svg class="icon"><use href="#i-arrow" /></svg></button
+            ><button
+              id="tool-blade"
+              class="icon-button"
+              aria-label="Blade tool"
+              title="Blade tool (B)"
+            >
+              <svg class="icon"><use href="#i-cut" /></svg></button
+            ><button
+              id="split-clip"
+              class="icon-button"
+              aria-label="Split at playhead"
+              title="Split at playhead (⌘B)"
+            >
+              ][</button
+            ><button
+              id="delete-clip"
+              class="icon-button"
+              aria-label="Delete selected clip"
+              title="Delete selected clip (Backspace)"
+            >
+              <svg class="icon"><use href="#i-trash" /></svg></button
+            ><span class="divider"></span
+            ><button
+              id="snap-toggle"
+              class="icon-button selected"
+              aria-label="Toggle snapping"
+              aria-pressed="true"
+              title="Snapping (S)"
+            >
+              <svg class="icon"><use href="#i-magnet" /></svg></button
+            ><button
+              id="link-toggle"
+              class="icon-button selected"
+              aria-label="Link source audio edits"
+              aria-pressed="true"
+              title="Keep source audio linked"
+            >
+              <svg class="icon"><use href="#i-link" /></svg></button
+            ><button id="add-title" class="quiet"><b>T</b> Add text</button>
+          </div>
+          <div class="timeline-zoom">
+            <button id="zoom-out" class="icon-button" aria-label="Zoom out">
+              −</button
+            ><input
+              id="timeline-zoom"
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+              aria-label="Timeline zoom"
+            /><button id="zoom-in" class="icon-button" aria-label="Zoom in">
+              ＋</button
+            ><button id="zoom-fit" class="quiet" title="Fit sequence (Shift+Z)">
+              Fit
+            </button>
+          </div>
+        </div>
+        <div class="timeline-surface">
+          <div class="track-headers">
+            <div class="track-header-ruler">
+              <input
+                id="timeline-clock"
+                aria-label="Playhead timecode"
+                value="00:00:00:00"
+                spellcheck="false"
+                title="Enter HH:MM:SS:FF"
+              />
+            </div>
+            <div id="track-headers"></div>
+          </div>
+          <div
+            id="timeline-scroll"
+            class="timeline-scroll"
+            tabindex="0"
+            aria-label="Scrollable timeline"
+          >
+            <div id="timeline-content" class="timeline-content">
+              <div id="ruler" class="ruler" aria-label="Time ruler"></div>
+              <div id="tracks" class="tracks"></div>
+              <div id="timeline-playhead" class="timeline-playhead">
+                <div class="playhead-grip"></div>
+                <div class="playhead-line"></div>
+              </div>
+              <div id="snap-line" class="snap-line" hidden></div>
+              <div id="timeline-ghost" class="timeline-ghost" hidden>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-footer">
+          <span id="selection-label"
+            >Select a clip · drag to move · drag an edge to trim</span
+          >
+          <div>
+            <span id="timeline-scale">Fit sequence</span
+            ><span class="revision" id="revision">Revision 0</span>
+          </div>
+        </div>
+      </section>
     </main>
+    <footer class="statusbar">
+      <div>
+        <span class="save-dot"></span>Saved on this device<span
+          class="status-divider"
+          >/</span
+        ><span id="status-hint">Your footage. Your edit.</span>
+      </div>
+      <div id="render-banner" class="render-banner" hidden></div>
+      <button id="project-download" class="text-button">Project JSON ↗</button>
+    </footer>
+    <dialog id="shortcuts-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button
+      ><span class="tiny-label">EDIT WORKSPACE</span>
+      <h2>Keep your hands on the edit.</h2>
+      <div class="shortcut-table">
+        <span>Play / pause</span><kbd>Space</kbd
+        ><span>Previous / next frame</span><kbd>← / →</kbd
+        ><span>Selection / blade</span><kbd>V / B</kbd
+        ><span>Split selected clip</span><kbd>⌘ Ctrl + B</kbd
+        ><span>Delete selection</span><kbd>Backspace</kbd><span>Snapping</span
+        ><kbd>S</kbd><span>Zoom to fit</span><kbd>Shift + Z</kbd
+        ><span>Undo / redo</span><kbd>⌘ Ctrl + Z / Shift + Z</kbd
+        ><span>Nudge selected clip</span><kbd>Alt + ← / →</kbd>
+      </div>
+      <p class="muted small">
+        Keyboard commands pause while typing in fields. Timeline edits open
+        Review before they change the project.
+      </p>
+    </dialog>
+    <dialog id="sequence-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button
+      ><span class="tiny-label">SEQUENCE SETTINGS</span>
+      <h2>Room for your edit.</h2>
+      <p>
+        Extend the timeline to add more clips. Shortening requires trimming
+        clips past the new end first.
+      </p>
+      <form id="sequence-form">
+        <label for="sequence-duration">Sequence duration (seconds)</label
+        ><input
+          id="sequence-duration"
+          type="number"
+          min="0.034"
+          max="120"
+          step="0.001"
+          required
+        />
+        <p class="muted small">
+          Resolution and frame rate use the current project settings.
+        </p>
+        <button class="primary">Review duration change ↗</button>
+      </form>
+    </dialog>
     <div id="toast" class="toast" role="status" hidden></div>
     <dialog id="connect-dialog">
       <button class="dialog-close" data-close aria-label="Close">×</button
@@ -381,6 +735,9 @@ MOVE</textarea
       </p>
     </dialog>
     <script src="/app.js"></script>
+    <script src="/timeline.js"></script>
+    <script src="/inspector.js"></script>
+    <script src="/playback.js"></script>
     <script src="/scene.js"></script>
   </body>
 </html>

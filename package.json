@@ -31,7 +31,7 @@
     "node": ">=20.20.1"
   },
   "scripts": {
-    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement",
+    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement && npm run test:editor",
     "doctor": "node bin/eme.js doctor",
     "capabilities": "node bin/eme.js capabilities",
     "validate:schema": "node tools/validate-schema.js",
@@ -49,6 +49,7 @@
     "test:legacy": "node --test tests/*.test.js tests/**/*.test.js",
     "test:scene": "node --test tests/scene.test.js",
     "test:placement": "node --test tests/title-placement.test.js",
+    "test:editor": "node --test tests/direct-edits.test.js tests/waveform.test.js tests/studio-editor.test.js",
     "verify:scene:m3": "node scripts/verify-scene-m3.cjs"
   },
   "keywords": [
