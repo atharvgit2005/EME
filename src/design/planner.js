@@ -99,7 +99,7 @@ function normalize(project, input, revisionClipId = null) {
     project.canvas.height > 3840
   )
     invalid("Supported canvas range is 320×180 through 3840×3840.");
-  brief.profiles ??= Object.keys(PROFILES);
+  brief.profiles ??= ["editorial", "balanced", "energetic"];
   if (
     !Array.isArray(brief.profiles) ||
     !brief.profiles.length ||

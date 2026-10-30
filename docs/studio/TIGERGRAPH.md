@@ -91,6 +91,12 @@ is not an automatic migration mechanism.
 
 Remote URLs require HTTPS. HTTP is supported on loopback for local development.
 Credentials are optional only for a local instance with authentication disabled.
+Savanna workspaces can auto-pause independently of EME. If automatic restart is
+disabled, resume the workspace in Savanna before syncing; a paused workspace may
+return HTTP 500 with "Auto start is not enabled". EME retains local edits and
+feedback while offline and replays them after the workspace resumes. Database
+credentials cannot resume cloud infrastructure, and account sessions are never
+saved as runtime credentials.
 Redirects are refused, and responses are bounded to four megabytes. Error/status
 responses do not contain tokens, endpoint credentials or raw remote error bodies.
 No SDK, Python graph package, additional model or paid API was added.

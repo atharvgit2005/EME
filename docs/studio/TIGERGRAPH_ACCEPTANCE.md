@@ -1,10 +1,10 @@
 # TigerGraph integration acceptance — 2026-10-30
 
-`npm test` passed 260 tests: 165 bounded engine checks, seven Studio, fourteen
-scene, five protected-title placement, twenty editor/waveform, thirty-three
+`npm test` passed 261 tests: 165 bounded engine checks, seven Studio, fourteen
+scene, five protected-title placement, twenty editor/waveform, thirty-four
 design/ranking/revision and sixteen TigerGraph checks. Contract and portable-input
 verification also exited zero. The latest aggregate output is retained under
-ignored `.artifacts/tigergraph/test-output.txt`.
+ignored `.artifacts/tigergraph/neo-full-test-output.txt`.
 
 The TigerGraph suite exercises the real HTTP adapter against a strict REST++
 contract double. It checks configuration/authentication, bounded and verified
@@ -27,7 +27,7 @@ the production stdio tool. The report has `evidenceKind: "restpp_contract_double
 All controlled preferences were retracted; no human aesthetic acceptance is claimed.
 
 The aggregate run's retained example is
-`.artifacts/tigergraph/e2e-contract-f814ca68-347c-4e18-9ed1-6dc1bec79295/verification.json`.
+`.artifacts/tigergraph/e2e-contract-6e4bcf9f-9ca5-4b4e-892d-a5ad7f748316/verification.json`.
 Its `delivery` links the actual rendered MP4 and native delivery evidence. The live
 CLI command is `node --env-file=.env.local bin/eme-tigergraph.js verify`; it refuses
 unconfigured endpoints and fails if graph reads fall back locally.
@@ -66,3 +66,11 @@ compatibility with 4.2.5; other versions and deployments need their own live che
 
 No credentials were added to source files. The isolated checks did not change the
 user's active project. See [setup, data model and live verification](TIGERGRAPH.md).
+
+The subsequent real editing session added the explicit Neobrutalism profile and
+verified three measured title/spacing variants on the active project. The IDE
+retrieved all three from live TigerGraph memory. The CLI helper now permits the
+design, ranking and memory tools already exposed by Studio MCP. The new regression
+checks measured footprint and readability for footage and portrait-card variants.
+The user requested this style; that request did not fabricate a comparison vote.
+The human preference comparison remains pending.

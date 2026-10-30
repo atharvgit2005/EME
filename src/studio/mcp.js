@@ -11,6 +11,7 @@ const parameterSchema = {
     holdScale: { type: "number", minimum: 0.8, maximum: 1.5 },
   },
 };
+const profileIds = Object.keys(require("../design/catalog.js").PROFILES);
 const definitions = [
   {
     name: "eme_studio_get_design_memory",
@@ -21,7 +22,7 @@ const definitions = [
       additionalProperties: false,
       properties: {
         recipe: { enum: ["lower-third", "title-card", "statistic-card"] },
-        profileId: { enum: ["editorial", "balanced", "energetic"] },
+        profileId: { enum: profileIds },
         aspect: { enum: ["landscape", "portrait", "square"] },
         componentId: { type: "string", minLength: 1, maxLength: 200 },
         limit: { type: "integer", minimum: 1, maximum: 10 },
@@ -62,7 +63,7 @@ const definitions = [
             value: { type: "string", maxLength: 16 },
             startTick: { type: "integer", minimum: 0 },
             durationTicks: { type: "integer", minimum: 1 },
-            profileId: { enum: ["editorial", "balanced", "energetic"] },
+            profileId: { enum: profileIds },
             parameters: {
               type: "object",
               additionalProperties: false,
@@ -123,7 +124,7 @@ const definitions = [
             startTick: { type: "integer", minimum: 0 },
             durationTicks: { type: "integer", minimum: 1 },
             videoClipId: { type: "string" },
-            preferredProfile: { enum: ["editorial", "balanced", "energetic"] },
+            preferredProfile: { enum: profileIds },
             parameters: parameterSchema,
             variationMode: { enum: ["styles", "parameters"] },
             variationAxes: {
@@ -145,7 +146,7 @@ const definitions = [
               minItems: 1,
               maxItems: 3,
               uniqueItems: true,
-              items: { enum: ["editorial", "balanced", "energetic"] },
+              items: { enum: profileIds },
             },
           },
         },

@@ -2,6 +2,24 @@
 const VERSION = "eme-design.v1";
 const { LIMITS, DEFAULTS } = require("./parameters.js");
 const PROFILES = {
+  neobrutalism: {
+    name: "Neobrutalism",
+    description:
+      "Bold black type, yellow blocks, heavy borders and hard offset shadows.",
+    background: "#ffe44d",
+    surface: "#ffe44d",
+    foreground: "#111111",
+    accent: "#111111",
+    borderPx: 4,
+    shadowPx: 9,
+    textStrokePx: 1,
+    titleRatio: 0.092,
+    marginRatio: 0.075,
+    entrySeconds: 0.2,
+    exitSeconds: 0.2,
+    travelRatio: 0.014,
+    wordsPerSecond: 2.8,
+  },
   editorial: {
     name: "Editorial",
     description: "Generous spacing, warm paper and restrained motion.",

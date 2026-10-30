@@ -53,7 +53,13 @@ an MCP server:
 node scripts/studio-agent-call.cjs eme_studio_get_inbox
 node scripts/studio-agent-call.cjs eme_studio_submit_plan /absolute/path/to/plan.json
 node scripts/studio-agent-call.cjs eme_studio_reply /absolute/path/to/reply.json
+node scripts/studio-agent-call.cjs eme_studio_get_design_memory
+node scripts/studio-agent-call.cjs eme_studio_rank_designs /absolute/path/to/set-query.json
 ```
+
+`set-query.json` contains `{ "setId": "the-set-id-from-the-inbox" }`. The CLI also
+supports the design planning, component, revision and proposal tools; it cannot
+submit preference votes or approve edits.
 
 A plan contains `requestId`, `baseRevision`, `summary`, and `operations`, each with
 `type` and `params`. The inbox supplies live IDs, units, examples, and supported

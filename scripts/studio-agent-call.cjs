@@ -12,12 +12,20 @@ if (
   ![
     "eme_studio_get_inbox",
     "eme_studio_get_scene",
+    "eme_studio_get_design_memory",
+    "eme_studio_get_design_component",
+    "eme_studio_rank_designs",
+    "eme_studio_plan_design",
+    "eme_studio_revise_design",
+    "eme_studio_propose_design",
     "eme_studio_propose_title",
     "eme_studio_submit_plan",
     "eme_studio_reply",
   ].includes(name)
 )
-  throw Error("Use a Studio inbox, proposal, or reply tool.");
+  throw Error(
+    "Use a supported Studio inbox, scene, design, proposal, or reply tool.",
+  );
 const child = spawn(
   process.execPath,
   [path.resolve(__dirname, "../bin/eme-studio-mcp.js")],

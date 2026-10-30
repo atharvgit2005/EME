@@ -124,6 +124,50 @@ test("Engine produces distinct measured designs without mutation and preserves t
     assert.equal(png.headers.get("content-type"), "image/png");
   }
 });
+test("Neobrutalist footage and portrait cards retain readable measured bounds and distinct editable variants", async (t) => {
+  const f = await setup(t, true);
+  for (const portrait of [false, true]) {
+    const project = structuredClone(f.server.project());
+    if (portrait)
+      project.canvas = { ...project.canvas, width: 540, height: 960 };
+    const brief = {
+      ...f.brief,
+      profiles: ["neobrutalism"],
+      preferredProfile: "neobrutalism",
+      variationMode: "parameters",
+      variationAxes: ["titleScale", "spacingScale"],
+    };
+    if (portrait) {
+      brief.recipe = "title-card";
+      delete brief.videoClipId;
+    }
+    const set = createDesignSet({
+      project,
+      brief,
+      outputDir: path.join(f.root, portrait ? "neo-card" : "neo-footage"),
+    });
+    assert.equal(set.candidates.length, 3);
+    assert.equal(
+      new Set(set.candidates.map((c) => c.report.graphicSha256)).size,
+      3,
+    );
+    for (const c of set.candidates) {
+      assert.equal(c.profileId, "neobrutalism");
+      const b = c.report.layout.alphaBounds;
+      assert.ok(
+        b.x >= 0 &&
+          b.y >= 0 &&
+          b.x + b.width <= project.canvas.width &&
+          b.y + b.height <= project.canvas.height,
+      );
+      for (const e of c.report.layout.elements) {
+        assert.ok(e.fontSize >= c.report.layout.minimumFontPx);
+        assert.ok(e.bounds.x + e.bounds.width <= project.canvas.width);
+        assert.ok(e.bounds.y + e.bounds.height <= project.canvas.height);
+      }
+    }
+  }
+});
 test("Cards adapt to portrait canvas and reject content that cannot fit without truncation", async (t) => {
   const f = await setup(t),
     p = f.server.project();

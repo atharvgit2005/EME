@@ -15,6 +15,13 @@ type ratios, surface/text/accent roles, margins and entry/exit timing across rec
 Click **Review this design**, inspect its proposal, then approve to apply it.
 Undo/redo uses existing engine history. Dismissal preserves the existing edit.
 
+Choose **Neobrutalism** explicitly for yellow panels, heavy black borders, hard
+offset shadows and heavier measured text. It supports the same footage/card
+recipes, within-style variants, revisions, feedback and graph memory. **Compare
+default styles** retains the original three-style comparison; each request still
+produces at most three candidates. The IDE discovers all supported profile IDs
+from `designSystem.profiles` in its inbox.
+
 Lower thirds require one visible, untransformed video covering the entire interval,
 with a compatible static crop and no effects or animated transforms. Placement is
 not subject-safe: use **Understand scene** and the existing protected-title tool
