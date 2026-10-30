@@ -31,17 +31,24 @@ with system fallbacks.
 
 ## Deploy with Vercel CLI
 
-Deploy only this directory, never the repository root:
+Production: https://eme-website-pied.vercel.app
+
+The Vercel project `eme-website` is connected to this repository. Its **Root
+Directory must be `website`**, with framework Other, output directory `.`, and
+empty install/build commands. Pushes to `main` then deploy only the static site.
+Do not reset the root to the repository root: that publishes the wrong directory
+and makes the homepage return 404.
+
+To rebuild the current production Git deployment with Vercel CLI:
 
 ```sh
-cd website
-vercel link --yes --project eme-website --scope atharv-paharias-projects
-vercel deploy --prod --yes --scope atharv-paharias-projects
+vercel redeploy https://eme-website-pied.vercel.app --target production --scope atharv-paharias-projects
 ```
 
 This is a static deployment with no install/build step or environment variables.
 Local Vercel project linkage is ignored by Git. Engine credentials, media and
-feedback databases live outside the deploy directory.
+feedback databases live outside the website root. The CLI command above rebuilds
+the existing Git source without uploading local files.
 
 The supplied logo is in `assets/eme-logo.png`, recolored to lime
 with a transparent background using the built-in image editing tool. The two
