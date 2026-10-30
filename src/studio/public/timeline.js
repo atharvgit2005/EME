@@ -41,6 +41,7 @@
     );
     return (
       c.typography?.text ||
+      asset?.metadata?.design?.title ||
       state.media.find(
         (m) => m.id === asset?.id || m.audioAsset?.id === asset?.id,
       )?.name ||

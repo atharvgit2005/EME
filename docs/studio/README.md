@@ -31,7 +31,7 @@ an audible source-audio or soundtrack clip. Silent-video export is not implement
 Click **Connect IDE** in Studio and copy the generated MCP configuration into your
 IDE's supported MCP settings. It uses `bin/eme-studio-mcp.js` and the active workspace
 root. No private IDE endpoints, browser credentials, or external model API keys are used.
-The original editing flow adds three Studio tools to the existing 26 EME tools; scene tracking adds a fourth:
+The editing flow adds inbox, proposal and reply tools to the existing 26 EME tools. Scene placement and the shared design system add further planning tools:
 
 - `eme_studio_get_inbox`: read requests, current project, media, and constraints.
 - `eme_studio_submit_plan`: submit grounded operations for human review.
@@ -101,4 +101,34 @@ on external assets and fixed cleanup paths. Review it before use.
 
 ## Scene understanding prototype
 
-Use **Understand scene** on a video card to select and track a region with the optional local MPS worker. [Setup, contract, and scope](SCENE.md). The Studio MCP server has 31 tools, including the read-only scene interval query and `eme_studio_propose_title` for a guarded, reviewable title placement. Follow the [hackathon demo walkthrough](HACKATHON_DEMO.md) for the complete tracking-to-export flow.
+Use **Understand scene** on a video card to select and track a region with the optional local MPS worker. [Setup, contract, and scope](SCENE.md). The Studio MCP server has 37 tools, including the read-only scene interval query and `eme_studio_propose_title` for a guarded, reviewable title placement. Follow the [hackathon demo walkthrough](HACKATHON_DEMO.md) for the complete tracking-to-export flow.
+
+## Shared design system
+
+Use **Design** in the timeline to compare three styles for a footage lower third,
+title card or statistic card. The IDE can call `eme_studio_plan_design` and
+`eme_studio_propose_design`; EME owns measured layout and motion compilation.
+See [scope, evidence, IDE examples and repeatable demo](DESIGN_SYSTEM.md).
+
+The [feedback and ranking system](DESIGN_FEEDBACK.md) recommends a candidate,
+learns from explicit comparisons, and supports correcting/retracting feedback.
+The IDE reads recommendations through `eme_studio_rank_designs`; user feedback
+remains a separate Studio action.
+
+[Editable design components](DESIGN_REVISIONS.md) retain content and parameters for
+targeted revisions. The IDE reads `eme_studio_get_design_component`, requests changes
+with `eme_studio_revise_design`, then proposes a candidate for review. EME can compare
+variants within one style and learn parameter preferences. `npm run demo:revisions`
+renders a generated-media before/after example.
+
+## TigerGraph memory
+
+[TigerGraph integration](TIGERGRAPH.md) provides optional graph memory for designs,
+parameter buckets, approved component versions and explicit feedback. Use
+`eme_studio_get_design_memory` before planning to retrieve verified related examples.
+Studio shows status, sync and retrieval controls in the Design dialog. The local
+ledger remains authoritative and network failures fall back to local examples.
+The local Savanna connection is configured in ignored `.env.local`; enable it with
+`node --env-file=.env.local bin/eme-studio.js`. The live integration passed on
+TigerGraph 4.2.5. New deployments use the supplied GSQL schema and environment
+template. See the [recorded verification](TIGERGRAPH_ACCEPTANCE.md).

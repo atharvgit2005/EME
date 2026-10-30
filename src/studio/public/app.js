@@ -67,6 +67,7 @@ function buttons() {
     "upload-button",
     "send",
     "add-title",
+    "design-open",
     "export",
     "sequence-settings",
   ])
@@ -77,8 +78,9 @@ function buttons() {
   $("undo").disabled = !!busy || !state?.canUndo;
   $("redo").disabled = !!busy || !state?.canRedo;
   $("play").disabled =
-    !state?.project.clips.some((c) => ["video", "audio"].includes(c.type)) &&
-    !mediaPreview;
+    !state?.project.clips.some((c) =>
+      ["video", "audio", "graphic", "text"].includes(c.type),
+    ) && !mediaPreview;
   document
     .querySelectorAll(
       '#sequence-form button[type="submit"], #sequence-form .primary',
@@ -93,7 +95,15 @@ function operationLabel(op) {
     case "add_track":
       return "Add " + (p.name || p.id) + " track";
     case "add_asset":
-      return "Register imported media";
+      return p.metadata?.design
+        ? "Register designed graphic"
+        : p.type === "font"
+          ? "Bind design font"
+          : "Register imported media";
+    case "animate_property":
+      return p.property === "transform.opacity"
+        ? "Animate entrance and exit opacity"
+        : "Animate entrance position";
     case "insert_clip":
       return p.type === "text"
         ? "Add title: " + p.typography.text
@@ -141,6 +151,19 @@ function renderProposal() {
   window.emeEditor?.panel("review");
   $("proposal").innerHTML =
     `<h3>Ready for your review <span class="count">${p.operations.length} ${p.operations.length === 1 ? "step" : "steps"}</span></h3><p>${escape(p.summary)}</p><ul class="operation-list">${p.operations.map((op) => "<li>" + escape(operationLabel(op)) + "</li>").join("")}</ul><details><summary>Inspect exact changes</summary><pre>${escape(JSON.stringify(p.operations, null, 2))}</pre></details><div class="proposal-buttons"><button id="dismiss" class="quiet">Dismiss</button><button id="approve" class="primary">Approve & apply <span>↗</span></button></div>`;
+  if (p.planning?.design) {
+    const d = p.planning.design,
+      figure = document.createElement("figure");
+    figure.className = "placement-preview";
+    const image = document.createElement("img");
+    image.src = d.previewUrl;
+    image.alt = d.name + " design at static hold";
+    const caption = document.createElement("figcaption");
+    caption.textContent =
+      `Static hold preview · ${(d.report.timing.holdTicks / 120000).toFixed(1)}s to read. ` + d.report.warnings.join(" ");
+    figure.append(image, caption);
+    $("proposal").querySelector("details").before(figure);
+  }
   if (p.planning?.previewId) {
     const figure = document.createElement("figure");
     figure.className = "placement-preview";
@@ -233,6 +256,29 @@ function fitViewer() {
   $("canvas").style.width = Math.max(1, width * scale) + "px";
   $("canvas").style.height = Math.max(1, height * scale) + "px";
 }
+function designGraphic(c, ratio) {
+  const at = cursor * 120000 - c.startTick;
+  function channel(property, fallback) {
+    const keys = state.project.animations.find(
+      (a) => a.clipId === c.id && a.property === property,
+    )?.keyframes;
+    if (!keys?.length) return fallback;
+    if (at <= keys[0].offsetTick) return keys[0].value;
+    for (let i = 1; i < keys.length; i++)
+      if (at < keys[i].offsetTick) {
+        const a = keys[i - 1],
+          b = keys[i];
+        return (
+          a.value +
+          ((b.value - a.value) * (at - a.offsetTick)) /
+            (b.offsetTick - a.offsetTick)
+        );
+      }
+    return keys.at(-1).value;
+  }
+  const t = c.transform || {};
+  return `<img class="design-graphic" alt="Designed graphic" src="/api/design/graphic/${encodeURIComponent(c.source.assetId)}" style="opacity:${channel("transform.opacity", t.opacity ?? 1)};transform:translate(${channel("transform.x", t.x || 0) * ratio}px,${channel("transform.y", t.y || 0) * ratio}px) rotate(${t.rotation || 0}deg) scale(${t.scaleX ?? 1},${t.scaleY ?? 1})">`;
+}
 function updateOverlay() {
   const p = state?.project;
   if (!p) return;
@@ -242,7 +288,10 @@ function updateOverlay() {
       ? p.clips
           .filter(
             (c) =>
-              c.type === "text" &&
+              (c.type === "text" ||
+                (c.type === "graphic" &&
+                  p.assets.find((a) => a.id === c.source?.assetId)?.metadata
+                    ?.design)) &&
               !p.tracks.find((t) => t.id === c.trackId)?.muted &&
               seconds(c.startTick) <= cursor &&
               cursor < seconds(c.startTick + c.durationTicks),
@@ -253,9 +302,11 @@ function updateOverlay() {
               p.tracks.find((t) => t.id === b.trackId).zIndex,
           )
           .map((c) =>
-            c.properties?.subject_safe?.previewId
-              ? `<img class="subject-title-overlay" alt="${escape(c.typography?.text || "")}" src="/api/title-glyph/${encodeURIComponent(c.properties.subject_safe.previewId)}" style="transform:translate(${(c.transform?.x || 0) * ratio}px,${(c.transform?.y || 0) * ratio}px)">`
-              : `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / p.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / p.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1};text-align:${["left", "right", "center"].includes(c.typography?.textAlign) ? c.typography.textAlign : "center"};background:${c.properties?.text_backing ? "#151515" : "transparent"}">${escape(c.typography?.text || "")}</div>`,
+            c.type === "graphic"
+              ? designGraphic(c, ratio)
+              : c.properties?.subject_safe?.previewId
+                ? `<img class="subject-title-overlay" alt="${escape(c.typography?.text || "")}" src="/api/title-glyph/${encodeURIComponent(c.properties.subject_safe.previewId)}" style="transform:translate(${(c.transform?.x || 0) * ratio}px,${(c.transform?.y || 0) * ratio}px)">`
+                : `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / p.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / p.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1};text-align:${["left", "right", "center"].includes(c.typography?.textAlign) ? c.typography.textAlign : "center"};background:${c.properties?.text_backing ? "#151515" : "transparent"}">${escape(c.typography?.text || "")}</div>`,
           )
           .join("")
       : "";
@@ -384,7 +435,10 @@ function seek(time) {
 function renderPreview() {
   if (!state) return;
   const video = state.project.clips.some((c) => c.type === "video");
-  $("empty-canvas").hidden = video || mode === "media" || mode === "export";
+  const visual = state.project.clips.some((c) =>
+    ["video", "graphic", "text"].includes(c.type),
+  );
+  $("empty-canvas").hidden = visual || mode === "media" || mode === "export";
   $("view-source").classList.toggle("selected", mode === "source");
   $("view-media").classList.toggle("selected", mode === "media");
   $("view-export").classList.toggle("selected", mode === "export");

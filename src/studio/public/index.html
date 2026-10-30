@@ -431,6 +431,9 @@
             >
               <svg class="icon"><use href="#i-link" /></svg></button
             ><button id="add-title" class="quiet"><b>T</b> Add text</button>
+            <button id="design-open" class="quiet" title="Design an edit">
+              <b>✳</b> Design
+            </button>
           </div>
           <div class="timeline-zoom">
             <button id="zoom-out" class="icon-button" aria-label="Zoom out">
@@ -734,10 +737,248 @@ MOVE</textarea
         not soft mattes.
       </p>
     </dialog>
+    <dialog id="design-dialog" class="design-dialog">
+      <form method="dialog" class="design-heading">
+        <h2>Design an edit</h2>
+        <button class="quiet" aria-label="Close design">Close</button>
+      </form>
+      <p class="small muted">
+        Create a component or revise an existing one. EME measures type, spacing
+        and timing, then creates up to three designs for review.
+      </p>
+      <form id="design-form" class="design-form">
+        <label
+          >Component to edit<select id="design-target">
+            <option value="">New component</option>
+          </select></label
+        >
+        <button id="design-load" type="button" class="quiet">
+          Load component
+        </button>
+        <label
+          >Style<select id="design-style">
+            <option value="all">Compare all styles</option>
+            <option value="editorial">Editorial</option>
+            <option value="balanced">Balanced</option>
+            <option value="energetic">Energetic</option>
+          </select></label
+        >
+        <label
+          >Compare<select id="design-variation-mode">
+            <option value="styles">Style choices</option>
+            <option value="parameters">Variations within one style</option>
+          </select></label
+        >
+        <label
+          >First variation<select id="design-axis-one">
+            <option value="titleScale">Title size</option>
+            <option value="spacingScale">Spacing</option>
+            <option value="motionScale">Motion</option>
+            <option value="holdScale">Hold length</option>
+          </select></label
+        >
+        <label
+          >Second variation<select id="design-axis-two">
+            <option value="motionScale">Motion</option>
+            <option value="titleScale">Title size</option>
+            <option value="spacingScale">Spacing</option>
+            <option value="holdScale">Hold length</option>
+            <option value="">None</option>
+          </select></label
+        >
+        <label
+          >Title size (%)<input
+            id="design-title-scale"
+            type="number"
+            min="80"
+            max="140"
+            value="100"
+            step="any"
+            required
+        /></label>
+        <label
+          >Spacing (%)<input
+            id="design-spacing-scale"
+            type="number"
+            min="75"
+            max="150"
+            value="100"
+            step="any"
+            required
+        /></label>
+        <label
+          >Slide motion (%)<input
+            id="design-motion-scale"
+            type="number"
+            min="0"
+            max="175"
+            value="100"
+            step="any"
+            required
+        /></label>
+        <label
+          >Hold length (%)<input
+            id="design-hold-scale"
+            type="number"
+            min="80"
+            max="150"
+            value="100"
+            step="any"
+            required
+        /></label>
+        <label
+          >Component<select id="design-recipe">
+            <option value="lower-third">Footage lower third</option>
+            <option value="title-card">Title card</option>
+            <option value="statistic-card">Statistic card</option>
+          </select></label
+        >
+        <label id="design-video-field"
+          >Footage<select id="design-video"></select
+        ></label>
+        <label
+          >Eyebrow
+          <input
+            id="design-eyebrow"
+            maxlength="45"
+            placeholder="Optional label"
+        /></label>
+        <label
+          >Title<textarea
+            id="design-title"
+            maxlength="180"
+            rows="2"
+            required
+            placeholder="Your title"
+          ></textarea>
+        </label>
+        <label id="design-value-field" hidden
+          >Statistic value<input
+            id="design-value"
+            maxlength="16"
+            placeholder="42%"
+        /></label>
+        <label
+          >Supporting text<textarea
+            id="design-body"
+            maxlength="260"
+            rows="2"
+            placeholder="Optional supporting sentence"
+          ></textarea>
+        </label>
+        <div class="design-timing">
+          <label
+            >Start (seconds)<input
+              id="design-start"
+              type="number"
+              min="0"
+              step="0.1"
+              value="0"
+              required /></label
+          ><label
+            >Base duration (seconds)<input
+              id="design-duration"
+              type="number"
+              min="1"
+              max="120"
+              step="0.1"
+              value="6"
+              required
+          /></label>
+        </div>
+        <p class="small muted">
+          Hold length scales the base duration. Each candidate shows its
+          resulting duration and static reading time.
+        </p>
+        <p id="design-scope" class="small muted"></p>
+        <button id="design-plan" class="primary">
+          Create design candidates
+        </button>
+      </form>
+      <p id="design-status" role="status" class="small"></p>
+      <p
+        id="design-recommendation"
+        role="status"
+        class="design-recommendation"
+        hidden
+      ></p>
+      <div id="design-candidates" class="design-candidates"></div>
+      <details class="design-feedback-history" id="design-memory-panel">
+        <summary>Design memory · TigerGraph</summary>
+        <p class="small muted">
+          Find measured examples and explicit preferences from this workspace.
+          Related designs are references; each new edit still goes through
+          review.
+        </p>
+        <p id="design-memory-status" class="small" role="status"></p>
+        <button type="button" class="quiet" id="design-memory-query">
+          Find related designs
+        </button>
+        <button type="button" class="quiet" id="design-memory-sync">
+          Sync memory
+        </button>
+        <div id="design-memory-results"></div>
+      </details>
+      <form id="design-feedback-form" class="design-feedback" hidden>
+        <h3>Help EME learn your preferences</h3>
+        <p class="small muted">
+          Save feedback only for designs you compared. Reviewing or applying a
+          design does not cast a preference vote. Use Play motion preview for
+          both compared designs before saving a motion preference. Motion
+          proxies are silent and use a still background.
+        </p>
+        <label
+          >Preferred design<select
+            id="design-feedback-preferred"
+            required
+          ></select
+        ></label>
+        <fieldset>
+          <legend>Alternatives I compared</legend>
+          <div
+            id="design-feedback-compared"
+            class="design-feedback-options"
+          ></div>
+        </fieldset>
+        <fieldset>
+          <legend>What influenced your choice? (optional)</legend>
+          <div
+            id="design-feedback-reasons"
+            class="design-feedback-options"
+          ></div>
+        </fieldset>
+        <label
+          >Notes<textarea
+            id="design-feedback-note"
+            maxlength="600"
+            rows="2"
+            placeholder="What worked, or what should change?"
+          ></textarea>
+        </label>
+        <button class="quiet" id="design-feedback-save">
+          Save preference feedback
+        </button>
+        <p id="design-feedback-status" role="status" class="small"></p>
+      </form>
+      <details class="design-feedback-history">
+        <summary>Recent designs and feedback</summary>
+        <p class="small muted">
+          You can revisit comparisons, correct a preference, or retract its
+          influence. Feedback belongs to this workspace; a configured TigerGraph
+          connection mirrors structured evidence.
+        </p>
+        <div id="design-recent-sets"></div>
+        <div id="design-feedback-history"></div>
+        <a class="text-button" href="/api/design/feedback/export" download
+          >Export preference data</a
+        >
+      </details>
+    </dialog>
     <script src="/app.js"></script>
     <script src="/timeline.js"></script>
     <script src="/inspector.js"></script>
     <script src="/playback.js"></script>
     <script src="/scene.js"></script>
+    <script src="/design.js"></script>
   </body>
 </html>

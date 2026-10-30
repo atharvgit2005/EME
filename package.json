@@ -9,6 +9,7 @@
     "eme-confirm": "bin/eme-confirm.js",
     "eme-studio": "bin/eme-studio.js",
     "eme-studio-mcp": "bin/eme-studio-mcp.js",
+    "eme-tigergraph": "bin/eme-tigergraph.js",
     "eme-scene": "bin/eme-scene.js"
   },
   "files": [
@@ -19,6 +20,7 @@
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
     "docs/studio/",
+    "config/tigergraph.env.example",
     "scripts/studio-agent-call.cjs",
     "requirements/scene-m3.txt",
     "scripts/render-scene-preview.py",
@@ -31,7 +33,7 @@
     "node": ">=20.20.1"
   },
   "scripts": {
-    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement && npm run test:editor",
+    "test": "npm run test:remediation && npm run test:studio && npm run test:scene && npm run test:placement && npm run test:editor && npm run test:design && npm run test:tigergraph",
     "doctor": "node bin/eme.js doctor",
     "capabilities": "node bin/eme.js capabilities",
     "validate:schema": "node tools/validate-schema.js",
@@ -50,6 +52,15 @@
     "test:scene": "node --test tests/scene.test.js",
     "test:placement": "node --test tests/title-placement.test.js",
     "test:editor": "node --test tests/direct-edits.test.js tests/waveform.test.js tests/studio-editor.test.js",
+    "test:design": "node --test tests/design.test.js tests/design-ranking.test.js tests/design-revisions.test.js",
+    "demo:design": "node scripts/demo-design-system.cjs",
+    "demo:revisions": "node scripts/demo-design-revisions.cjs",
+    "test:tigergraph": "node --test tests/tigergraph.test.js",
+    "graph:schema": "node bin/eme-tigergraph.js schema",
+    "graph:status": "node bin/eme-tigergraph.js status",
+    "graph:sync": "node bin/eme-tigergraph.js sync",
+    "graph:recall": "node bin/eme-tigergraph.js recall",
+    "graph:verify": "node bin/eme-tigergraph.js verify",
     "verify:scene:m3": "node scripts/verify-scene-m3.cjs"
   },
   "keywords": [

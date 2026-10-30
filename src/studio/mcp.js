@@ -1,7 +1,173 @@
 const fs = require("node:fs"),
   path = require("node:path");
 const { EmeMcpServer, TOOL_DEFINITIONS } = require("../mcp/server.js");
+const parameterSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    titleScale: { type: "number", minimum: 0.8, maximum: 1.4 },
+    spacingScale: { type: "number", minimum: 0.75, maximum: 1.5 },
+    motionScale: { type: "number", minimum: 0, maximum: 1.75 },
+    holdScale: { type: "number", minimum: 0.8, maximum: 1.5 },
+  },
+};
 const definitions = [
+  {
+    name: "eme_studio_get_design_memory",
+    description:
+      "Retrieve related measured design examples, revision lineage and explicit feedback from verified TigerGraph memory or the local ledger. Read evidence before planning; cannot approve edits, submit preferences or execute arbitrary graph queries.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        recipe: { enum: ["lower-third", "title-card", "statistic-card"] },
+        profileId: { enum: ["editorial", "balanced", "energetic"] },
+        aspect: { enum: ["landscape", "portrait", "square"] },
+        componentId: { type: "string", minLength: 1, maxLength: 200 },
+        limit: { type: "integer", minimum: 1, maximum: 10 },
+      },
+    },
+  },
+  {
+    name: "eme_studio_get_design_component",
+    description:
+      "Read a designed component's editable content, style and parameters from the current project. Reports unsupported external changes; never modifies the project.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["clipId"],
+      properties: { clipId: { type: "string" } },
+    },
+  },
+  {
+    name: "eme_studio_revise_design",
+    description:
+      "Plan a designed component revision. Preserves style and untouched dimensions; alternatives vary only requested axes. Creates candidates for review; cannot approve or execute.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["requestId", "baseRevision", "clipId", "changes"],
+      properties: {
+        requestId: { type: "string" },
+        baseRevision: { type: "integer" },
+        clipId: { type: "string" },
+        explore: { type: "boolean" },
+        changes: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            title: { type: "string", maxLength: 180 },
+            body: { type: "string", maxLength: 260 },
+            eyebrow: { type: "string", maxLength: 45 },
+            value: { type: "string", maxLength: 16 },
+            startTick: { type: "integer", minimum: 0 },
+            durationTicks: { type: "integer", minimum: 1 },
+            profileId: { enum: ["editorial", "balanced", "energetic"] },
+            parameters: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                titleScale: { type: "number", minimum: 0.8, maximum: 1.4 },
+                spacingScale: { type: "number", minimum: 0.75, maximum: 1.5 },
+                motionScale: { type: "number", minimum: 0, maximum: 1.75 },
+                holdScale: { type: "number", minimum: 0.8, maximum: 1.5 },
+              },
+            },
+            adjustments: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                typography: { enum: ["larger", "smaller"] },
+                spacing: { enum: ["more", "less"] },
+                motion: { enum: ["more", "less"] },
+                hold: { enum: ["longer", "shorter"] },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    name: "eme_studio_rank_designs",
+    description:
+      "Read current explained design rankings using measured rules and explicit local user feedback. Historical or damaged candidates are ineligible. Read-only; does not record human preferences, approve, apply or alter the project.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["setId"],
+      properties: { setId: { type: "string" } },
+    },
+  },
+  {
+    name: "eme_studio_plan_design",
+    description:
+      "Create measured design candidates without changing the project. Read the inbox designSystem first. EME owns text wrapping, layout, reading time and motion. Title/statistic cards cover footage; lower thirds are not subject-safe. Returns previews, decisions and per-profile failures.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["requestId", "baseRevision", "brief"],
+      properties: {
+        requestId: { type: "string" },
+        baseRevision: { type: "integer" },
+        brief: {
+          type: "object",
+          additionalProperties: false,
+          required: ["recipe", "title", "startTick", "durationTicks"],
+          properties: {
+            recipe: { enum: ["lower-third", "title-card", "statistic-card"] },
+            title: { type: "string", maxLength: 180 },
+            body: { type: "string", maxLength: 260 },
+            eyebrow: { type: "string", maxLength: 45 },
+            value: { type: "string", maxLength: 16 },
+            startTick: { type: "integer", minimum: 0 },
+            durationTicks: { type: "integer", minimum: 1 },
+            videoClipId: { type: "string" },
+            preferredProfile: { enum: ["editorial", "balanced", "energetic"] },
+            parameters: parameterSchema,
+            variationMode: { enum: ["styles", "parameters"] },
+            variationAxes: {
+              type: "array",
+              minItems: 1,
+              maxItems: 2,
+              uniqueItems: true,
+              items: {
+                enum: [
+                  "titleScale",
+                  "spacingScale",
+                  "motionScale",
+                  "holdScale",
+                ],
+              },
+            },
+            profiles: {
+              type: "array",
+              minItems: 1,
+              maxItems: 3,
+              uniqueItems: true,
+              items: { enum: ["editorial", "balanced", "energetic"] },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    name: "eme_studio_propose_design",
+    description:
+      "Select a current design candidate and create an exact browser-review proposal. Cannot approve or execute. Changed source, preview, font or project requires replanning.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["requestId", "baseRevision", "setId", "candidateId"],
+      properties: {
+        requestId: { type: "string" },
+        baseRevision: { type: "integer" },
+        setId: { type: "string" },
+        candidateId: { type: "string" },
+      },
+    },
+  },
   {
     name: "eme_studio_propose_title",
     description:
@@ -117,15 +283,27 @@ class StudioMcpServer extends EmeMcpServer {
     if (url.protocol !== "http:" || url.hostname !== "127.0.0.1")
       throw Error("Studio must be a local loopback service.");
     const route =
-      name === "eme_studio_propose_title"
-        ? "title"
-        : name === "eme_studio_get_scene"
-          ? "scene"
-          : name === "eme_studio_get_inbox"
-            ? "context"
-            : name === "eme_studio_submit_plan"
-              ? "plan"
-              : "reply";
+      name === "eme_studio_get_design_memory"
+        ? "design/memory"
+        : name === "eme_studio_get_design_component"
+          ? "design/component"
+          : name === "eme_studio_revise_design"
+            ? "design/revise"
+            : name === "eme_studio_rank_designs"
+              ? "design/rank"
+              : name === "eme_studio_plan_design"
+                ? "design/plan"
+                : name === "eme_studio_propose_design"
+                  ? "design/propose"
+                  : name === "eme_studio_propose_title"
+                    ? "title"
+                    : name === "eme_studio_get_scene"
+                      ? "scene"
+                      : name === "eme_studio_get_inbox"
+                        ? "context"
+                        : name === "eme_studio_submit_plan"
+                          ? "plan"
+                          : "reply";
     const response = await fetch(new URL("/api/agent/" + route, url), {
       method: route === "context" ? "GET" : "POST",
       headers: {

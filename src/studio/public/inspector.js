@@ -153,7 +153,11 @@
     const locked = !!track?.locked;
     blocked = guarded || curved || locked;
     const label =
-      clip.typography?.text || media?.name || clip.metadata?.name || clip.id;
+      clip.typography?.text ||
+      asset?.metadata?.design?.title ||
+      media?.name ||
+      clip.metadata?.name ||
+      clip.id;
     const t = clip.transform || {};
     const bounds = Math.max(project.canvas.width, project.canvas.height) * 4;
     const duration = value(project.timebase.durationTicks);
@@ -218,7 +222,11 @@
       html += `<section class="inspector-section"><h4>Source</h4>${metadata("Media", media?.name || asset?.id || "Unavailable")}${metadata("Clip ID", clip.id)}${media?.width ? metadata("Dimensions", `${media.width} × ${media.height}`) : ""}${metadata("Source link", counterpart ? (clip.type === "audio" ? "Video + source audio" : "Source audio available") : "No matching component")}</section>`;
     }
     html += `<section class="inspector-section"><h4>Clip actions</h4><div class="field-row">${button("inspect-split", "Split at playhead")}${button("inspect-delete", "Delete clip")}</div><p class="small muted">Deleting leaves other clips in place. Every edit opens Review before it is applied.</p></section>`;
+    if (asset?.metadata?.design)
+      html += `<section class="inspector-section"><h4>Design component</h4><button id="inspect-design" class="quiet" type="button">Edit design content and motion</button><p class="small muted">Rebuild this component through EME while preserving the rest of the sequence.</p></section>`;
     content.innerHTML = html;
+    if (byId("inspect-design"))
+      byId("inspect-design").onclick = () => window.emeDesign?.edit(clip.id);
     timing("inspect-move", "move", "inspect-start");
     timing("inspect-trim-start-apply", "trim_start", "inspect-trim-start");
     timing("inspect-trim-end", "trim_end", "inspect-end");

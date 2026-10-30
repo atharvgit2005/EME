@@ -24,6 +24,23 @@ the same reviewed operations and undo history as agent proposals.
 
 The optional [scene understanding prototype](docs/studio/SCENE.md) tracks a selected region with MobileSAM on MPS, preserves timestamped masks and uncertainty, and exposes the same evidence in Studio and the IDE.
 
+The [shared design system](docs/studio/DESIGN_SYSTEM.md) lets the IDE request footage
+lower thirds, title cards and statistic cards while EME measures text, plans layout
+and compiles motion. Compare three style candidates using **Design** in the timeline,
+then review and apply one. [Feedback and ranking](docs/studio/DESIGN_FEEDBACK.md)
+recommend eligible designs using measured rules and explicit local preferences.
+[Editable components](docs/studio/DESIGN_REVISIONS.md) support targeted content,
+type, spacing, motion and hold revisions, within-style variants and parameter
+preferences. Run `npm run demo:design` or `npm run demo:revisions` for generated-media examples.
+
+Optional [TigerGraph design memory](docs/studio/TIGERGRAPH.md) links candidates,
+parameters, component revisions and explicit feedback. The IDE retrieves related
+examples with `eme_studio_get_design_memory`; local editing works without a graph
+connection. Live sync, revisions, feedback, export and MCP retrieval passed on
+Savanna 4.2.5. Start the configured local connection with
+`node --env-file=.env.local bin/eme-studio.js`; the schema and configuration
+template are included for other deployments.
+
 The [hackathon demo](docs/studio/HACKATHON_DEMO.md) uses those observations to place
 a title clear of the selected region, review the measured result and export it
 with scene, font and collision checks. Both a local quick action and an IDE/MCP
