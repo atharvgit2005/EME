@@ -1,6 +1,6 @@
 # EME website
 
-A restrained neo-brutalist product website: off-white, black, lime, generous
+A restrained neo-brutalist product website: charcoal, off-white, lime, generous
 spacing, an interactive Three.js layer stack and a compact design playground.
 
 Preview from the EME checkout:
@@ -29,6 +29,22 @@ The bundle was generated from the official npm package with esbuild. Runtime 3D
 requires no external script CDN. DM Sans and Space Mono load from Google Fonts,
 with system fallbacks.
 
-The Sites-managed checkout lives under `../sites/eme-surreal` (the original
-checkout name). Copy changes there and use the Sites packaging workflow to publish.
-Keep its current Site identity and access settings.
+## Deploy with Vercel CLI
+
+Deploy only this directory, never the repository root:
+
+```sh
+cd website
+vercel link --yes --project eme-website --scope atharv-paharias-projects
+vercel deploy --prod --yes --scope atharv-paharias-projects
+```
+
+This is a static deployment with no install/build step or environment variables.
+Local Vercel project linkage is ignored by Git. Engine credentials, media and
+feedback databases live outside the deploy directory.
+
+The supplied logo is in `assets/eme-logo.png`, recolored to lime and off-white
+with a transparent background using the image editing tool. The original logo's
+geometry is preserved. Header, footer and favicon use the same asset.
+
+The earlier Sites deployment is separate; Vercel is now the requested hosting target.

@@ -40,3 +40,6 @@ dist-*/
 *.pt
 *.pth
 *.onnx
+
+# Vercel account and project linkage stays local
+.vercel/

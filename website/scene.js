@@ -24,13 +24,13 @@ try {
   scene.add(new THREE.AmbientLight(0xffffff, 2));
   const light = new THREE.DirectionalLight(0xffffff, 3);
   light.position.set(-4, 7, 9); scene.add(light);
-  const fill = new THREE.DirectionalLight(0xc9dbff, 1.5);
+  const fill = new THREE.DirectionalLight(0xe1e8cb, 1.5);
   fill.position.set(4, -2, 2); scene.add(fill);
   const stack = new THREE.Group(); scene.add(stack);
   const black = new THREE.MeshStandardMaterial({color:0x171717, roughness:.9});
   const yellow = new THREE.MeshStandardMaterial({color:0xe6fb66, roughness:.8});
   const white = new THREE.MeshStandardMaterial({color:0xf6f4ed, roughness:.8});
-  const blue = new THREE.MeshStandardMaterial({color:0x98b9e6, roughness:.9});
+  const blue = new THREE.MeshStandardMaterial({color:0x85956a, roughness:.9});
   function box(w,h,d,material,x=0,y=0,z=0,parent=stack){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);mesh.position.set(x,y,z);parent.add(mesh);return mesh;}
   function texture(draw){const c=document.createElement('canvas');c.width=1024;c.height=640;const ctx=c.getContext('2d');draw(ctx);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t;}
   function panel(t,group,z=.1){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(5,3.125),new THREE.MeshBasicMaterial({map:t,transparent:true,side:THREE.DoubleSide,depthWrite:false}));mesh.position.z=z;group.add(mesh);return mesh;}
@@ -38,12 +38,12 @@ try {
   const footage = new THREE.Group(); stack.add(footage);
   box(5.18,3.32,.16,black,0,0,-.05,footage);
   const sceneTexture=texture(ctx=>{
-    ctx.fillStyle='#98b9e6';ctx.fillRect(0,0,1024,640);
-    ctx.fillStyle='#83a6d6';ctx.fillRect(0,395,1024,245);
-    ctx.strokeStyle='#17171733';ctx.lineWidth=2;
+    ctx.fillStyle='#30392c';ctx.fillRect(0,0,1024,640);
+    ctx.fillStyle='#252f21';ctx.fillRect(0,395,1024,245);
+    ctx.strokeStyle='#dce4cd33';ctx.lineWidth=2;
     for(let x=-500;x<1600;x+=100){ctx.beginPath();ctx.moveTo(510+(x-510)*.5,395);ctx.lineTo(x,640);ctx.stroke();}
     for(const y of [425,470,535,620]){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1024,y);ctx.stroke();}
-    ctx.fillStyle='#171717';ctx.font='bold 18px monospace';ctx.fillText('EME — SEQUENCE 01',35,42);ctx.fillText('00:00:03:00',790,603);
+    ctx.fillStyle='#f6f4ed';ctx.font='bold 18px monospace';ctx.fillText('EME — SEQUENCE 01',35,42);ctx.fillText('00:00:03:00',790,603);
     ctx.beginPath();ctx.arc(700,254,118,0,Math.PI*2);ctx.fillStyle='#f47c52';ctx.fill();ctx.lineWidth=4;ctx.strokeStyle='#171717';ctx.stroke();
     const g=ctx.createRadialGradient(655,210,10,700,254,118);g.addColorStop(0,'#ffc6a5');g.addColorStop(.6,'#f47c52');g.addColorStop(1,'#b34e35');ctx.fillStyle=g;ctx.fill();ctx.stroke();
     ctx.fillStyle='#17171718';ctx.beginPath();ctx.ellipse(720,440,130,23,0,0,Math.PI*2);ctx.fill();
@@ -59,10 +59,10 @@ try {
   });panel(typeTexture,type,.1);
   const motion = new THREE.Group(); stack.add(motion);
   const guideTexture=texture(ctx=>{
-    ctx.strokeStyle='#171717';ctx.lineWidth=4;
+    ctx.strokeStyle='#f6f4ed';ctx.lineWidth=4;
     for(const [x,y,sx,sy] of [[8,8,1,1],[1016,8,-1,1],[8,632,1,-1],[1016,632,-1,-1]]){ctx.beginPath();ctx.moveTo(x,y+sy*48);ctx.lineTo(x,y);ctx.lineTo(x+sx*48,y);ctx.stroke();}
     ctx.fillStyle='#171717';ctx.fillRect(26,26,269,45);ctx.fillStyle='#f6f4ed';ctx.font='bold 17px monospace';ctx.fillText('03 / MOTION',45,56);
-    ctx.setLineDash([8,9]);ctx.strokeStyle='#17171780';ctx.lineWidth=2;ctx.strokeRect(28,90,968,515);ctx.setLineDash([]);
+    ctx.setLineDash([8,9]);ctx.strokeStyle='#f6f4ed80';ctx.lineWidth=2;ctx.strokeRect(28,90,968,515);ctx.setLineDash([]);
   });panel(guideTexture,motion,0);
   const playDisk=new THREE.Mesh(new THREE.CylinderGeometry(.39,.39,.12,48),yellow);playDisk.rotation.x=Math.PI/2;playDisk.position.set(1.76,-.77,.15);motion.add(playDisk);
   const triangle = new THREE.Shape();triangle.moveTo(-.1,-.17);triangle.lineTo(.18,0);triangle.lineTo(-.1,.17);triangle.closePath();
