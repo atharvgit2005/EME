@@ -13,7 +13,8 @@ let state = null,
   lastRender = "",
   lastMedia = "",
   config = null,
-  mediaPreview = null;
+  mediaPreview = null,
+  refreshRequest = 0;
 const escape = (s) =>
   String(s ?? "").replace(
     /[&<>"']/g,
@@ -52,12 +53,19 @@ async function action(fn) {
   try {
     await fn();
     await refresh();
+    return true;
   } catch (e) {
     toast(e.message);
+    return false;
   } finally {
     working = false;
     buttons();
   }
+}
+async function editorCommand(command, body = {}) {
+  const result = await api("editor/command", { command, baseRevision: state.project.revision, ...body });
+  mode = "source";
+  return result;
 }
 function buttons() {
   const busy = working || state?.busy;
@@ -211,7 +219,7 @@ function renderMedia(force = false) {
     button.onclick = () => window.emeScene?.open(button.dataset.scene);
   for (const button of document.querySelectorAll("[data-media]"))
     button.onclick = () =>
-      action(() => api("import", { mediaId: button.dataset.media }));
+      action(() => editorCommand("import", { mediaId: button.dataset.media }));
   for (const button of document.querySelectorAll("[data-preview]"))
     button.onclick = () => previewMedia(button.dataset.preview);
   for (const card of document.querySelectorAll("[data-media-drag]"))
@@ -408,15 +416,14 @@ function seek(time) {
     if (media) {
       const target = "/api/media/" + media.id,
         desired =
-          seconds(clip.source.trimInTick) + cursor - seconds(clip.startTick),
-        wasPlaying = !player.paused;
+          seconds(clip.source.trimInTick) + cursor - seconds(clip.startTick);
       activeClip = clip;
       if (player.getAttribute("src") !== target) {
         player.src = target;
         player.onloadedmetadata = () => {
-          player.currentTime = desired;
-          if (window.emePlayback?.isRunning() || wasPlaying)
-            player.play().catch(() => {});
+          if (mode !== "source" || !activeClip) return;
+          player.currentTime = Math.max(0, seconds(activeClip.source.trimInTick) + cursor - seconds(activeClip.startTick));
+          if (window.emePlayback?.isRunning()) player.play().catch(() => {});
         };
       } else if (
         Math.abs(player.currentTime - desired) >
@@ -470,7 +477,7 @@ function renderPreview() {
           " · revision " +
           output.revision;
   } else {
-    if (video)
+    if (visual || state.project.clips.some(c => c.type === "audio"))
       seek(
         Math.min(cursor, seconds(state.project.timebase.durationTicks) - 0.001),
       );
@@ -490,6 +497,7 @@ function renderExport() {
   }
   const key = JSON.stringify(r);
   if (key === lastRender) return;
+  const wasRendering = lastRender && JSON.parse(lastRender).status === "RENDERING";
   lastRender = key;
   const box = $("render-banner");
   box.hidden = false;
@@ -510,15 +518,20 @@ function renderExport() {
       ' · verified MP4 <a href="/api/media/' +
       o.id +
       '?download">Download export ↗</a>';
-    if (o.revision === state.project.revision) mode = "export";
+    if (wasRendering && o.revision === state.project.revision) {
+      window.emePlayback?.pause();
+      mode = "export";
+    }
     renderPreview();
   } else
     box.textContent =
       r.message || "The previous export was interrupted. Export again.";
 }
 async function refresh() {
+  const request = ++refreshRequest;
   try {
     const next = await api("state");
+    if (request !== refreshRequest) return;
     state = next;
     $("project-name").textContent = state.project.title || "Untitled project";
     const fps = state.project.timebase.fps;
@@ -559,8 +572,8 @@ async function useDemo() {
   await action(async () => {
     toast("Preparing your sample footage…");
     const media = await api("demo", {});
-    await api("import", { mediaId: media.id });
-    toast("Sample ready. Review the proposed import.");
+    await editorCommand("import", { mediaId: media.id });
+    toast("Sample added. Undo is available.");
   });
 }
 $("demo").onclick = useDemo;
@@ -584,7 +597,7 @@ $("file-input").onchange = () =>
     );
     const media = await response.json();
     if (!response.ok) throw Error(media.error);
-    await api("import", { mediaId: media.id });
+    await editorCommand("import", { mediaId: media.id });
     $("file-input").value = "";
   });
 $("prompt-form").onsubmit = (e) => {
@@ -610,18 +623,17 @@ $("dictate").onclick = () => {
     "Start Wispr Flow with its desktop dictation shortcut, then speak your request.",
   );
 };
-$("undo").onclick = () => action(() => api("undo", {}));
-$("redo").onclick = () => action(() => api("redo", {}));
+$("undo").onclick = () => action(() => editorCommand("undo"));
+$("redo").onclick = () => action(() => editorCommand("redo"));
 $("add-title").onclick = () => {
-  const title = state?.project.clips.find((c) => c.type === "text");
-  $("title-input").value = title?.typography.text || "";
+  $("title-input").value = "";
   $("title-dialog").showModal();
   $("title-input").focus();
 };
 $("title-form").onsubmit = (e) => {
   e.preventDefault();
   action(async () => {
-    await api("title", { text: $("title-input").value });
+    await editorCommand("title", { text: $("title-input").value, startTick: window.emeTimeline.quantize(cursor * 120000) });
     $("title-dialog").close();
   });
 };
@@ -760,11 +772,11 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   $("sequence-form").onsubmit = async (e) => {
     e.preventDefault();
-    await window.emeEditor.edit({
+    const applied = await window.emeEditor.edit({
       action: "duration",
       durationTicks: Math.round(Number($("sequence-duration").value) * 120000),
     });
-    if (state.proposal) $("sequence-dialog").close();
+    if (applied) $("sequence-dialog").close();
   };
   $("media-search").oninput = () => renderMedia(true);
   $("bin-list").onclick = () => {
@@ -800,7 +812,7 @@ window.addEventListener("DOMContentLoaded", () => {
   drop.ondrop = (e) => {
     e.preventDefault();
     const mediaId = e.dataTransfer.getData("application/x-eme-media");
-    if (mediaId) action(() => api("import", { mediaId }));
+    if (mediaId) action(() => editorCommand("import", { mediaId, startTick: window.emeTimeline.tickAt(e.clientX) }));
   };
   new ResizeObserver(() => {
     fitViewer();

@@ -103,7 +103,7 @@ function crop(width, height, canvas) {
     height: h,
   };
 }
-function importOperations(project, media) {
+function importOperations(project, media, options = {}) {
   const ops = [],
     add = (type, params) => ops.push({ type, params });
   const video = media.type === "video";
@@ -141,7 +141,7 @@ function importOperations(project, media) {
         dimensions: { width: media.width, height: media.height },
       },
     });
-  const start = video
+  const start = options.startTick !== undefined ? options.startTick : video
     ? Math.max(
         0,
         ...project.clips
@@ -149,11 +149,18 @@ function importOperations(project, media) {
           .map((c) => c.startTick + c.durationTicks),
       )
     : 0;
+  if (!Number.isSafeInteger(start) || start < 0 || start >= 120 * TICKS)
+    throw error("Choose an insertion time within the two-minute sequence limit.");
+  const availableEnd = options.extend
+    ? Math.min(120 * TICKS, Math.max(project.timebase.durationTicks, start + Math.floor(media.duration * TICKS)))
+    : project.timebase.durationTicks;
+  if (options.extend && availableEnd > project.timebase.durationTicks)
+    add("set_project_duration", { durationTicks: availableEnd });
   const duration = Math.min(
     Math.floor(media.duration * TICKS),
     (video && !project.clips.length
       ? Math.min(Math.floor(media.duration * TICKS), 120 * TICKS)
-      : project.timebase.durationTicks) - start,
+      : availableEnd) - start,
   );
   if (duration < 4000)
     throw error(
@@ -201,8 +208,8 @@ function importOperations(project, media) {
   }
   return ops;
 }
-function titleOperations(project, text) {
-  const existing = project.clips.find((c) => c.type === "text");
+function titleOperations(project, text, options = {}) {
+  const existing = !options.newClip && project.clips.find((c) => c.type === "text");
   if (existing?.properties?.subject_safe)
     throw error(
       "Open Understand scene and plan the title again to update its placement and preview.",
@@ -215,19 +222,25 @@ function titleOperations(project, text) {
       },
     ];
   const ops = [];
-  if (!project.tracks.some((t) => t.id === "titles"))
+  const startTick = options.startTick ?? 0;
+  if (!Number.isSafeInteger(startTick) || startTick < 0 || startTick >= project.timebase.durationTicks)
+    throw error("Move the playhead inside the sequence before adding text.");
+  const durationTicks = Math.min(4 * TICKS, project.timebase.durationTicks - startTick);
+  const overlaps = project.clips.some((c) => c.trackId === "titles" && c.startTick < startTick + durationTicks && c.startTick + c.durationTicks > startTick);
+  const trackId = overlaps ? "titles-" + crypto.randomUUID().slice(0, 8) : "titles";
+  if (!project.tracks.some((t) => t.id === trackId))
     ops.push({
       type: "add_track",
-      params: { id: "titles", name: "Titles", kind: "visual", zIndex: 10 },
+      params: { id: trackId, name: "Titles", kind: "visual", zIndex: Math.max(10, ...project.tracks.filter(t => t.kind === "visual").map(t => t.zIndex + 1)) },
     });
   ops.push({
     type: "insert_clip",
     params: {
       id: "title-" + crypto.randomUUID().slice(0, 8),
-      trackId: "titles",
+      trackId,
       type: "text",
-      startTick: 0,
-      durationTicks: Math.min(4 * TICKS, project.timebase.durationTicks),
+      startTick,
+      durationTicks,
       typography: {
         text,
         fontSize: Math.round(project.canvas.width / 16),

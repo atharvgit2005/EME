@@ -189,3 +189,69 @@ test("Browser authority, pending edits and track locks protect direct timeline a
   assert.equal(failed.status, 400);
   assert.match(failed.body.error, /Unlock/);
 });
+
+test("Direct browser commands commit linked edits and undo/redo without leaving a pending proposal", async t => {
+  const f = await setup(t), p = f.server.project(), video = p.clips.find(c => c.type === 'video');
+  const command = (command, body = {}) => f.post('editor/command', { command, baseRevision: f.server.project().revision, ...body });
+  let r = await command('edit', { edit: { action: 'split', clipId: video.id, atTick: 120000, baseRevision: p.revision } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.equal(f.server.project().clips.length, 4);
+  assert.equal(f.server.state.proposal, null);
+  assert.equal((await command('undo')).status, 200);
+  assert.deepEqual(f.server.project().clips, p.clips);
+  assert.equal((await command('redo')).status, 200);
+  assert.equal(f.server.project().clips.length, 4);
+  const clip = f.server.project().clips.find(c => c.type === 'video');
+  assert.equal((await command('edit', { edit: { action: 'delete', clipId: clip.id, baseRevision: f.server.project().revision } })).status, 200);
+  assert.equal(f.server.project().clips.length, 2);
+  assert.equal(f.server.state.proposal, null);
+});
+
+test("Direct commands cannot approve agent proposals, use stale revisions or accept agent credentials", async t => {
+  const f = await setup(t), p = f.server.project(), clip = p.clips[0];
+  const body = { command: 'edit', baseRevision: p.revision, edit: { action: 'delete', clipId: clip.id, baseRevision: p.revision } };
+  const before = digest(p);
+  assert.equal((await f.post('editor/command', body, { 'X-EME-Review': f.server.agentToken })).status, 403);
+  assert.equal((await f.post('editor/command', { ...body, baseRevision: -1 })).status, 409);
+  assert.equal((await f.post('editor/command', { ...body, command: 'approve', operations: [] })).status, 400);
+  assert.equal(digest(f.server.project()), before);
+  await f.post('edit', { action: 'delete', clipId: clip.id, baseRevision: p.revision });
+  const pending = f.server.state.proposal.id;
+  assert.equal((await f.post('editor/command', body)).status, 409);
+  assert.equal(f.server.state.proposal.id, pending);
+  assert.equal(digest(f.server.project()), before);
+});
+
+test("Append extends a full sequence and Add text inserts at the playhead without overwriting titles", async t => {
+  const f = await setup(t);
+  const command = (command, body = {}) => f.post('editor/command', { command, baseRevision: f.server.project().revision, ...body });
+  assert.equal((await command('import', { mediaId: f.media.id })).status, 200);
+  assert.equal(f.server.project().timebase.durationTicks, 720000);
+  assert.deepEqual(f.server.project().clips.filter(c => c.type === 'video').map(c => c.startTick), [0, 360000]);
+  for (const text of ['First title', 'Second title']) {
+    const result = await command('title', { text, startTick: 120000 });
+    assert.equal(result.status, 200, JSON.stringify(result.body));
+  }
+  const titles = f.server.project().clips.filter(c => c.type === 'text');
+  assert.deepEqual(titles.map(c => c.typography.text), ['First title', 'Second title']);
+  assert.ok(titles.every(c => c.startTick === 120000));
+  assert.notEqual(titles[0].trackId, titles[1].trackId);
+  const before = digest(f.server.project());
+  assert.equal((await command('import', { mediaId: f.media.id, startTick: 120000 })).status, 400);
+  assert.equal(digest(f.server.project()), before);
+  assert.equal(f.server.state.proposal, null);
+});
+
+test("Direct track locks, mute and property edits use the validated engine and survive reload", async t => {
+  const f = await setup(t), video = f.server.project().clips.find(c => c.type === 'video');
+  const edit = body => f.post('editor/command', { command: 'edit', baseRevision: f.server.project().revision, edit: { baseRevision: f.server.project().revision, ...body } });
+  assert.equal((await edit({ action: 'properties', clipId: video.id, transform: { x: 25, scaleX: 1.2 } })).status, 200);
+  assert.equal(f.server.project().clips.find(c => c.id === video.id).transform.x, 25);
+  assert.equal((await edit({ action: 'track', trackId: video.trackId, locked: true, muted: true })).status, 200);
+  const before = digest(f.server.project());
+  assert.equal((await edit({ action: 'delete', clipId: video.id })).status, 400);
+  assert.equal(digest(f.server.project()), before);
+  const disk = JSON.parse(fs.readFileSync(f.server.projectPath));
+  assert.equal(disk.tracks.find(t => t.id === video.trackId).muted, true);
+  assert.equal(f.server.state.proposal, null);
+});

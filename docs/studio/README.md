@@ -21,7 +21,7 @@ limits). Compositions currently use a 960×540 landscape canvas and up to two mi
 of output. The first imported video sets the output duration within that limit;
 longer footage is explicitly trimmed, and incompatible aspect ratios are center-cropped.
 
-Review the import proposal, approve it, then use Add title or send an editing request.
+Imports apply immediately with undo. Use Add text at the playhead or send an editing request.
 Timeline preview approximates composition and plays source audio. Export for the
 rendered typography, effects, and final audio mix. Verified exports currently require
 an audible source-audio or soundtrack clip. Silent-video export is not implemented.
@@ -76,8 +76,8 @@ and stale snapshots are rechecked. All accepted edits use ExecutionAuthority and
 OperationExecutor. Browser approval is not physical-human authentication against an
 unrestricted same-user process. The terminal workflow remains available and unchanged.
 
-Undo and redo also create proposals, which are reviewed before applying an engine-owned
-history restoration. Revisions advance monotonically. Render jobs execute in a separate
+Direct browser edits and undo/redo execute validated engine commands immediately.
+The browser-only command route cannot approve a pending IDE proposal or accept arbitrary operations. Revisions advance monotonically. Render jobs execute in a separate
 process against the sealed committed snapshot. Failed exports do not replace previous
 successful outputs. A fresh output requires successful final-media QA and publication.
 Uploads, history, proposals, assets, and outputs remain under `.eme/studio/` and are

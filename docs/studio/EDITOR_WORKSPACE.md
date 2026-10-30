@@ -10,7 +10,7 @@ history are preserved. Import local media or load the generated sample.
 
 ## Working on the timeline
 
-- Select a clip to inspect it. Drag its body to move it, or either edge to trim.
+- Select a clip to inspect it; double-click to seek to its start. Drag its body to move it, or either edge to trim.
   These are ordinary trims: other clips stay in place. Source limits, track locks,
   collisions and project boundaries are checked before a proposal is created.
 - Source audio stays linked by default. The chain button allows explicitly separate
@@ -27,9 +27,13 @@ history are preserved. Import local media or load the generated sample.
 - Click **Sequence 01** to extend the sequence. Trim clips beyond a proposed end
   before shortening it. Studio retains its two-minute export limit.
 
-Gestures and inspector edits open **Review**. Apply the precise proposal to commit;
-dismiss to keep the current project. Undo/redo also uses reviewed engine history.
-Changes are bound to the current revision, source bytes and exact operations.
+Gestures, inspector controls, imports, new text and undo/redo apply immediately as
+browser-authenticated commands, with revision and source validation and undo history.
+An import appends and extends the sequence up to two minutes; a media drop uses the
+drop time. Add text creates a new title at the playhead. Overlapping new titles use
+a separate visual track. IDE, scene and design proposals still open **Review** and
+must be approved or dismissed before direct edits continue. The legacy proposal API
+remains available; agents cannot call the direct command route with agent credentials.
 
 ## Inspector and preview
 
@@ -70,8 +74,7 @@ EME_PLAYWRIGHT_ROOT=/path/to/package-root node scripts/verify-editor-browser.cjs
 ```
 
 The script creates an isolated Studio workspace and actual FFmpeg fixture, drags
-the clip body and both edges using browser mouse inputs, verifies no commit before
-review, approves in the browser and checks linked source/timeline geometry. It
+the clip body and both edges using browser mouse inputs, verifies immediate commits with undo history and checks linked source/timeline geometry. It
 cleans up its browser and server. See the script for runtime overrides; no browser
 dependency is added to normal Studio startup or the default CI suite.
 

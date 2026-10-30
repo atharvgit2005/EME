@@ -379,6 +379,39 @@ class StudioServer {
     this.designMemory.notify();
     return result;
   }
+  // Only the browser command route calls this. It compiles a named user gesture;
+  // it cannot execute an arbitrary agent plan or approve an existing proposal.
+  editorCommand(body) {
+    this.assertIdle();
+    const project = this.project();
+    if (body.baseRevision !== project.revision)
+      throw error("Project changed. Refresh and retry this edit.", 409);
+    if (this.state.proposal)
+      throw error("Apply or dismiss the pending proposal in Review first.", 409);
+    let proposal;
+    if (["undo", "redo"].includes(body.command)) {
+      proposal = this.historyProposal(body.command);
+    } else {
+      let operations, summary;
+      if (body.command === "import") {
+        const media = this.state.media.find((m) => m.id === body.mediaId);
+        if (!media) throw error("Media not found", 404);
+        operations = importOperations(project, media, { extend: true, startTick: body.startTick });
+        summary = "Add " + media.name + " to the timeline.";
+      } else if (body.command === "title") {
+        if (typeof body.text !== "string" || !body.text.trim() || body.text.length > 150)
+          throw error("Enter a title up to 150 characters.");
+        operations = titleOperations(project, body.text, { newClip: true, startTick: body.startTick });
+        summary = "Add title: " + body.text;
+      } else if (body.command === "edit") {
+        const edit = directEditOperations(project, body.edit);
+        operations = edit.operations;
+        summary = edit.summary;
+      } else throw error("Unknown editor command.");
+      proposal = this.pending(operations, { summary, source: "Direct user edit" });
+    }
+    return this.approve({ id: proposal.id, digest: proposal.digest });
+  }
   async mediaFromFile(file, name) {
     const raw = await run("ffprobe", [
       "-v",
@@ -1308,6 +1341,8 @@ class StudioServer {
           throw error("Design graphic is unavailable or changed.", 404);
         return this.serveFile(req, res, asset.src, { type: "image/png" });
       }
+      if (req.method === "POST" && p === "/api/editor/command")
+        return this.json(res, 200, this.editorCommand(await this.body(req)));
       if (req.method === "POST" && p === "/api/edit") {
         const b = await this.body(req);
         const edit = directEditOperations(this.project(), b);

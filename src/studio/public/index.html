@@ -81,7 +81,7 @@
     </svg>
     <header class="topbar">
       <a class="wordmark" href="/" aria-label="Editing Mechanics Engine"
-        ><span class="brand-box">m<span>e</span></span
+        ><span class="brand-box">em<span>e</span></span
         ><span
           >editing mechanics<span class="brand-sub"
             >ENGINE / LOCAL WORKSPACE</span
@@ -187,7 +187,7 @@
               <div class="empty-symbol">
                 <svg class="icon"><use href="#i-film" /></svg>
               </div>
-              <h2>Make room for your next edit.</h2>
+              <h2>Your sequence</h2>
               <p>Add footage to the timeline to get started.</p>
               <button id="empty-demo" class="quiet">
                 Try sample footage ↗
@@ -262,7 +262,7 @@
           >
             Inspector</button
           ><button id="tab-agent" role="tab" aria-selected="false">
-            <svg class="icon"><use href="#i-spark" /></svg>Assistant</button
+            <svg class="icon"><use href="#i-spark" /></svg>IDE assistant</button
           ><button id="tab-review" role="tab" aria-selected="false">
             Review<span id="review-count" hidden>1</span>
           </button>
@@ -270,7 +270,7 @@
         <div id="inspector-panel" class="side-panel">
           <div id="inspector-empty" class="inspector-empty">
             <svg class="icon"><use href="#i-arrow" /></svg>
-            <h3>Every detail, in reach.</h3>
+            <h3>Clip inspector</h3>
             <p>
               Select a timeline clip to adjust its timing, transform, text or
               audio.
@@ -521,8 +521,8 @@
         ><span>Nudge selected clip</span><kbd>Alt + ← / →</kbd>
       </div>
       <p class="muted small">
-        Keyboard commands pause while typing in fields. Timeline edits open
-        Review before they change the project.
+        Keyboard commands pause while typing in fields. Direct edits apply immediately
+        and support Undo. IDE proposals stay in Review.
       </p>
     </dialog>
     <dialog id="sequence-dialog">
@@ -546,7 +546,7 @@
         <p class="muted small">
           Resolution and frame rate use the current project settings.
         </p>
-        <button class="primary">Review duration change ↗</button>
+        <button class="primary">Set duration</button>
       </form>
     </dialog>
     <div id="toast" class="toast" role="status" hidden></div>
@@ -591,9 +591,9 @@
           required
         />
         <p class="muted small">
-          A quick action creates a proposal for you to review.
+          Adds a new title at the playhead. Undo is available.
         </p>
-        <button class="primary">Review title</button>
+        <button class="primary">Add text</button>
       </form>
     </dialog>
     <dialog id="history-dialog">

@@ -1,4 +1,4 @@
-/* Pixel-space gestures compile into source-bound, reviewed engine edits. */
+/* User gestures compile into validated, undoable engine commands. */
 (() => {
   const TICKS = 120000;
   let pixelsPerSecond = 70,
@@ -7,6 +7,7 @@
     snapping = true,
     drag = null,
     scrubbing = false,
+    lastPress = null,
     lastKey = "",
     waveCache = new Map();
   const scroll = $("timeline-scroll"),
@@ -69,13 +70,8 @@
     }
     window.emePlayback?.pause();
     $("player").pause();
-    await action(async () => {
-      await api("edit", {
-        baseRevision: state.project.revision,
-        linked,
-        ...body,
-      });
-      panel("review");
+    return action(async () => {
+      await editorCommand("edit", { edit: { baseRevision: state.project.revision, linked, ...body } });
     });
   }
   function select(id, seekToClip = false) {
@@ -103,7 +99,10 @@
       busy = working || state?.busy || state?.proposal;
     for (const id of ["split-clip", "delete-clip"])
       $(id).disabled = !c || !!busy;
-    $("split-clip").disabled ||= !!c?.properties?.subject_safe;
+    const at = quantize(cursor * TICKS);
+    $("split-clip").disabled ||= !!c?.properties?.subject_safe || !!c && (at <= c.startTick || at >= c.startTick + c.durationTicks);
+    for (const id of ["split-clip", "delete-clip"])
+      $(id).disabled ||= !!state?.project.tracks.find(t => t.id === c?.trackId)?.locked;
   }
   function setTool(value) {
     tool = value;
@@ -116,7 +115,8 @@
     $("timeline-playhead").style.left = cursor * pixelsPerSecond + "px";
     if (document.activeElement !== $("timeline-clock"))
       $("timeline-clock").value = timecode(cursor);
-    if (follow && !$("player").paused) {
+    updateButtons();
+    if (follow && window.emePlayback?.isRunning()) {
       const x = cursor * pixelsPerSecond;
       if (
         x > scroll.scrollLeft + scroll.clientWidth - 30 ||
@@ -254,6 +254,10 @@
     );
     content.style.minHeight =
       Math.max(scroll.clientHeight, usableRows + 34) + "px";
+    const selectedClip = p.clips.find(c => c.id === selection);
+    $("selection-label").textContent = selectedClip
+      ? `${selectedClip.type.toUpperCase()} · ${clipName(selectedClip).replaceAll("\n", " ")} · ${timecode(seconds(selectedClip.durationTicks))}`
+      : "Select a clip · drag to move · drag an edge to trim";
     $("revision").textContent = "Revision " + p.revision;
     $("timeline-scale").textContent =
       zoom === 0
@@ -274,6 +278,7 @@
         }),
     );
     document.querySelectorAll("[data-clip]").forEach((b) => {
+      b.onclick = () => select(b.dataset.clip);
       b.ondblclick = () => select(b.dataset.clip, true);
       b.onkeydown = (e) => {
         if (e.key === "Enter") {
@@ -328,7 +333,7 @@
   }
   content.onpointerdown = (e) => {
     if (e.button !== 0 || !state) return;
-    if (mode === "media") {
+    if (mode !== "source") {
       mode = "source";
       renderPreview();
     }
@@ -346,6 +351,14 @@
         ),
       );
       scroll.setPointerCapture(e.pointerId);
+      return;
+    }
+    // Pointer capture can retarget click/dblclick to the scroll container.
+    const doublePress = lastPress?.id === c.id && e.timeStamp - lastPress.time < 400 && Math.abs(e.clientX - lastPress.x) < 5;
+    lastPress = { id: c.id, time: e.timeStamp, x: e.clientX };
+    if (doublePress && tool === "select" && !e.target.closest("[data-edge]")) {
+      lastPress = null;
+      select(c.id, true);
       return;
     }
     select(c.id);
@@ -394,6 +407,7 @@
       );
     if (Math.abs(e.clientX - d.startX) < 3 && !d.changed) return;
     d.changed = true;
+    lastPress = null;
     let tick = quantize(
       (d.action === "trim_end" ? c.startTick + c.durationTicks : c.startTick) +
         delta,
@@ -569,8 +583,9 @@
   $("project-download").onclick = () => {
     window.location.href = "/api/project/download";
   };
-  $("go-start").onclick = () => seek(0);
-  $("go-end").onclick = () =>
+  $("go-start").onclick = () => { window.emePlayback?.pause(); seek(0); };
+  $("go-end").onclick = () => {
+    window.emePlayback?.pause();
     seek(
       Math.max(
         0,
@@ -578,6 +593,7 @@
           frame().denominator / frame().numerator,
       ),
     );
+  };
   $("step-back").onclick = () => {
     window.emePlayback?.pause();
     $("player").pause();
@@ -707,6 +723,7 @@
     updateButtons,
     select,
     quantize,
+    tickAt,
   };
   window.emeEditor = {
     edit,

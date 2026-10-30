@@ -84,35 +84,18 @@ async function gesture(clipId, kind, secondsDelta, expected) {
     "Pointer drag must show a gesture preview",
   );
   const responsePromise = page.waitForResponse(
-    (r) => r.url().endsWith("/api/edit") && r.request().method() === "POST",
+    (r) => r.url().endsWith("/api/editor/command") && r.request().method() === "POST",
     { timeout: 15000 },
   );
   await page.mouse.up();
   const response = await responsePromise;
   const result = await response.json();
   assert.equal(response.status(), 200, JSON.stringify(result));
-  await page.locator("#approve").waitFor({ state: "visible", timeout: 15000 });
-  assert.equal(
-    digest(server.project()),
-    before,
-    "Dragging must only propose, not mutate",
-  );
-  assert.equal(
-    server.state.proposal.operations.length,
-    2,
-    "Both AV components must be in the exact proposal",
-  );
-  assert.equal(
-    server.state.proposal.operations.every(
-      (op) => op.type === (kind === "move" ? "move_clip" : "trim_clip"),
-    ),
-    true,
-  );
-  await page.locator("#approve").click();
   await waitFor(
     () => !server.state.proposal && server.project().revision > revision,
-    "browser-approved edit",
+    "direct user edit",
   );
+  assert.notEqual(digest(server.project()), before, "Pointer release commits the edit");
   const after = geometry();
   for (const c of after)
     for (const [key, value] of Object.entries(expected))
@@ -126,7 +109,7 @@ async function gesture(clipId, kind, secondsDelta, expected) {
   report.steps.push({
     gesture: kind,
     deltaSeconds: secondsDelta,
-    proposalOnlyBeforeApproval: true,
+    directCommitWithUndo: true,
     linkedOperations: 2,
     revision: server.project().revision,
     geometry: after,

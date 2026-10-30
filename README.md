@@ -10,8 +10,8 @@ stdio MCP; no model API key is needed by the engine.
 npm start
 ```
 
-Open **http://127.0.0.1:4720**. Import footage or try the generated sample, review
-and apply edits, preview the timeline, then export a verified MP4. Undo/redo and
+Open **http://127.0.0.1:4720**. Import footage or try the generated sample, edit
+the timeline, review IDE proposals, then export a verified MP4. Undo/redo and
 revision history preserve earlier edits. Connect your IDE through the in-app MCP
 configuration to submit conversational editing requests. Requests wait for the IDE
 agent to read the inbox and propose a plan; Studio does not run a background model.
@@ -19,8 +19,8 @@ See [Studio setup, agent workflow, scope, and partner status](docs/studio/README
 
 The [edit workspace](docs/studio/EDITOR_WORKSPACE.md) adds a zoomable timeline,
 playhead and snapping guides, draggable clips and trim edges, linked audio,
-measured waveforms, track controls and a numeric clip inspector. Direct edits use
-the same reviewed operations and undo history as agent proposals.
+measured waveforms, track controls and a numeric clip inspector. Direct edits apply immediately through validated engine commands with undo history.
+IDE proposals require explicit review.
 
 The optional [scene understanding prototype](docs/studio/SCENE.md) tracks a selected region with MobileSAM on MPS, preserves timestamped masks and uncertainty, and exposes the same evidence in Studio and the IDE.
 

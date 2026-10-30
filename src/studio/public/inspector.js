@@ -1,4 +1,4 @@
-/* Selected-clip controls. Every action creates the same reviewed edit as the timeline. */
+/* Selected-clip controls. Direct changes use the same undoable commands as the timeline. */
 (() => {
   const byId = (id) => document.getElementById(id);
   let renderedKey = "",
@@ -115,6 +115,11 @@
           ?.locked ||
         busy ||
         waiting;
+    const split = byId("inspect-split");
+    if (split) {
+      const at = window.emeTimeline.quantize(cursor * 120000);
+      split.disabled ||= at <= current.startTick || at >= current.startTick + current.durationTicks;
+    }
     const save = byId("inspect-save");
     if (save)
       save.disabled = save.disabled || !Object.keys(properties()).length;
@@ -204,7 +209,7 @@
     if (clip.type === "audio")
       html += `<section class="inspector-section"><h4>Audio</h4>${numberField("inspect-volume", "Volume", (clip.audio?.volume ?? 1) * 100, { min: 0, max: 200, unit: "%" })}<p class="small muted">100% is the source level. Export checks the final mix and output peaks.</p></section>`;
     html +=
-      '<div class="inspector-actions"><button id="inspect-save" type="submit" class="primary" data-edit-control>Review property changes ↗</button></div></form>';
+      '<div class="inspector-actions"><button id="inspect-save" type="submit" class="primary" data-edit-control>Apply changes</button></div></form>';
     if (clip.source?.assetId) {
       const counterpart = project.clips.find(
         (c) =>
@@ -221,7 +226,7 @@
       );
       html += `<section class="inspector-section"><h4>Source</h4>${metadata("Media", media?.name || asset?.id || "Unavailable")}${metadata("Clip ID", clip.id)}${media?.width ? metadata("Dimensions", `${media.width} × ${media.height}`) : ""}${metadata("Source link", counterpart ? (clip.type === "audio" ? "Video + source audio" : "Source audio available") : "No matching component")}</section>`;
     }
-    html += `<section class="inspector-section"><h4>Clip actions</h4><div class="field-row">${button("inspect-split", "Split at playhead")}${button("inspect-delete", "Delete clip")}</div><p class="small muted">Deleting leaves other clips in place. Every edit opens Review before it is applied.</p></section>`;
+    html += `<section class="inspector-section"><h4>Clip actions</h4><div class="field-row">${button("inspect-split", "Split at playhead")}${button("inspect-delete", "Delete clip")}</div><p class="small muted">Deleting leaves other clips in place. Edits apply immediately. Use Undo to restore the previous version.</p></section>`;
     if (asset?.metadata?.design)
       html += `<section class="inspector-section"><h4>Design component</h4><button id="inspect-design" class="quiet" type="button">Edit design content and motion</button><p class="small muted">Rebuild this component through EME while preserving the rest of the sequence.</p></section>`;
     content.innerHTML = html;

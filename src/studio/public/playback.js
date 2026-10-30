@@ -31,13 +31,9 @@
         node.preload = "auto";
         audio.set(c.id, node);
         node.onloadedmetadata = () => {
-          if (running) {
-            node.currentTime = Math.max(
-              0,
-              seconds(c.source.trimInTick || 0) + cursor - seconds(c.startTick),
-            );
-            node.play().catch(() => {});
-          }
+          // Re-read current clips: a source can finish loading after a seek,
+          // mute, deletion or undo has invalidated the original closure.
+          if (running && mode === "source") syncAudio();
         };
       }
       const desired =
