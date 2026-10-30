@@ -105,6 +105,8 @@ class VisualConstraintSolver {
             height: obs.bounds.height + 2 * faceMarginPx,
             rawBounds: obs.bounds
           });
+        } else if (obs.type === 'protected_region' && obs.bounds && options.protectSelectedRegion) {
+          faceBoxes.push({x:obs.bounds.x-faceMarginPx,y:obs.bounds.y-faceMarginPx,width:obs.bounds.width+2*faceMarginPx,height:obs.bounds.height+2*faceMarginPx,rawBounds:obs.bounds});
         } else if (obs.type === 'person' && obs.bounds) {
           subjectBoxes.push(obs.bounds);
         }
@@ -207,7 +209,7 @@ class VisualConstraintSolver {
       }
     }
 
-    if (candidates.length === 0) {
+    if (candidates.length === 0 && options.allowTitleSafeRelaxation !== false) {
       // Infeasible within title safe: attempt relaxing title safe slightly (e.g. 5% action-safe)
       // but STILL strictly maintain 0.0% face collision
       const actionSafeMinX = sourceW * 0.05;
@@ -239,23 +241,23 @@ class VisualConstraintSolver {
         }
       }
 
-      if (candidates.length === 0) {
-        return {
-          status: 'INFEASIBLE_CONSTRAINTS',
-          placement: null,
-          anchor: preferredAnchor,
-          backing: { required: false, color: null },
-          contrastRatio: 1.0,
-          faceCollisionsCount: faceBoxes.length,
-          titleSafeSatisfied: false,
-          score: 0.0,
-          diagnostics: {
-            reason: 'Cannot place element without overlapping face bounding box',
-            faceBoxesCount: faceBoxes.length,
-            framesEvaluated: frameCountInInterval
-          }
-        };
-      }
+    }
+    if (candidates.length === 0) {
+      return {
+        status: 'INFEASIBLE_CONSTRAINTS',
+        placement: null,
+        anchor: preferredAnchor,
+        backing: { required: false, color: null },
+        contrastRatio: 1.0,
+        faceCollisionsCount: faceBoxes.length,
+        titleSafeSatisfied: false,
+        score: 0.0,
+        diagnostics: {
+          reason: 'Cannot place element without overlapping a protected bounding box',
+          faceBoxesCount: faceBoxes.length,
+          framesEvaluated: frameCountInInterval
+        }
+      };
     }
 
     // 5. Deterministic sorting: Highest score, then lowest Y, then lowest X

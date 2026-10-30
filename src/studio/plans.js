@@ -202,6 +202,10 @@ function importOperations(project, media) {
 }
 function titleOperations(project, text) {
   const existing = project.clips.find((c) => c.type === "text");
+  if (existing?.properties?.subject_safe)
+    throw error(
+      "Open Understand scene and plan the title again to update its placement and preview.",
+    );
   if (existing)
     return [
       {

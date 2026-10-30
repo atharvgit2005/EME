@@ -289,7 +289,7 @@ test("Production stdio MCP reads requests and proposes edits without execution a
   const client = rpc(f.root);
   t.after(() => client.child.kill());
   const listed = await client.call("tools/list", {});
-  assert.equal(listed.result.tools.length, 30);
+  assert.equal(listed.result.tools.length, 31);
   assert.ok(!listed.result.tools.some((t) => /studio.*approv/.test(t.name)));
   const inbox = await client.call("tools/call", {
     name: "eme_studio_get_inbox",

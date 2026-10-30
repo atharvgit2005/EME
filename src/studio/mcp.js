@@ -3,6 +3,34 @@ const fs = require("node:fs"),
 const { EmeMcpServer, TOOL_DEFINITIONS } = require("../mcp/server.js");
 const definitions = [
   {
+    name: "eme_studio_propose_title",
+    description:
+      "Propose a static title that avoids a selected tracked region throughout its duration. Requires complete observed coverage. Resolves real font bounds, crop/trim mapping, backing and placement preview. Creates a browser review proposal only; cannot approve or execute.",
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "requestId",
+        "baseRevision",
+        "analysisId",
+        "videoClipId",
+        "text",
+        "startTick",
+        "durationTicks",
+      ],
+      properties: {
+        requestId: { type: "string" },
+        baseRevision: { type: "integer" },
+        analysisId: { type: "string" },
+        videoClipId: { type: "string" },
+        text: { type: "string" },
+        startTick: { type: "integer" },
+        durationTicks: { type: "integer" },
+        fontSize: { type: "integer", minimum: 12, maximum: 120 },
+      },
+    },
+  },
+  {
     name: "eme_studio_get_scene",
     description:
       "Read a source-bound scene analysis interval. Returns observed regions, predictions, uncertainty and mask IDs. Read-only: cannot authorize edits. Coordinates are source pixels, not project canvas pixels.",
@@ -89,13 +117,15 @@ class StudioMcpServer extends EmeMcpServer {
     if (url.protocol !== "http:" || url.hostname !== "127.0.0.1")
       throw Error("Studio must be a local loopback service.");
     const route =
-      name === "eme_studio_get_scene"
-        ? "scene"
-        : name === "eme_studio_get_inbox"
-          ? "context"
-          : name === "eme_studio_submit_plan"
-            ? "plan"
-            : "reply";
+      name === "eme_studio_propose_title"
+        ? "title"
+        : name === "eme_studio_get_scene"
+          ? "scene"
+          : name === "eme_studio_get_inbox"
+            ? "context"
+            : name === "eme_studio_submit_plan"
+              ? "plan"
+              : "reply";
     const response = await fetch(new URL("/api/agent/" + route, url), {
       method: route === "context" ? "GET" : "POST",
       headers: {

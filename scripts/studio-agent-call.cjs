@@ -12,6 +12,7 @@ if (
   ![
     "eme_studio_get_inbox",
     "eme_studio_get_scene",
+    "eme_studio_propose_title",
     "eme_studio_submit_plan",
     "eme_studio_reply",
   ].includes(name)

@@ -100,6 +100,7 @@ function bindAssets(project, operationPlan, options, baseDir) {
   visit(options, 'options');
   visit(project.colorGrade, 'projectGrade');
   visit((project.clips || []).map(clip => clip.colorGrade || {}), 'clipGrades');
+  visit((project.clips || []).map(clip => clip.properties || {}), 'clipProperties');
   visit(operationPlan.operations.map(op => op.params), 'operations');
   return bound;
 }

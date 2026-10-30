@@ -128,6 +128,20 @@
       const doc = await api("scene/" + id);
       if (current?.id !== mediaId) return;
       analysis = doc;
+      el("scene-title-form").hidden = false;
+      const clips = state.project.clips.filter(
+        (c) => c.type === "video" && c.source?.assetId === current.id,
+      );
+      el("scene-title-clip").replaceChildren(
+        ...clips.map(
+          (c) => new Option(`${c.id} · ${clock(c.startTick / 120000)}`, c.id),
+        ),
+      );
+      el("scene-title-plan").disabled = !clips.length;
+      el("scene-title-status").textContent = clips.length
+        ? ""
+        : "Add this footage to the timeline first, then reopen the scene.";
+      titleTiming();
       selecting = false;
       canvas.style.pointerEvents = "none";
       el("scene-scrub").max = doc.source.endTick / 120000;
@@ -172,6 +186,7 @@
       el("scene-status").textContent = job.message || "Tracking cancelled.";
   }
   function reselect() {
+    el("scene-title-form").hidden = true;
     handledJob = state.sceneJob?.id;
     video.pause();
     video.currentTime = 0;
@@ -190,6 +205,7 @@
     draw();
   }
   async function open(id) {
+    el("scene-title-form").hidden = true;
     handledJob =
       state.sceneJob?.status === "SUCCEEDED" ? state.sceneJob.id : null;
     current = state.media.find((m) => m.id === id);
@@ -257,6 +273,7 @@
     el("scene-box-" + k).oninput = () => {
       selecting = true;
       analysis = null;
+      el("scene-title-form").hidden = true;
       handledJob = state.sceneJob?.id;
       video.pause();
       video.currentTime = 0;
@@ -285,6 +302,7 @@
       });
       analysis = null;
       failedLoad = null;
+      el("scene-title-form").hidden = true;
       selecting = false;
       canvas.style.pointerEvents = "none";
       el("scene-analyze").disabled = true;
@@ -318,6 +336,46 @@
     draw();
   };
   el("scene-show-mask").onchange = () => draw();
+  function titleTiming() {
+    const clip = state.project.clips.find(
+      (c) => c.id === el("scene-title-clip").value,
+    );
+    if (!clip || !analysis) return;
+    el("scene-title-start").value = clip.startTick / 120000;
+    el("scene-title-duration").value = Math.max(
+      0,
+      Math.min(
+        4,
+        clip.durationTicks / 120000,
+        (analysis.source.endTick - (clip.source.trimInTick || 0)) / 120000,
+      ),
+    );
+  }
+  el("scene-title-clip").onchange = titleTiming;
+  el("scene-title-form").onsubmit = async (event) => {
+    event.preventDefault();
+    el("scene-title-plan").disabled = true;
+    el("scene-title-status").textContent =
+      "Measuring title and checking all tracked intervals…";
+    try {
+      await api("scene/title", {
+        analysisId: analysis.analysisId,
+        videoClipId: el("scene-title-clip").value,
+        text: el("scene-title-text").value,
+        fontSize: Number(el("scene-title-size").value),
+        startTick: Math.round(Number(el("scene-title-start").value) * 120000),
+        durationTicks: Math.round(
+          Number(el("scene-title-duration").value) * 120000,
+        ),
+      });
+      el("scene-dialog").close();
+      await refresh();
+    } catch (e) {
+      el("scene-title-status").textContent = e.message.replace(/^ERR_SUBJECT_TITLE: /, "");
+    } finally {
+      el("scene-title-plan").disabled = false;
+    }
+  };
   video.onloadeddata = () => draw();
   video.onseeked = () => draw();
   video.ontimeupdate = () => {

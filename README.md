@@ -19,6 +19,11 @@ See [Studio setup, agent workflow, scope, and partner status](docs/studio/README
 
 The optional [scene understanding prototype](docs/studio/SCENE.md) tracks a selected region with MobileSAM on MPS, preserves timestamped masks and uncertainty, and exposes the same evidence in Studio and the IDE.
 
+The [hackathon demo](docs/studio/HACKATHON_DEMO.md) uses those observations to place
+a title clear of the selected region, review the measured result and export it
+with scene, font and collision checks. Both a local quick action and an IDE/MCP
+proposal workflow are available.
+
 This repository imports the audited `codex/eme-remediation` implementation and
 additional source tools and experiments into a new eight-commit history on `main`.
 See [source import notes](docs/import/README.md) for provenance and repository scope.

@@ -319,6 +319,57 @@
         </div>
       </details>
       <p id="scene-status" role="status">Draw a box to begin.</p>
+      <form id="scene-title-form" class="scene-title-form" hidden>
+        <span class="tiny-label">TURN UNDERSTANDING INTO AN EDIT</span>
+        <h3>Leave room for your subject.</h3>
+        <label for="scene-title-text">Title text</label>
+        <textarea id="scene-title-text" rows="2" maxlength="150">
+NEXT
+MOVE</textarea
+        >
+        <div class="scene-options">
+          <label
+            >Timeline clip
+            <select id="scene-title-clip"></select
+          ></label>
+          <label
+            >Start (s)
+            <input
+              id="scene-title-start"
+              type="number"
+              min="0"
+              step="0.001"
+              value="0"
+          /></label>
+          <label
+            >Duration (s)
+            <input
+              id="scene-title-duration"
+              type="number"
+              min="0.034"
+              step="0.001"
+              value="4"
+          /></label>
+          <label
+            >Font (px)
+            <input
+              id="scene-title-size"
+              type="number"
+              min="12"
+              max="120"
+              value="28"
+          /></label>
+        </div>
+        <p class="small muted">
+          Checks the entire title interval against observed regions. Missing
+          tracking or insufficient space blocks the proposal. Review the
+          rendered still before applying.
+        </p>
+        <button id="scene-title-plan" class="primary">
+          Find placement & review ↗
+        </button>
+        <p id="scene-title-status" class="small" role="status"></p>
+      </form>
       <p id="scene-readout" class="small muted">
         Orange: model segmentation · teal: optical-flow propagation · dashed:
         prediction only.

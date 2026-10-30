@@ -4,6 +4,7 @@ const http = require("node:http"),
   crypto = require("node:crypto");
 const { spawn } = require("node:child_process");
 const { SceneService, fileHash, queryScene } = require("../scene/service.js");
+const { proposeSubjectTitle } = require("../scene/title-placement.js");
 const {
   ApprovalAuthority: A,
   durableWrite,
@@ -207,6 +208,8 @@ class StudioServer {
       source = "Quick action",
       requestId = null,
       historyAction = null,
+      internalPaths = [],
+      planning = null,
     } = {},
   ) {
     this.assertIdle();
@@ -222,10 +225,27 @@ class StudioServer {
       if (op.type === "add_asset" && !allowed.has(op.params?.src))
         throw error("Only media imported into this workspace can be used.");
       const encoded = JSON.stringify(op.params);
-      if (/"(?:path|filePath|mediaPath|render_font|lutId)"\s*:/.test(encoded))
+      if (
+        !internalPaths.length &&
+        /"(?:path|filePath|mediaPath|render_font|lutId)"\s*:/.test(encoded)
+      )
         throw error(
           "This operation contains an unsupported external file reference.",
         );
+      if (internalPaths.length) {
+        const inspect = (value) => {
+          if (!value || typeof value !== "object") return;
+          for (const [key, v] of Object.entries(value)) {
+            if (
+              ["path", "src", "filePath", "mediaPath", "lutId"].includes(key) &&
+              !internalPaths.includes(v)
+            )
+              throw error("Untrusted placement dependency.");
+            inspect(v);
+          }
+        };
+        inspect(op.params);
+      }
     }
     const plan = operationPlan(project, operations);
     if (plan.target_duration_ticks > 120 * TICKS)
@@ -246,6 +266,7 @@ class StudioServer {
       baseRevision: project.revision,
       operations: plan.operations,
       expires: ticket.expires_at,
+      planning,
     };
     this.message("assistant", summary, {
       source,
@@ -686,6 +707,49 @@ class StudioServer {
       );
     return this.sceneService.read(id, { sourceSha256: media.sha256 });
   }
+  proposeSceneTitle(body, request = null) {
+    this.assertIdle();
+    if (this.state.proposal)
+      throw error("Review or dismiss the current proposal first.", 409);
+    const doc = this.sceneDocument(body.analysisId);
+    const previewId = crypto.randomUUID();
+    const result = proposeSubjectTitle({
+      project: this.project(),
+      doc,
+      scenePath: path.join(
+        this.sceneService.root,
+        "analyses",
+        doc.analysisId,
+        "scene.json",
+      ),
+      outputDir: path.join(this.root, "title-previews", previewId),
+      text: body.text,
+      videoClipId: body.videoClipId,
+      startTick: body.startTick,
+      durationTicks: body.durationTicks,
+      fontSize: body.fontSize,
+    });
+    result.operations.at(-1).params.properties.subject_safe.previewId =
+      previewId;
+    const proposal = this.pending(result.operations, {
+      summary: `Add “${body.text.trim()}” clear of the selected region across ${result.report.tracked_intervals} tracked intervals. White text with an opaque backing, a 12 px region margin and a 5% canvas inset.`,
+      source: request ? "IDE agent · scene placement" : "Scene placement",
+      requestId: request?.id || null,
+      internalPaths: result.internalPaths,
+      planning: { ...result.report, previewId },
+    });
+    if (request) request.status = "PROPOSED";
+    this.state.titlePreviews ||= [];
+    this.state.titlePreviews.push({
+      id: previewId,
+      path: result.previewPath,
+      sha256: fileHash(result.previewPath),
+      glyphPath: result.glyphPath,
+      glyphSha256: fileHash(result.glyphPath),
+    });
+    this.save();
+    return proposal;
+  }
   startScene(media, body) {
     this.assertIdle();
     if (media.type !== "video")
@@ -757,7 +821,7 @@ class StudioServer {
       snapshot: digest(this.project()),
       media: this.state.media,
       instructions:
-        "You are the local IDE editing agent. Interpret the queued user request, then call eme_studio_submit_plan with requestId, baseRevision, summary, and exact operations. Never approve or execute a proposal. Ask for clarification through eme_studio_reply if needed. Only use imported media. Preserve everything not requested. Units: 120000 ticks/second; centered transform x/y offsets in canvas pixels. Native text typography keys: text,fontSize,color,textAlign. Use modify_clip for text/style/transform/audio; trim_clip for timing and source trims. Canvas size is fixed. Use set_project_duration {durationTicks} to change export length (maximum 120 seconds); trim every overlapping video, audio, and title clip first when shortening. Source audio is a separate audio clip and needs matching timing edits. Available native effects: invert, brightness/contrast {factor}, blur {radius}. No general transitions or color grades. Place text on a separate visual track above footage; avoid conflicting clips on the same track. You can add source assets from the provided inventory, using their exact paths and sha256.",
+        "For a title avoiding the selected subject, first read eme_studio_get_scene, then use eme_studio_propose_title with analysisId, videoClipId, text, timing, requestId and baseRevision; it produces a measured preview and fails on missing evidence. Guarded titles must be replanned after text, style, timing or position changes. You are the local IDE editing agent. Interpret the queued user request, then call eme_studio_submit_plan with requestId, baseRevision, summary, and exact operations. Never approve or execute a proposal. Ask for clarification through eme_studio_reply if needed. Only use imported media. Preserve everything not requested. Units: 120000 ticks/second; centered transform x/y offsets in canvas pixels. Native text typography keys: text,fontSize,color,textAlign. Use modify_clip for text/style/transform/audio; trim_clip for timing and source trims. Canvas size is fixed. Use set_project_duration {durationTicks} to change export length (maximum 120 seconds); trim every overlapping video, audio, and title clip first when shortening. Source audio is a separate audio clip and needs matching timing edits. Available native effects: invert, brightness/contrast {factor}, blur {radius}. No general transitions or color grades. Place text on a separate visual track above footage; avoid conflicting clips on the same track. You can add source assets from the provided inventory, using their exact paths and sha256.",
       examples: [
         {
           type: "modify_clip",
@@ -793,6 +857,22 @@ class StudioServer {
         this.agentAuth(req);
         if (p === "/api/agent/context" && req.method === "GET")
           return this.json(res, 200, this.context());
+        if (p === "/api/agent/title" && req.method === "POST") {
+          const b = await this.body(req);
+          const request = this.state.requests.find(
+            (r) => r.id === b.requestId && r.status === "QUEUED",
+          );
+          if (
+            !request ||
+            b.baseRevision !== this.project().revision ||
+            request.revision !== b.baseRevision
+          )
+            throw error(
+              "Request or project changed. Read the latest context.",
+              409,
+            );
+          return this.json(res, 200, this.proposeSceneTitle(b, request));
+        }
         if (p === "/api/agent/plan" && req.method === "POST") {
           const b = await this.body(req);
           const request = this.state.requests.find(
@@ -848,6 +928,30 @@ class StudioServer {
         throw error("Unknown agent route", 404);
       }
       if (req.method === "POST") this.browserAuth(req);
+      if (req.method === "POST" && p === "/api/scene/title")
+        return this.json(
+          res,
+          200,
+          this.proposeSceneTitle(await this.body(req)),
+        );
+      if (req.method === "GET" && p.startsWith("/api/title-glyph/")) {
+        const record = this.state.titlePreviews?.find(
+          (r) => r.id === p.split("/")[3],
+        );
+        if (!record || fileHash(record.glyphPath) !== record.glyphSha256)
+          throw error("Title glyph is unavailable or changed.", 404);
+        return this.serveFile(req, res, record.glyphPath, {
+          type: "image/png",
+        });
+      }
+      if (req.method === "GET" && p.startsWith("/api/title-preview/")) {
+        const record = this.state.titlePreviews?.find(
+          (r) => r.id === p.split("/")[3],
+        );
+        if (!record || fileHash(record.path) !== record.sha256)
+          throw error("Placement preview is unavailable or changed.", 404);
+        return this.serveFile(req, res, record.path, { type: "image/png" });
+      }
       if (req.method === "POST" && p === "/api/scene/analyze") {
         const b = await this.body(req);
         const media = this.state.media.find((m) => m.id === b.mediaId);

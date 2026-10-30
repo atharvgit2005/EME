@@ -67,7 +67,7 @@ class CanonicalNativeAdapter {
     const args = ['-nostdin', '-v', 'error', '-n', '-filter_complex_threads', '1'];
     const filters = [`color=c=${color(p.canvas.backgroundColor || '#000000')}:s=${width}x${height}:r=${rate}:d=${duration}[base]`];
     const audioLabels = []; let inputs = 0, layer = 'base';
-    const fontEvidence = [], animations=new Map();
+    const fontEvidence = [], subjectEvidence = [], animations=new Map();
     for(const animation of p.animations || []){
       const clip=p.clips.find(c=>c.id===animation.clipId);
       if(!clip || !['transform.opacity','transform.x','transform.y'].includes(animation.property) || !animation.keyframes?.length)fail('ERR_UNSUPPORTED_CANONICAL_ANIMATION','Only linear opacity/x/y keyframes supported');
@@ -78,10 +78,10 @@ class CanonicalNativeAdapter {
     for (const [i, c] of clips.entries()) {
       only(c,['id','trackId','type','startTick','durationTicks','source','assetId','transform','typography','effects','audio','properties','metadata','colorGrade'],`clip:${c.id}`);
       if (c.startTick + c.durationTicks > durationTicks || c.colorGrade?.enabled) fail('ERR_UNSUPPORTED_CANONICAL_PROPERTY', `${c.id}: duration or colorGrade`);
-      only(c.properties, ['reframing', 'optical_distortion', 'curved_typography', 'render_font', 'face_safe'], `${c.id}.properties`);
+      only(c.properties, ['reframing', 'optical_distortion', 'curved_typography', 'render_font', 'face_safe', 'text_backing', 'subject_safe'], `${c.id}.properties`);
       if (c.type === 'audio') continue; // Sample-accurate canonical mixer owns audio below.
       only(c.source,['assetId','trimInTick','trimOutTick'],'source');
-      if(c.type!=='text' && (c.typography || c.properties?.curved_typography || c.properties?.face_safe || c.properties?.render_font))fail('ERR_UNSUPPORTED_CANONICAL_PROPERTY','Required graphic typography/face-safe payload is supported only on text clips');
+      if(c.type!=='text' && (c.typography || c.properties?.curved_typography || c.properties?.face_safe || c.properties?.render_font || c.properties?.text_backing || c.properties?.subject_safe))fail('ERR_UNSUPPORTED_CANONICAL_PROPERTY','Required graphic typography/face-safe payload is supported only on text clips');
       const t = c.transform || {};
       only(t, ['x','y','scaleX','scaleY','rotation','opacity','anchorX','anchorY'], 'transform');
       if ((t.anchorX ?? .5) !== .5 || (t.anchorY ?? .5) !== .5) fail('ERR_UNSUPPORTED_CANONICAL_PROPERTY', 'Noncentral transform anchor');
@@ -100,6 +100,18 @@ class CanonicalNativeAdapter {
         const font=graphics.resolveFont(copy,assets);fontEvidence.push({sha256:font.sha256,clip_id:c.id});
         const directory=path.join(stagingDir,`graphic-${i}`);fs.mkdirSync(directory);
         graphic=graphics.rasterizeGraphic({clip:copy,canvas:p.canvas,fps,outputDir:directory,font});src=graphic.inputPath;
+        if(c.properties?.subject_safe){
+          const subject=c.properties.subject_safe;
+          const sceneBinding=snapshot.assets.find(a=>a.source_path===subject.evidence?.path);
+          if(!binding || !sceneBinding || sceneBinding.sha256!==subject.evidence.sha256)fail('ERR_SUBJECT_TITLE_BINDING','Font and scene bytes must be bound to the approved execution');
+          const doc=JSON.parse(fs.readFileSync(assets.get(sceneBinding.asset_id),'utf8'));
+          const subjectVideo=p.clips.find(v=>v.id===subject.videoClipId);
+          const actualSource=assets.get(subjectVideo?.source?.assetId || subjectVideo?.assetId);
+          if(!actualSource)fail('ERR_SUBJECT_TITLE_BINDING','Tracked footage is unavailable');
+          const dimensions=require('./inspector.js').FrameInspector.inspectVideoMetadata(actualSource).video;
+          if(dimensions.width!==doc.source.width || dimensions.height!==doc.source.height)fail('ERR_SUBJECT_TITLE_BINDING','Actual source dimensions differ from scene coordinates');
+          subjectEvidence.push(require('../scene/title-placement.js').verifySubjectTitle({project:p,clip:c,doc,bounds:graphic.bounds}));
+        }
         const safe=c.properties?.face_safe;
         if(safe?.required){
           if(digest(safe.local_bounds)!==digest(graphic.bounds))fail('ERR_GRAPHIC_BOUNDS_MISMATCH','Graphic bounds differ from approved placement');
@@ -165,7 +177,7 @@ class CanonicalNativeAdapter {
     if (audioLabels.length) args.push('-map','[audio]','-c:a','aac','-b:a','192k','-ar','48000','-ac','2');
     args.push('-t',String(duration),'-r',rate,'-c:v','libx264','-preset','ultrafast','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',outputPath);
     run(EnvironmentResolver.resolveFfmpeg() || 'ffmpeg', args);
-    return { success:true, outputPath, provenance: {...snapshot.provenance, renderer:VERSION, output_profile:{width,height,frame_rate:fps,duration_ticks:durationTicks}, fonts:fontEvidence, audio_master:audioMaster ? {master_gain_db:audioMaster.master_gain_db,audit:audioMaster.audit} : null}, sha256:fileHash(outputPath) };
+    return { success:true, outputPath, provenance: {...snapshot.provenance, renderer:VERSION, output_profile:{width,height,frame_rate:fps,duration_ticks:durationTicks}, fonts:fontEvidence, subject_titles:subjectEvidence, audio_master:audioMaster ? {master_gain_db:audioMaster.master_gain_db,audit:audioMaster.audit} : null}, sha256:fileHash(outputPath) };
   }
 }
 module.exports = { CanonicalNativeAdapter };

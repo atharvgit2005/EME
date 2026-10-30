@@ -101,4 +101,4 @@ on external assets and fixed cleanup paths. Review it before use.
 
 ## Scene understanding prototype
 
-Use **Understand scene** on a video card to select and track a region with the optional local MPS worker. [Setup, contract, and scope](SCENE.md). The Studio MCP server now has 30 tools, including the read-only scene interval query.
+Use **Understand scene** on a video card to select and track a region with the optional local MPS worker. [Setup, contract, and scope](SCENE.md). The Studio MCP server has 31 tools, including the read-only scene interval query and `eme_studio_propose_title` for a guarded, reviewable title placement. Follow the [hackathon demo walkthrough](HACKATHON_DEMO.md) for the complete tracking-to-export flow.

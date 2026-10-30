@@ -11,6 +11,7 @@ function resolveFont(clip,assets=new Map()) {
 function rasterizeGraphic({clip,canvas,fps,outputDir,font}) {
  let frames,inputPath,sequence=false;
  const curve=clip.properties?.curved_typography;
+ if(curve && clip.properties?.text_backing)throw Error('ERR_TEXT_BACKING: curved text backing unsupported');
  if(curve){
   const config=CurvedTypography.validateParams(curve);
   if(config.text!==clip.typography.text || config.timeline.startTick!==clip.startTick || config.timeline.durationTicks!==clip.durationTicks)throw Error('ERR_TYPOGRAPHY_PAYLOAD_MISMATCH');
@@ -20,7 +21,9 @@ function rasterizeGraphic({clip,canvas,fps,outputDir,font}) {
   frames=sequence?result.frames:[result.frame];
  }else{
   inputPath=path.join(outputDir,'glyph.png');const t=clip.typography || {};
-  const result=spawnSync('python3',[path.join(__dirname,'canonical-text-rasterizer.py')],{input:JSON.stringify({width:canvas.width,height:canvas.height,text:t.text || '',size:t.fontSize || 64,color:t.color || '#ffffff',align:t.textAlign || 'center',font:font.path,output:inputPath}),encoding:'utf8',timeout:30000});
+  const backing=clip.properties?.text_backing;
+  if(backing && (curve || !/^#[a-fA-F0-9]{6}$/.test(backing.color) || !Number.isInteger(backing.padding) || backing.padding<0 || backing.padding>64 || Object.keys(backing).some(k=>!['color','padding'].includes(k))))throw Error('ERR_TEXT_BACKING');
+  const result=spawnSync('python3',[path.join(__dirname,'canonical-text-rasterizer.py')],{input:JSON.stringify({width:canvas.width,height:canvas.height,text:t.text || '',size:t.fontSize || 64,color:t.color || '#ffffff',align:t.textAlign || 'center',font:font.path,backing,output:inputPath}),encoding:'utf8',timeout:30000});
   if(result.status!==0)throw Error(`ERR_TEXT_RASTERIZATION: ${result.stderr}`);frames=[JSON.parse(result.stdout)];
  }
  const visible=frames.map(f=>f.alpha_bounds).filter(Boolean);

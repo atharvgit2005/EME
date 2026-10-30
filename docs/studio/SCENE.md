@@ -20,9 +20,10 @@ Select a continuous shot for this prototype. Reselection currently starts at the
 first frame; correction anchors inside a shot are a later capability.
 
 Scene analysis is advisory. It does not modify the canonical project or approve
-edits. The prototype does not automatically place titles, implement a dynamic
-crop renderer, grade footage, infer depth/normals/gaze, or produce soft mattes.
-Those consumers can be built on the evidence contract independently.
+edits. The [hackathon demo](HACKATHON_DEMO.md) now consumes this evidence to propose
+and verify a static title clear of the selected region, with browser review.
+A dynamic crop renderer, grading, depth/normals/gaze and soft mattes remain outside
+the tracking prototype.
 
 ## Configure the local worker
 

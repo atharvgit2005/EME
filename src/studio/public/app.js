@@ -124,6 +124,26 @@ function renderProposal() {
   $("proposal").hidden = false;
   $("proposal").innerHTML =
     `<h3>Ready for your review <span class="count">${p.operations.length} ${p.operations.length === 1 ? "step" : "steps"}</span></h3><p>${escape(p.summary)}</p><ul class="operation-list">${p.operations.map((op) => "<li>" + escape(operationLabel(op)) + "</li>").join("")}</ul><details><summary>Inspect exact changes</summary><pre>${escape(JSON.stringify(p.operations, null, 2))}</pre></details><div class="proposal-buttons"><button id="dismiss" class="quiet">Dismiss</button><button id="approve" class="primary">Approve & apply <span>↗</span></button></div>`;
+  if (p.planning?.previewId) {
+    const figure = document.createElement("figure");
+    figure.className = "placement-preview";
+    const image = document.createElement("img");
+    image.id = "placement-preview";
+    image.src =
+      "/api/title-preview/" + encodeURIComponent(p.planning.previewId);
+    image.alt =
+      "Rendered title placement at the first source frame of the title interval";
+    const caption = document.createElement("figcaption");
+    caption.textContent = `At title start · ${p.planning.tracked_intervals} tracked intervals checked · export rechecks the scene and rendered bounds.`;
+    const fullSize = document.createElement("a");
+    fullSize.href = image.src;
+    fullSize.target = "_blank";
+    fullSize.rel = "noopener";
+    fullSize.title = "Open full-size placement preview";
+    fullSize.append(image);
+    figure.append(fullSize, caption);
+    $("proposal").querySelector("details").before(figure);
+  }
   $("approve").onclick = () =>
     action(async () => {
       await api("approve", { id: p.id, digest: p.digest });
@@ -162,6 +182,11 @@ function renderTimeline() {
     return;
   }
   $("tracks").innerHTML = p.tracks
+    .filter(
+      (t) =>
+        !t.id.startsWith("subject-title-") ||
+        p.clips.some((c) => c.trackId === t.id),
+    )
     .map(
       (t) =>
         `<div class="track-row"><span class="track-label">${escape(t.name || t.id)}</span><div class="track-lane" data-track="${escape(t.id)}">${p.clips
@@ -219,9 +244,10 @@ function updateOverlay() {
               seconds(c.startTick) <= cursor &&
               cursor < seconds(c.startTick + c.durationTicks),
           )
-          .map(
-            (c) =>
-              `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / video.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / video.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1}">${escape(c.typography?.text || "")}</div>`,
+          .map((c) =>
+            c.properties?.subject_safe?.previewId
+              ? `<img class="subject-title-overlay" alt="${escape(c.typography?.text || "")}" src="/api/title-glyph/${encodeURIComponent(c.properties.subject_safe.previewId)}" style="transform:translate(${(c.transform?.x || 0) * ratio}px,${(c.transform?.y || 0) * ratio}px)">`
+              : `<div class="text-overlay" style="font-size:${(c.typography?.fontSize || 48) * ratio}px;color:${/^#[0-9a-f]{6}$/i.test(c.typography?.color) ? c.typography.color : "#fff"};left:${50 + ((c.transform?.x || 0) / video.canvas.width) * 100}%;top:${50 + ((c.transform?.y || 0) / video.canvas.height) * 100}%;opacity:${c.transform?.opacity ?? 1}">${escape(c.typography?.text || "")}</div>`,
           )
           .join("")
       : "";
