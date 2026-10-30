@@ -43,8 +43,9 @@ This is a static deployment with no install/build step or environment variables.
 Local Vercel project linkage is ignored by Git. Engine credentials, media and
 feedback databases live outside the deploy directory.
 
-The supplied logo is in `assets/eme-logo.png`, recolored to lime and off-white
-with a transparent background using the image editing tool. The original logo's
-geometry is preserved. Header, footer and favicon use the same asset.
+The supplied logo is in `assets/eme-logo.png`, recolored to lime
+with a transparent background using the built-in image editing tool. The two
+white shapes below the mark have been removed. Edit prompt: remove only the
+two off-white shapes, replacing them with transparency; keep the lime mark. Header, footer and favicon use the same asset.
 
 The earlier Sites deployment is separate; Vercel is now the requested hosting target.
