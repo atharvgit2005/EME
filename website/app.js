@@ -12,3 +12,41 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)stop();}).observe(stage);
 document.querySelector('#copy-command').addEventListener('click',async()=>{try{await navigator.clipboard.writeText('npm start');document.querySelector('#copy-status').textContent='Copied npm start.';}catch{document.querySelector('#copy-status').textContent='Select and copy: npm start';}});
 render();
+
+
+// Native video works without JavaScript; these controls add chapter navigation.
+const demoVideo = document.querySelector('#eme-demo');
+const demoPlay = document.querySelector('#demo-play');
+const demoStatus = document.querySelector('#demo-playback-status');
+const demoChapters = [...document.querySelectorAll('[data-demo-time]')];
+demoPlay.hidden = false;
+document.querySelector('.demo-chapters').hidden = false;
+let requestedDemoTime = null;
+async function playDemo(at) {
+  demoStatus.textContent = '';
+  if (typeof at === 'number') {
+    if (demoVideo.readyState >= 1) demoVideo.currentTime = at;
+    else requestedDemoTime = at;
+  }
+  try { await demoVideo.play(); }
+  catch { demoStatus.textContent = 'Use the player controls to start, or download the video below.'; }
+}
+demoVideo.addEventListener('loadedmetadata', () => {
+  if (requestedDemoTime !== null) { demoVideo.currentTime = requestedDemoTime; requestedDemoTime = null; }
+});
+demoPlay.addEventListener('click', () => {
+  if (!demoVideo.paused) demoVideo.pause();
+  else playDemo(demoVideo.ended ? 0 : undefined);
+});
+demoChapters.forEach(button => button.addEventListener('click', () => playDemo(Number(button.dataset.demoTime))));
+function demoPlaybackLabel() {
+  demoPlay.textContent = demoVideo.ended ? 'Replay walkthrough ↻' : demoVideo.paused ? 'Play walkthrough ▶' : 'Pause walkthrough Ⅱ';
+}
+['play', 'pause', 'ended'].forEach(event => demoVideo.addEventListener(event, demoPlaybackLabel));
+demoVideo.addEventListener('timeupdate', () => {
+  let active = demoChapters[0];
+  for (const button of demoChapters) if (demoVideo.currentTime >= Number(button.dataset.demoTime)) active = button;
+  demoChapters.forEach(button => button.setAttribute('aria-current', String(button === active)));
+});
+demoVideo.addEventListener('error', () => { demoStatus.textContent = 'The video could not load. Try the download link or read the transcript below.'; });
+document.addEventListener('visibilitychange', () => { if (document.hidden) demoVideo.pause(); });

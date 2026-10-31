@@ -1,0 +1,52 @@
+{
+  "title": "EME \u2014 Request. Review. Render.",
+  "duration": 65.233333,
+  "resolution": [
+    1600,
+    900
+  ],
+  "fps": 30,
+  "chapters": [
+    {
+      "title": "Meet EME",
+      "start": 0,
+      "duration": 10.433333,
+      "sourceStart": 8.766667
+    },
+    {
+      "title": "Edit your timeline",
+      "start": 10.433333,
+      "duration": 11.0,
+      "sourceStart": 19.2
+    },
+    {
+      "title": "Request and review",
+      "start": 21.433333,
+      "duration": 10.133333,
+      "sourceStart": 30.2
+    },
+    {
+      "title": "Compare designs",
+      "start": 31.566667,
+      "duration": 12.633333,
+      "sourceStart": 51.633333
+    },
+    {
+      "title": "Verified export",
+      "start": 44.2,
+      "duration": 11.7,
+      "sourceStart": 86.933333
+    },
+    {
+      "title": "Your next edit",
+      "start": 55.9,
+      "duration": 9.333333,
+      "sourceStart": 98.633333
+    }
+  ],
+  "sourceFilm": "EME-Hackathon-Demo.mp4",
+  "sourceSha256": "913d2909662772e884f004115622aa7aa23e4f36d3cf2f60b6c3567df4623f1e",
+  "sha256": "94081c73437504a6bb0cfc3a8dbaa12408234e86a3c70289e22fca05e67a19dc",
+  "bytes": 5854301,
+  "provenance": "Short cut of the existing EME film: real Studio captures, generated demo footage, native EME export; Inworld Grayson narration and original procedural music. Edited presentation, not an uninterrupted screen recording."
+}

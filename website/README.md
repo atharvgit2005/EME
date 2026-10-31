@@ -56,3 +56,26 @@ white shapes below the mark have been removed. Edit prompt: remove only the
 two off-white shapes, replacing them with transparency; keep the lime mark. Header, footer and favicon use the same asset.
 
 The earlier Sites deployment is separate; Vercel is now the requested hosting target.
+
+## Product walkthrough
+
+The homepage includes a 65-second narrated product demo, five chapter buttons,
+English captions, a text transcript, and a download link. The native player
+works without JavaScript. Video loading waits for the visitor to press play.
+
+`assets/demo/eme-walkthrough.mp4` is a 1600×900, 30 fps H.264/AAC fast-start MP4
+(about 5.6 MiB). It is a short cut of the existing EME cinematic film, using real
+Studio captures, generated sample footage and a native EME export. It is an edited
+presentation, not an uninterrupted recording. Existing Inworld Grayson narration
+and original procedural music are retained. `manifest.json` records the source
+hash, chapter cuts and output hash. Captions are also visible in the picture.
+
+Rebuild from the original local film and its timeline (requires FFmpeg):
+
+```sh
+python3 scripts/build-website-demo.py ../outputs/eme-cinematic-demo
+```
+
+The Python preview server above does not support byte-range requests, so chapter
+seeking may fail there even when the full video plays. Use a static server with
+HTTP Range support for playback QA; Vercel serves the deployed MP4 with ranges.
