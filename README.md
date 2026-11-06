@@ -1,5 +1,7 @@
 # Editing Mechanics Engine
 
+<img src="website/assets/eme-logo.svg" alt="EME logo" width="100">
+
 EME combines a local video editor with a deterministic editing, rendering, audio,
 and verification engine. Your local IDE agent supplies creative reasoning through
 stdio MCP; no model API key is needed by the engine.

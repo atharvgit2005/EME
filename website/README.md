@@ -50,10 +50,7 @@ Local Vercel project linkage is ignored by Git. Engine credentials, media and
 feedback databases live outside the website root. The CLI command above rebuilds
 the existing Git source without uploading local files.
 
-The supplied logo is in `assets/eme-logo.png`, recolored to lime
-with a transparent background using the built-in image editing tool. The two
-white shapes below the mark have been removed. Edit prompt: remove only the
-two off-white shapes, replacing them with transparency; keep the lime mark. Header, footer and favicon use the same asset.
+The supplied vector logo is in `assets/eme-logo.svg`, with its original lime fill and transparent background. Its viewBox is trimmed for legibility at small sizes. Header, footer, blog and favicon use this asset; `eme-logo.png` is a raster compatibility copy.
 
 The earlier Sites deployment is separate; Vercel is now the requested hosting target.
 

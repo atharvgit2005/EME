@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="299 147 970 682" role="img" aria-labelledby="title desc">
+  <title id="title">EME logo</title>
+  <desc id="desc">Symmetrical neon-lime M mark with rounded outer sides and a sharp central V.</desc>
+  <path fill="#E5FB5C" d="
+    M 540 179
+    C 418 211, 331 313, 331 435
+    C 331 558, 405 660, 523 696
+    L 523 451
+    L 779 797
+    L 1031 451
+    L 1031 696
+    C 1150 660, 1237 558, 1237 435
+    C 1237 313, 1150 211, 1029 179
+    L 779 523
+    Z"/>
+</svg>
